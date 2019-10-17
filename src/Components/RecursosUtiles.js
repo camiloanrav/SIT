@@ -16,7 +16,7 @@ const RecursosUtiles = ({ header, body }) => {
                     <ul>
                         <li>
                             <a href="">
-                                <span class="icon icon-drive"></span>
+                                <span class="fab fa-google-drive"></span>
                                 <p>Políticas</p>
                             </a>
                         </li>
