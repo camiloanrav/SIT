@@ -34,9 +34,11 @@ const NavBarDesktop = () => {
                             </Link>
                         </li>
                         <li class="dropdown">
-                            <div class="dd-btn">
-                                Publicaciones
-                            </div>
+                            <Link to={"Publicaciones"}>
+                                <div class="dd-btn">
+                                    Publicaciones
+                                </div>
+                            </Link>
                         </li>
                         <li class="dropdown">
                             <Link to={"Contacto"}>

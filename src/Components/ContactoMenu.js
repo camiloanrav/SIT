@@ -21,7 +21,7 @@ const ContactoMenu = () => {
                             <p>Director</p>
                             <div>
                                 <div class="circle-icon">
-                                    <span class="icon icon-user"></span>
+                                    <span class="icon fas fa-user"></span>
                                 </div>
                                 <p>Decano: Hernán Montaño Motato</p>
                             </div>
@@ -30,7 +30,7 @@ const ContactoMenu = () => {
                             <p>Teléfono</p>
                             <div>
                                 <div class="circle-icon">
-                                    <span class="icon icon-phone"></span>
+                                    <span class="icon fas fa-phone"></span>
                                 </div>
                                 <p>PBX: +2 318 8000</p>
                             </div>
@@ -39,7 +39,7 @@ const ContactoMenu = () => {
                             <p>Correo electrónico</p>
                             <div>
                                 <div class="circle-icon">
-                                    <span class="icon icon-envelope"></span>
+                                    <span class="icon fas fa-envelope"></span>
                                 </div>
                                 <p>
                                 <a href="mailto:buzon@uao.edu.co" target="_top">buzon@uao.edu.co</a>
@@ -50,7 +50,7 @@ const ContactoMenu = () => {
                             <p>Ubicación en Campus</p>
                             <div>
                                 <div class="circle-icon">
-                                    <span class="icon icon-map-marker-alt"></span>
+                                    <span class="icon fas fa-map-marker-alt"></span>
                                 </div>
                                 <p>Edificio A</p>
                             </div>
@@ -59,7 +59,7 @@ const ContactoMenu = () => {
                             <p>Horario de Atención</p>
                             <div>
                                 <div class="circle-icon">
-                                    <span class="icon icon-clock"></span>
+                                    <span class="icon fas fa-clock"></span>
                                 </div>
                                 <p>Lunes a viernes de 9:00 a. m. a 4:30 p. m.</p>
                             </div>
@@ -73,7 +73,7 @@ const ContactoMenu = () => {
                             <label class="cb-container">
                                 <input type="checkbox"></input>
                                 <p>Acepto las <a href="">Políticas de privacidad</a></p>
-                                <span class="icon icon-no-check-two"></span>
+                                <span class="icon fas fa-no-check-two"></span>
                             </label>
 
                             <div class="input-form ">

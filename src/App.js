@@ -7,6 +7,7 @@ import InicioContainer from './Containers/InicioContainer';
 import EstadisticasContainer from './Containers/EstadisticasContainer';
 import ContactoContainer from './Containers/ContactoContainer';
 import AyudaContainer from './Containers/AyudaContainer';
+import PublicacionesContainer from './Containers/PublicacionesContainer';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route exact path="/Estadisticas" component={EstadisticasContainer}/>
           <Route exact path="/Contacto" component={ContactoContainer}/>
           <Route exact path="/Ayuda" component={AyudaContainer}/>
+          <Route exact path="/Publicaciones" component={PublicacionesContainer}/>
           <Switch>
             <Route path="/customers/new" component={InicioContainer}/>
             <Route path="/customers/:dni" component={InicioContainer}/>

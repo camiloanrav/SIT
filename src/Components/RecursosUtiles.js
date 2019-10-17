@@ -17,31 +17,13 @@ const RecursosUtiles = ({ header, body }) => {
                         <li>
                             <a href="">
                                 <span class="fab fa-google-drive"></span>
-                                <p>Políticas</p>
+                                <p>Link a manual</p>
                             </a>
                         </li>
                         <li>
                             <a href="">
-                                <span class="icon icon-drive"></span>
-                                <p>Documento en línea</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="">
-                                <span class="icon icon-download"></span>
-                                <p>Reglamentos.doc</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="">
-                                <span class="icon icon-download"></span>
-                                <p>Norma-3456.pdf</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="">
-                                <span class="icon icon-download"></span>
-                                <p>Resoluciones.pdf</p>
+                                <span class="fas fa-file-download"></span>
+                                <p>Descargar manual</p>
                             </a>
                         </li>
                     </ul>

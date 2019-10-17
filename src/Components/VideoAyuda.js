@@ -7,7 +7,7 @@ const VideoAyuda = () => {
             <section class="video-section">
                 <div class="vs">
                     <h1 class="section-title">
-                Conoce la experiencia UAO
+                Video guía
                 </h1>
                     <div class="vs-wrap">
                     <div class="vs-container">

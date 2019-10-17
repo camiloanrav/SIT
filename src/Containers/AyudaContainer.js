@@ -5,6 +5,7 @@ import Footer from '../Components/Footer';
 import NavBarDesktop from '../Components/NavBarDesktop';
 import NavBarMovil from '../Components/NavBarMovil';
 import RecursosUtiles from '../Components/RecursosUtiles';
+import Titulo from '../Components/Titulo';
 
 class AyudaContainer extends Component {
     render() {
@@ -12,6 +13,7 @@ class AyudaContainer extends Component {
             <div>
                 <NavBarDesktop></NavBarDesktop>
                 <NavBarMovil></NavBarMovil>
+                <Titulo titulo="Ayuda"></Titulo>
                 <VideoAyuda></VideoAyuda>
                 <div className="ayuda">
                     <div>
