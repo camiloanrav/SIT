@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import logo from '../logo-ser.png';
 
 const NavBarMovil = ({ header, body }) => {
     return (
@@ -9,41 +10,23 @@ const NavBarMovil = ({ header, body }) => {
                 <div id="hmm-top">
                     <span class="hmmt-line"></span>
                     <a href="#" id="hmmt-menu-icon">
-                        <span class="icon icon-hamburguesa"></span>
+                        <span class="icon fas fa-hamburguesa"></span>
                         <p>Menú</p>
                     </a>
                     <a href="#" class="hmmt-logo">
                         <figure class="gf-figure-logo">
-                            <img src="../../../images/UAO-logo.png" alt="UAO"></img>
+                            <img src={logo} alt="UAO"></img>
                         </figure>
-                    </a>
-                    <a href="#" id="hmmt-search">
-                        <div class="circle-icon">
-                            <span class="icon icon-search"></span>
-                        </div>
-                        <p>Buscar</p>
                     </a>
 
                     <span class="scroll-indicator"></span>
-                </div>
-
-                <div id="hmm-search-dropdown">
-                    <div class="hmmsd-container">
-                        <form class="hmmsdc-form-search">
-                            <div class="input-form-search">
-                                <input id="hmmsdc-search" type="search" name="buscar" required="required"></input>
-                                <label for="hmmsdc-search">¿Qué estás buscando?</label>
-                            </div>
-                            <button id="hmmsdc-submit" type="submit" value=""><span class="icon icon-search"></span></button>
-                        </form>
-                    </div>
                 </div>
 
                 <div id="hmm-bottom">
                     <div class="hmmb-icons">
                         <a href="#" id="hmmb-menu-icon-close">
                             <div class="circle-icon">
-                                <span class="icon icon-close"></span>
+                                <span class="icon fas fa-close"></span>
                             </div>
                             <p>Cerrar</p>
                         </a>
@@ -52,7 +35,7 @@ const NavBarMovil = ({ header, body }) => {
                             <button class="profile-btn ">
                                 <div class="pb-circle">
                                     <div>
-                                        <span class="icon icon-hand-point-up"></span>
+                                        <span class="icon fas fa-hand-point-up"></span>
                                     </div>
                                 </div>
                                 <div class="pb-rectangle">Elige tu perfil</div>
@@ -61,7 +44,7 @@ const NavBarMovil = ({ header, body }) => {
                         <div id="hmmb-profile-dropdown">
                             <a href="#" id="hmmbpd-close">
                                 <div class="circle-icon">
-                                    <span class="icon icon-close"></span>
+                                    <span class="icon fas fa-close"></span>
                                 </div>
                                 <p>Cerrar</p>
                             </a>
@@ -71,7 +54,7 @@ const NavBarMovil = ({ header, body }) => {
                                     <a href="">
                                         <li>
                                             <div class="circle-icon">
-                                                <span class="icon icon-user-plus"></span>
+                                                <span class="icon fas fa-user-plus"></span>
                                             </div>
                                             <p>Aspirante</p>
                                         </li>
@@ -79,7 +62,7 @@ const NavBarMovil = ({ header, body }) => {
                                     <a href="">
                                         <li>
                                             <div class="circle-icon">
-                                                <span class="icon icon-users"></span>
+                                                <span class="icon fas fa-users"></span>
                                             </div>
                                             <p>Estudiante</p>
                                         </li>
@@ -87,7 +70,7 @@ const NavBarMovil = ({ header, body }) => {
                                     <a href="">
                                         <li>
                                             <div class="circle-icon">
-                                                <span class="icon icon-graduation-cap"></span>
+                                                <span class="icon fas fa-graduation-cap"></span>
                                             </div>
                                             <p>Egresado</p>
                                         </li>
@@ -95,7 +78,7 @@ const NavBarMovil = ({ header, body }) => {
                                     <a href="">
                                         <li>
                                             <div class="circle-icon">
-                                                <span class="icon icon-book"></span>
+                                                <span class="icon fas fa-book"></span>
                                             </div>
                                             <p>Docente</p>
                                         </li>
@@ -103,7 +86,7 @@ const NavBarMovil = ({ header, body }) => {
                                     <a href="">
                                         <li>
                                             <div class="circle-icon">
-                                                <span class="icon icon-address-card"></span>
+                                                <span class="icon fas fa-address-card"></span>
                                             </div>
                                             <p>Colaborador</p>
                                         </li>
@@ -111,7 +94,7 @@ const NavBarMovil = ({ header, body }) => {
                                     <a href="">
                                         <li>
                                             <div class="circle-icon">
-                                                <span class="icon icon-university"></span>
+                                                <span class="icon fas fa-university"></span>
                                             </div>
                                             <p>Entidad</p>
                                         </li>
@@ -128,7 +111,7 @@ const NavBarMovil = ({ header, body }) => {
                         <li>
                             <a href="">
                                 <div class="circle-icon">
-                                    <span class="icon icon-envelope"></span>
+                                    <span class="icon fas fa-envelope"></span>
                                 </div>
                                 Tu correo institucional
                             </a>
@@ -138,7 +121,7 @@ const NavBarMovil = ({ header, body }) => {
                         <li>
                             <div class="hmmbp-title">
                                 <a href="">Institución</a>
-                                <a class="hmmbpt-dropbtn" href=""><span class="icon icon-angle-down"></span></a>
+                                <a class="hmmbpt-dropbtn" href=""><span class="icon fas fa-angle-down"></span></a>
                             </div>
                             <ul class="hmmbp-submenu">
                                 <li><a href="#">Nuestro campus</a></li>
@@ -154,7 +137,7 @@ const NavBarMovil = ({ header, body }) => {
                         <li>
                             <div class="hmmbp-title">
                                 <a href="">Oferta Académica</a>
-                                <a class="hmmbpt-dropbtn" href=""><span class="icon icon-angle-down"></span></a>
+                                <a class="hmmbpt-dropbtn" href=""><span class="icon fas fa-angle-down"></span></a>
                             </div>
                             <ul class="hmmbp-submenu">
                                 <li><a href="#">¿En qué estás interesado?</a></li>
@@ -169,7 +152,7 @@ const NavBarMovil = ({ header, body }) => {
                         <li>
                             <div class="hmmbp-title">
                                 <a href="">Admisiones</a>
-                                <a class="hmmbpt-dropbtn" href=""><span class="icon icon-angle-down"></span></a>
+                                <a class="hmmbpt-dropbtn" href=""><span class="icon fas fa-angle-down"></span></a>
                             </div>
                             <ul class="hmmbp-submenu">
                                 <li><a href="#">Para pregrados</a></li>
@@ -183,7 +166,7 @@ const NavBarMovil = ({ header, body }) => {
                         <li>
                             <div class="hmmbp-title">
                                 <a href="">Experimenta la UAO</a>
-                                <a class="hmmbpt-dropbtn" href=""><span class="icon icon-angle-down"></span></a>
+                                <a class="hmmbpt-dropbtn" href=""><span class="icon fas fa-angle-down"></span></a>
                             </div>
                             <ul class="hmmbp-submenu">
                                 <li><a href="#">¿Por qué estudiar en la UAO?</a></li>
@@ -199,7 +182,7 @@ const NavBarMovil = ({ header, body }) => {
                         <li>
                             <div class="hmmbp-title">
                                 <a href="">Investigación</a>
-                                <a class="hmmbpt-dropbtn" href=""><span class="icon icon-angle-down"></span></a>
+                                <a class="hmmbpt-dropbtn" href=""><span class="icon fas fa-angle-down"></span></a>
                             </div>
                             <ul class="hmmbp-submenu">
                                 <li><a href="#">¿Quiénes somos?</a></li>
@@ -212,7 +195,7 @@ const NavBarMovil = ({ header, body }) => {
                         <li>
                             <div class="hmmbp-title">
                                 <a href="">Servicios Académicos</a>
-                                <a class="hmmbpt-dropbtn" href=""><span class="icon icon-angle-down"></span></a>
+                                <a class="hmmbpt-dropbtn" href=""><span class="icon fas fa-angle-down"></span></a>
                             </div>
                             <ul class="hmmbp-submenu">
                                 <li><a href="#">Servicios generales</a></li>
@@ -226,7 +209,7 @@ const NavBarMovil = ({ header, body }) => {
                         <li>
                             <div class="hmmbp-title">
                                 <a href="">Bienestar</a>
-                                <a class="hmmbpt-dropbtn" href=""><span class="icon icon-angle-down"></span></a>
+                                <a class="hmmbpt-dropbtn" href=""><span class="icon fas fa-angle-down"></span></a>
                             </div>
                             <ul class="hmmbp-submenu">
                                 <li><a href="#">Información y políticas</a></li>
@@ -264,7 +247,7 @@ const NavBarMovil = ({ header, body }) => {
                                     <div class="contact-title">Teléfono</div>
                                     <div class="contact-info">
                                         <div class="circle-icon">
-                                            <span class="icon icon-phone"></span>
+                                            <span class="icon fas fa-phone"></span>
                                         </div>
                                         <div class="ci-text">
                                             PBX:+ 2 318 8000
@@ -282,7 +265,7 @@ const NavBarMovil = ({ header, body }) => {
                                     <div class="contact-title">Correo Electrónico</div>
                                     <div class="contact-info">
                                         <div class="circle-icon">
-                                            <span class="icon icon-envelope"></span>
+                                            <span class="icon fas fa-envelope"></span>
                                         </div>
                                         <div class="ci-text">
                                             <a href="">buzon@uao.edu.co</a>
@@ -293,7 +276,7 @@ const NavBarMovil = ({ header, body }) => {
                                     <div class="contact-title">Dirección de Campus principal</div>
                                     <div class="contact-info">
                                         <div class="circle-icon">
-                                            <span class="icon icon-university"></span>
+                                            <span class="icon fas fa-university"></span>
                                         </div>
                                         <div class="ci-text">
                                             Cll 25#115-85
@@ -306,7 +289,7 @@ const NavBarMovil = ({ header, body }) => {
                                     <div class="contact-title">Ciudad</div>
                                     <div class="contact-info">
                                         <div class="circle-icon">
-                                            <span class="icon icon-map-marker-alt"></span>
+                                            <span class="icon fas fa-map-marker-alt"></span>
                                         </div>
                                         <div class="ci-text">
                                             Cali, Colombia

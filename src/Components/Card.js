@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Card = ({nombreDimension}) => {
+const Card = ({nombreDimension, descripcion}) => {
     return (
         <div>
             <div className="card">
@@ -14,14 +14,13 @@ const Card = ({nombreDimension}) => {
                                 <img src="https://pattern.uao.edu.co/images/example-image.jpg" alt="UAO"></img>
                             </figure>
                             <div>
-                                <p class="category-tag ">
+                                <p class="category-tag">
                                     {nombreDimension}
                                 </p>
-                                <time class="date-text">03 de Abril de 2019</time>
                             </div>
                         </div>
                         <p class="nc-title">
-                            Ingeniería mecánica: 45 años formando ingenieros líderes para los desafíos de la región
+                            {descripcion}
                         </p>
                     </a>
                 </article>

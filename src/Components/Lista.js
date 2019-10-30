@@ -1,10 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {
+    BrowserRouter as Router,
+    useParams
+  } from "react-router-dom";
 
 const Lista = props => {
+    let { listaID } = useParams();
     return (
         <div>
             <div className="lista">
+            
+            <h3>{listaID}</h3>
                 <div class="form-table" >
                     <table style={{}}>
                         <thead>
@@ -19,8 +26,8 @@ const Lista = props => {
                                 <td data-table-header="Nivel de formación">Sistema multimedia para favoreces el aprendizaje profundo en estudiantes de la materia arquitectura de sistemas multimedia</td>
                                 <td data-table-header="Docentes de planta">Camilo Andres Ramirez, Cristian Andres Olivares</td>
                                 <td data-table-header="Docentes de hora cátedra">
-                                    <a>Detalles <span class="fas fa-search"></span></a>
-                                    <a>Descargar <span class="fas fa-file-download"></span></a>
+                                    {/*<p><a>Detalles <span class="fas fa-search"></span></a></p>*/}
+                                    <a href="">Descargar <span class="fas fa-file-download"></span></a>
                                 </td>
                             </tr>
 

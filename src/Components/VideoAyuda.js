@@ -7,8 +7,8 @@ const VideoAyuda = () => {
             <section class="video-section">
                 <div class="vs">
                     <h1 class="section-title">
-                Video guía
-                </h1>
+                        Video guía
+                    </h1>
                     <div class="vs-wrap">
                     <div class="vs-container">
                         <iframe src="https://www.youtube.com/embed/dvVOFNpando" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>

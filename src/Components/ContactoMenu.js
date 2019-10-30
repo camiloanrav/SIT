@@ -73,10 +73,10 @@ const ContactoMenu = () => {
                             <label class="cb-container">
                                 <input type="checkbox"></input>
                                 <p>Acepto las <a href="">Políticas de privacidad</a></p>
-                                <span class="icon fas fa-no-check-two"></span>
+                                <span class="icon far fa-square"></span>
                             </label>
 
-                            <div class="input-form ">
+                            <div class="input-form">
                                 <input id="sig-name" type="text" name="nombre" value="" required="required"/>
                                 <label for="sig-name">Nombres</label>
                                 <p>Formato de nombre incorrecto</p>
@@ -94,10 +94,10 @@ const ContactoMenu = () => {
                             <p>Formato de nombre incorrecto</p>
                             </div>
 
-                                    <div class="form-captcha"></div>
+                            <div class="form-captcha"></div>
                                     
                             <button class="form-submit-btn" disabled>
-                            Enviar mensaje
+                                Enviar mensaje
                             </button>
                         </form>
                         </div>

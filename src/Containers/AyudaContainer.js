@@ -17,15 +17,11 @@ class AyudaContainer extends Component {
                 <VideoAyuda></VideoAyuda>
                 <div className="ayuda">
                     <div>
-                        <h3>A tener en cuenta</h3>
-                        <ul>
-                            <li>lodsadremdasdasdas</li>
-                            <li>dasdsadasdasdasda</li>
-                            <li>dsadsadasdasdasdas</li>
-                            <li>dasdasdsadasdasdasd</li>
-                            <li>dasdasdasdsadasdasdas</li>
-                        </ul>
-                    </div>
+                        <h3>Preguntas frecuentes:</h3>
+                        <div class="circle-icon">
+                            <span class="icon fas fa-envelope"></span>
+                        </div>
+                </div>
                     <RecursosUtiles></RecursosUtiles>
                 </div>
                 <Footer></Footer>
