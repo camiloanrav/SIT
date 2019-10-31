@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 
 import Footer from '../Components/Footer';
 import NavBarDesktop from '../Components/NavBarDesktop';
@@ -88,13 +89,52 @@ const dataBar = (canvas) => {
   }
   
 
-function EstadisticasContainer() {
+  class EstadisticasContainer extends Component {
     // Declara una nueva variable de estado, la cual llamaremos “count”
     //const [gradient, setGradient] = useState("");
+    constructor(props) {
+      super(props);
+      this.state = {
+          espera: true,
+          descripcion: null,
+          nombre: null,
+          valor: null,
+          dimensiones: []
+      };
+  }
+  render() {
+      
+    const {espera, nombre, descripcion, dimensiones} = this.state;
+
     return (
       <div>
         <NavBarDesktop></NavBarDesktop>
         <NavBarMovil></NavBarMovil>
+       
+        <div className="input-form select-input" >
+                <label for="locality-dropdown">Elija</label>
+                <select id="locality-dropdown" name="locality-dropdown" onChange={cargarCategorias}>   
+                <option value="epa">Epita</option>                        
+                </select>
+        </div>
+        <div className="input-form select-input" >
+        <label for="dropdown-categorias">Elija</label>
+        <select id="dropdown-categorias" name="categoty">
+    <option value="defecto">Categorias</option>
+  </select>
+        </div>
+        <div className="input-form select-input" >
+        </div>
+        <div className="input-form select-input" >
+        </div>
+        <div className="input-form select-input" >
+        </div>
+        <div className="input-form select-input" >
+        </div>
+        <div className="input-form select-input" >
+        </div>
+        <div className="input-form select-input" >
+        </div>
         <div style={{height:'', width:'50rem'}}>
           <h2>Line Example</h2>
           <Line data={dataLine} width={100} height={50}/>
@@ -105,6 +145,104 @@ function EstadisticasContainer() {
       </div>
     );
   }
+
+  async componentDidMount(){
+    const array = [];
+    axios.get("http://localhost/serpacificows/dimension/all.php").then(response => {
+      iniciartodo();
+    }).catch(error => console.log(error.response));
+  }
+  }
+
+  function iniciartodo() {
+    console.log("Entro");
+    let dropdown = document.getElementById('locality-dropdown');
+    dropdown.length = 0;
+    let defaultOption = document.createElement('option');
+    defaultOption.text = 'Escoge una dimensíon';
+
+    dropdown.add(defaultOption);
+    dropdown.selectedIndex = 0;
+
+    const url = 'http://localhost/sitws/dimension/all.php';
+
+    fetch(url, {
+        method: 'GET',      
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then(function (response) {
+        if (response.status !== 200) {
+            console.warn('Parece que hay un problema. Status Code: ' + response.status);
+            return;
+        }
+        // Examine the text in the response
+        response.json().then(function (data) {
+            let option;
+            for (let i = 0; i < data.length; i++) {
+                option = document.createElement('option');
+                option.text = data[i].nombre;
+                option.value = data[i].iddimensiones;
+                dropdown.add(option);
+            }
+        });
+    }).catch(function (err) {
+        console.error('Fetch Error -', err);
+    });
+}
+
+
+function cargarCategorias() {
+
+  console.log("Epita");
+  let dimensiones = document.getElementById("locality-dropdown");
+  let idSeleccionada = dimensiones.options[dimensiones.selectedIndex].value;
+
+  console.log(idSeleccionada);
+
+  let dropdown = document.getElementById('dropdown-categorias');
+  dropdown.length = 0;
+
+  let defaultOption = document.createElement('option');
+  defaultOption.text = 'Escoge una categoria';
+
+  dropdown.add(defaultOption);
+  dropdown.selectedIndex = 0;
+
+  const url = 'http://localhost/sitws/categoria/search.php?id=' + idSeleccionada;
+
+  fetch(url, {
+    method: 'GET', // or 'PUT'
+    // data can be `string` or {object}!
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+    .then(
+      function (response) {
+        if (response.status !== 200) {
+          console.warn('Parece que hay un problema. Status Code: ' +
+            response.status);
+          return;
+        }
+
+        // Examine the text in the response  
+        response.json().then(function (data) {
+          let option;
+
+          for (let i = 0; i < data.length; i++) {
+            option = document.createElement('option');
+            option.text = data[i].nombre;
+            option.value = data[i].idcategorias;
+            dropdown.add(option);
+          }
+        });
+      }
+    )
+    .catch(function (err) {
+      console.error('Fetch Error -', err);
+    });
+}
 
 EstadisticasContainer.propTypes = {
 
