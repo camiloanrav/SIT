@@ -6,9 +6,12 @@ import Footer from '../Components/Footer';
 import NavBarDesktop from '../Components/NavBarDesktop';
 import NavBarMovil from '../Components/NavBarMovil';
 
+import Select from 'react-select';
+
 import {Line} from 'react-chartjs-2';
 import {Doughnut} from 'react-chartjs-2';
 import {Bar} from 'react-chartjs-2';
+
 
 
   const dataLine = (canvas) => {
@@ -87,6 +90,44 @@ const dataBar = (canvas) => {
         ]
     }
   }
+
+  const options = [
+    { value: 'chocolate', label: 'Chocolate' },
+    { value: 'strawberry', label: 'Strawberry' },
+    { value: 'vanilla', label: 'Vanilla' },
+    { value: 'fresa', label: 'Fresa' },
+    { value: 'mango', label: 'Mango' },
+    { value: 'mandarina', label: 'Mandarina' },
+    { value: 'lulo', label: 'Lulo' },
+    { value: 'papaya', label: 'Papaya' },
+    { value: 'zapote', label: 'Zapote' },
+    { value: 'limon', label: 'Limon' },
+    { value: 'uva', label: 'Uva' },
+    { value: 'mora', label: 'Mora' },
+    { value: 'guayaba', label: 'Guayaba' },
+    { value: 'guanabana', label: 'Guanabana' },
+    { value: 'pera', label: 'Pera' },
+    { value: 'piña', label: 'Piña' },
+  ];
+
+  const options2 = [
+    { value: 'chocolate', label: 'Chocolatee' },
+    { value: 'strawberry', label: 'Strawberryy' },
+    { value: 'vanilla', label: 'Vanilla' },
+    { value: 'fresa', label: 'Fresa' },
+    { value: 'mango', label: 'Mango' },
+    { value: 'mandarina', label: 'Mandarina' },
+    { value: 'lulo', label: 'Lulo' },
+    { value: 'papaya', label: 'Papaya' },
+    { value: 'zapote', label: 'Zapote' },
+    { value: 'limon', label: 'Limon' },
+    { value: 'uva', label: 'Uva' },
+    { value: 'mora', label: 'Mora' },
+    { value: 'guayaba', label: 'Guayaba' },
+    { value: 'guanabana', label: 'Guanabana' },
+    { value: 'pera', label: 'Pera' },
+    { value: 'piña', label: 'Piña' },
+  ];
   
 
   class EstadisticasContainer extends Component {
@@ -95,33 +136,74 @@ const dataBar = (canvas) => {
     constructor(props) {
       super(props);
       this.state = {
-          espera: true,
-          descripcion: null,
-          nombre: null,
-          valor: null,
-          dimensiones: []
+        espera: true,
+        descripcion: null,
+        nombre: null,
+        valor: null,
+        dimensiones: [],
+        selectedOption: null,
+        selectedOption2: null
+      };
+
+      this.handleChange = selectedOption => {
+        this.setState(
+          { selectedOption },
+          () => console.log(`Option selected:`, this.state.selectedOption)
+        );
+      };
+
+      this.handleChange2 = selectedOption2 => {
+        this.setState(
+          { selectedOption2 },
+          () => console.log(`Option selected:`, this.state.selectedOption2)
+        );
       };
   }
+
+
   render() {
       
-    const {espera, nombre, descripcion, dimensiones} = this.state;
+    const {espera, nombre, descripcion, dimensiones, selectedOption, selectedOption2} = this.state;
 
     return (
       <div>
         <NavBarDesktop></NavBarDesktop>
         <NavBarMovil></NavBarMovil>
+        <div style={{'width':'25em', 'textAlign':'left', 'margin':'2em'}}>
+          <Select
+            value={selectedOption}
+            onChange={this.handleChange}
+            options={options}
+            isSearchable={true}
+            placeholder={"Territorio"}
+            isMulti={true}
+            captureMenuScroll={true}
+          />
+        </div>
+        <div style={{'width':'25em', 'textAlign':'left', 'margin':'2em'}}>
+          <Select
+            value={selectedOption2}
+            onChange={this.handleChange2}
+            options={options2}
+            isSearchable={true}
+            placeholder={"Dimensiones"}
+            captureMenuScroll={true}
+          />
+        </div>
+        
+        
        
         <div className="input-form select-input" >
-                <label for="locality-dropdown">Elija</label>
-                <select id="locality-dropdown" name="locality-dropdown" onChange={cargarCategorias}>   
-                <option value="epa">Epita</option>                        
-                </select>
+          <label for="locality-dropdown">Elija</label>
+          <select id="locality-dropdown" name="locality-dropdown" onChange={cargarCategorias}>   
+            <option value="epa">Epita</option>                        
+          </select>
         </div>
         <div className="input-form select-input" >
-        <label for="dropdown-categorias">Elija</label>
-        <select id="dropdown-categorias" name="categoty">
-    <option value="defecto">Categorias</option>
-  </select>
+          <label for="dropdown-categorias">Elija</label>
+          <select id="dropdown-categorias" name="categoty">
+            <option value="defecto">Categorias</option>
+          </select>
         </div>
         <div className="input-form select-input" >
         </div>

@@ -18,7 +18,6 @@ const Acercade = () => {
             <div class="results-card" href="#" style={{'textAlign':'left'}}>
                 <div>
                     <p class="category-tag ">
-
                         ¿Qué puedo encontrar aquí?
                     </p>
                     <h6>
