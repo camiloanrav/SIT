@@ -187,7 +187,6 @@ const dataBar = (canvas) => {
             options={options2}
             isSearchable={true}
             placeholder={"Dimensiones"}
-            captureMenuScroll={true}
           />
         </div>
         
@@ -246,7 +245,7 @@ const dataBar = (canvas) => {
     dropdown.add(defaultOption);
     dropdown.selectedIndex = 0;
 
-    const url = 'http://localhost/sitws/dimension/all.php';
+    const url = 'http://localhost/serpacificows/dimension/all.php';
 
     fetch(url, {
         method: 'GET',      
@@ -291,7 +290,7 @@ function cargarCategorias() {
   dropdown.add(defaultOption);
   dropdown.selectedIndex = 0;
 
-  const url = 'http://localhost/sitws/categoria/search.php?id=' + idSeleccionada;
+  const url = 'http://localhost/serpacificows/categoria/search.php?id=' + idSeleccionada;
 
   fetch(url, {
     method: 'GET', // or 'PUT'

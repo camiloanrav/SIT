@@ -15,22 +15,6 @@ class PublicacionesContainer extends Component {
                 <NavBarDesktop></NavBarDesktop>
                 <NavBarMovil></NavBarMovil>
                 <Titulo titulo="Publicaciones"></Titulo>
-                <SelectorUAO></SelectorUAO>
-                <label class="cb-container">
-                    <input type="checkbox"></input>
-                    <p>Opción Uno</p>
-                    <span class="icon far fa-square"></span>
-                </label>
-                    <label class="cb-container">
-                    <input type="checkbox"></input>
-                    <p>Opción Dos</p>
-                    <span class="icon far fa-square"></span>
-                </label>
-                <label class="cb-container">
-                    <input type="checkbox"></input>
-                    <p>Opción Tres</p>
-                    <span class="icon far fa-square"></span>
-                </label>
                 <Tabs></Tabs>
                 <Footer></Footer>
             </div>
