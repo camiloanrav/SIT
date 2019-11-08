@@ -115,6 +115,110 @@ const dataBar = canvas => {
     };
 };
 
+const options = [
+    {
+        value: "chocolate",
+        label: "Chocolate"
+    }, {
+        value: "strawberry",
+        label: "Strawberry"
+    }, {
+        value: "vanilla",
+        label: "Vanilla"
+    }, {
+        value: "fresa",
+        label: "Fresa"
+    }, {
+        value: "mango",
+        label: "Mango"
+    }, {
+        value: "mandarina",
+        label: "Mandarina"
+    }, {
+        value: "lulo",
+        label: "Lulo"
+    }, {
+        value: "papaya",
+        label: "Papaya"
+    }, {
+        value: "zapote",
+        label: "Zapote"
+    }, {
+        value: "limon",
+        label: "Limon"
+    }, {
+        value: "uva",
+        label: "Uva"
+    }, {
+        value: "mora",
+        label: "Mora"
+    }, {
+        value: "guayaba",
+        label: "Guayaba"
+    }, {
+        value: "guanabana",
+        label: "Guanabana"
+    }, {
+        value: "pera",
+        label: "Pera"
+    }, {
+        value: "piña",
+        label: "Piña"
+    }
+];
+
+const options2 = [
+    {
+        value: "chocolate",
+        label: "Chocolatee"
+    }, {
+        value: "strawberry",
+        label: "Strawberryy"
+    }, {
+        value: "vanilla",
+        label: "Vanilla"
+    }, {
+        value: "fresa",
+        label: "Fresa"
+    }, {
+        value: "mango",
+        label: "Mango"
+    }, {
+        value: "mandarina",
+        label: "Mandarina"
+    }, {
+        value: "lulo",
+        label: "Lulo"
+    }, {
+        value: "papaya",
+        label: "Papaya"
+    }, {
+        value: "zapote",
+        label: "Zapote"
+    }, {
+        value: "limon",
+        label: "Limon"
+    }, {
+        value: "uva",
+        label: "Uva"
+    }, {
+        value: "mora",
+        label: "Mora"
+    }, {
+        value: "guayaba",
+        label: "Guayaba"
+    }, {
+        value: "guanabana",
+        label: "Guanabana"
+    }, {
+        value: "pera",
+        label: "Pera"
+    }, {
+        value: "piña",
+        label: "Piña"
+    }
+];
+
 var optionsDims = [];
 var optionsCats = [];
 var optionsSubcats = [];
@@ -169,7 +273,19 @@ class EstadisticasContainer extends Component {
             seleccionadoPeriodo:null,
             opcionesPeriodo:optionsPeriodo,
             idSeleccionada:null        
-        };       
+        };
+
+        this.handleChange = selectedOption => {
+            this.setState({
+                selectedOption
+            }, () => console.log(`Option selected:`, this.state.selectedOption));
+        };
+
+        this.handleChange2 = selectedOption2 => {
+            this.setState({
+                selectedOption2
+            }, () => console.log(`Option selected:`, this.state.selectedOption2));
+        };
 
         this.cambioDimensiones = seleccionadoDimension => {
             this.setState({
@@ -254,7 +370,12 @@ class EstadisticasContainer extends Component {
 
     render() {
         const {
-            espera,            
+            espera,
+            nombre,
+            descripcion,
+            dimensiones, 
+            selectedOption,
+            selectedOption2,         
             opcionesDimensiones,
             seleccionadoDimension,
             estadoCategorias,
@@ -291,8 +412,41 @@ class EstadisticasContainer extends Component {
         return (
             <div>
                 <NavBarDesktop></NavBarDesktop>
-                <NavBarMovil></NavBarMovil>             
-               
+                <NavBarMovil></NavBarMovil>
+              
+                <div style={
+                    {
+                        width: "25em",
+                        textAlign: "left",
+                        margin: "2em"
+                    }
+                }>  {espera ? '' :
+                    <Select value={selectedOption}
+                        onChange={
+                            this.handleChange
+                        }
+                        options={options}
+                        isSearchable={true}
+                        placeholder={"Territorio"}
+                        isMulti={true}
+                        captureMenuScroll={true}/>}
+                </div>
+                <div style={
+                    {
+                        width: "25em",
+                        textAlign: "left",
+                        margin: "2em"
+                    }
+                }>
+                    <Select value={selectedOption2}
+                        onChange={
+                            this.handleChange2
+                        }
+                        options={options2}
+                        isSearchable={true}
+                        placeholder={"Dimensiones"}
+                        captureMenuScroll={true}/>
+                </div>
                 {/*-----------Dropdown de dimensiones------------*/}
                 <div style={
                     {
@@ -307,7 +461,7 @@ class EstadisticasContainer extends Component {
                         }
                         options={opcionesDimensiones}
                         isSearchable={true}
-                        placeholder={"Dimension"}
+                        placeholder={"Prueba"}
                         captureMenuScroll={true}/>
                 </div>
                 {/*-----------Dropdown de categorias------------*/}
@@ -469,7 +623,27 @@ class EstadisticasContainer extends Component {
                         isSearchable={true}
                         placeholder={"Periodo"}
                     captureMenuScroll={true}/> }
-                </div>        
+                </div>                        
+
+                <div className="input-form select-input">
+                    <label for="locality-dropdown">Elija</label>
+                    <select id="locality-dropdown" name="locality-dropdown"
+                        onChange={cargarCategorias}>
+                        <option value="epa">Epita</option>
+                    </select>
+                </div>
+                <div className="input-form select-input">
+                    <label for="dropdown-categorias">Elija</label>
+                    <select id="dropdown-categorias" name="categoty">
+                        <option value="defecto">Categorias</option>
+                    </select>
+                </div>
+                <div className="input-form select-input"></div>
+                <div className="input-form select-input"></div>
+                <div className="input-form select-input"></div>
+                <div className="input-form select-input"></div>
+                <div className="input-form select-input"></div>
+                <div className="input-form select-input"></div>
                 <div style={
                     {
                         height: "",
@@ -494,7 +668,8 @@ class EstadisticasContainer extends Component {
 
     async componentDidMount() {
         const array = [];
-        axios.get("http://localhost/serpacificows/dimension/all.php").then(response => {           
+        axios.get("http://localhost/serpacificows/dimension/all.php").then(response => {
+            iniciartodo();     
             let daticos = response.data;
             optionsDims = daticos.map(getParsedDimension);         
             this.setState({opcionesDimensiones: optionsDims});
@@ -632,7 +807,89 @@ function getParsedPeriodo(item) {
     return opcionTemp;
 }
 
+function iniciartodo() {
+    console.log("Entro");
+    let dropdown = document.getElementById("locality-dropdown");
+    dropdown.length = 0;
+    let defaultOption = document.createElement("option");
+    defaultOption.text = "Escoge una dimensíon";
 
+    dropdown.add(defaultOption);
+    dropdown.selectedIndex = 0;
+
+    const url = "http://localhost/sitws/dimension/all.php";
+
+    fetch(url, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }).then(function (response) {
+        if (response.status !== 200) {
+            console.warn("Parece que hay un problema. Status Code: " + response.status);
+            return;
+        }
+        // Examine the text in the response
+        response.json().then(function (data) {
+            let option;
+            for (let i = 0; i < data.length; i++) {
+                option = document.createElement("option");
+                option.text = data[i].nombre;
+                option.value = data[i].iddimensiones;
+                dropdown.add(option);
+            }
+        });
+    }).catch(function (err) {
+        console.error("Fetch Error -", err);
+    });
+}
+
+function cargarCategorias() {
+    console.log("Epita");
+    let dimensiones = document.getElementById("locality-dropdown");
+    let idSeleccionada = dimensiones.options[dimensiones.selectedIndex].value;
+
+    console.log(idSeleccionada);
+
+    let dropdown = document.getElementById("dropdown-categorias");
+    dropdown.length = 0;
+
+    let defaultOption = document.createElement("option");
+    defaultOption.text = "Escoge una categoria";
+
+    dropdown.add(defaultOption);
+    dropdown.selectedIndex = 0;
+
+    const url = "http://localhost/sitws/categoria/search.php?id=" + idSeleccionada;
+
+    fetch(url, {
+        method: "GET",
+        // or 'PUT'
+        // data can be `string` or {object}!
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }).then(function (response) {
+        if (response.status !== 200) {
+            console.warn("Parece que hay un problema. Status Code: " + response.status);
+            return;
+        }
+
+        // Examine the text in the response
+        response.json().then(function (data) {
+            let option;
+
+            for (let i = 0; i < data.length; i++) {
+                option = document.createElement("option");
+                option.text = data[i].nombre;
+                option.value = data[i].idcategorias;
+                dropdown.add(option);
+            }
+        });
+    }).catch(function (err) {
+        console.error("Fetch Error -", err);
+    });
+}
 
 EstadisticasContainer.propTypes = {};
 
