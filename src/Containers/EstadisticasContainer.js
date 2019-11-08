@@ -12,109 +12,6 @@ import {Line} from "react-chartjs-2";
 import {Doughnut} from "react-chartjs-2";
 import {Bar} from "react-chartjs-2";
 
-const dataLine = canvas => {
-    const ctx = canvas.getContext("2d");
-    const gradient = ctx.createLinearGradient(0, 0, 1, 2000);
-    gradient.addColorStop(0, "rgba(50,50,250,1)");
-    gradient.addColorStop(1, "rgba(250,0,50,0.5)");
-    return {
-        labels: [
-            "Enero",
-            "Febrero",
-            "Marzo",
-            "Abril",
-            "Mayo",
-            "Junio",
-            "Julio"
-        ],
-        datasets: [
-            {
-                label: "My First dataset",
-                fill: true,
-                lineTension: 0.1,
-                backgroundColor: gradient,
-                borderColor: "blue",
-                borderCapStyle: "butt",
-                borderDash: [],
-                borderDashOffset: 0.1,
-                borderJoinStyle: "miter",
-                pointBorderColor: "black",
-                pointBackgroundColor: "#fff",
-                pointBorderWidth: 10,
-                pointHoverRadius: 10,
-                pointHoverBackgroundColor: "rgba(75,192,192,1)",
-                pointHoverBorderColor: "rgba(220,220,220,1)",
-                pointHoverBorderWidth: 2,
-                pointRadius: 1,
-                pointHitRadius: 10,
-                data: [
-                    65,
-                    59,
-                    80,
-                    81,
-                    56,
-                    55,
-                    40
-                ]
-            }
-        ]
-    };
-};
-
-const dataDoughnut = {
-    labels: [
-        "Red", "Green", "Yellow"
-    ],
-    datasets: [
-        {
-            data: [
-                300, 50, 100
-            ],
-            backgroundColor: [
-                "#FF6384", "#36A2EB", "#FFCE56"
-            ],
-            hoverBackgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"]
-        }
-    ]
-};
-
-const dataBar = canvas => {
-    const ctx = canvas.getContext("2d");
-    const gradient = ctx.createLinearGradient(0, 0, 1, 2000);
-    gradient.addColorStop(0, "rgba(250,50,150,1)");
-    gradient.addColorStop(1, "rgba(50,0,250,0.5)");
-    return {
-        labels: [
-            "January",
-            "February",
-            "March",
-            "April",
-            "May",
-            "June",
-            "July"
-        ],
-        datasets: [
-            {
-                label: "My First dataset",
-                backgroundColor: gradient,
-                borderColor: "black",
-                borderWidth: 1,
-                hoverBackgroundColor: "rgba(250,50,150,0.5)",
-                hoverBorderColor: "rgba(250,50,150,1)",
-                data: [
-                    65,
-                    59,
-                    80,
-                    81,
-                    56,
-                    55,
-                    40
-                ]
-            }
-        ]
-    };
-};
-
 var optionsDims = [];
 var optionsCats = [];
 var optionsSubcats = [];
@@ -125,6 +22,33 @@ var optionsSubniv3 = [];
 var optionsSubniv4 = [];
 var optionsTerris = [];
 var optionsPeriodo = [];
+var arrEjes = ['January'];
+var arrDatos = [95];
+var datos = {
+  labels: arrEjes,
+  datasets: [
+    {
+      label: 'Rainfall',
+      backgroundColor: 'rgba(75,192,192,1)',
+      borderColor: 'rgba(0,0,0,1)',
+      borderWidth: 2,
+      data: arrDatos
+    }
+  ]
+}
+
+var wepaje = {
+    labels: arrEjes,
+    datasets: [
+      {
+        label: 'Rainfall',
+        backgroundColor: 'rgba(75,192,192,1)',
+        borderColor: 'rgba(0,0,0,1)',
+        borderWidth: 2,
+        data: arrDatos
+      }
+    ]
+  }
 
 class EstadisticasContainer extends Component {
     // Declara una nueva variable de estado, la cual llamaremos “count”
@@ -168,13 +92,15 @@ class EstadisticasContainer extends Component {
             estadoPeriodo:true,
             seleccionadoPeriodo:null,
             opcionesPeriodo:optionsPeriodo,
-            idSeleccionada:null        
+            idSeleccionada:null,
+            indicadorSeleccionado:null, 
+            estadoGrafica:true        
         };       
 
         this.cambioDimensiones = seleccionadoDimension => {
             this.setState({
                 seleccionadoDimension
-            }, () => {
+            }, () => {               
                 console.log(`Dimension Seleccionada:`, this.state.seleccionadoDimension.value);
                 this.cargarCats();
             });
@@ -244,6 +170,14 @@ class EstadisticasContainer extends Component {
                 this.cargarPeriodo();});
         };
 
+        this.cambioPeriodo = seleccionadoPeriodo => {
+            this.setState({
+                seleccionadoPeriodo
+            }, () => {
+                console.log(`Valor del periodo:`, this.state.seleccionadoPeriodo.value);
+                this.pintarGrafico();});
+        };
+
         this.cambioCategorias = this.cambioCategorias.bind(this);
         this.cambioSubcategorias = this.cambioSubcategorias.bind(this);
         this.cambioIndicadores = this.cambioIndicadores.bind(this);
@@ -284,7 +218,9 @@ class EstadisticasContainer extends Component {
             estadoPeriodo,
             opcionesPeriodo,             
             seleccionadoPeriodo,
-            idSeleccionada
+            idSeleccionada,
+            indicadorSeleccionado,
+            estadoGrafica
                    
          } = this.state;
 
@@ -469,23 +405,30 @@ class EstadisticasContainer extends Component {
                         isSearchable={true}
                         placeholder={"Periodo"}
                     captureMenuScroll={true}/> }
-                </div>        
+                </div> 
+
+                  {/*-----------Grafica que se genera------------*/}       
                 <div style={
                     {
-                        height: "",
-                        width: "50rem"
+                        width: "25em",
+                        textAlign: "left",
+                        margin: "2em"
                     }
-                }>
-                    <h2>Line Example</h2>
-                    <Line data={dataLine}
-                        width={100}
-                        height={50}/>
-                    <Doughnut data={dataDoughnut}
-                        width={100}
-                        height={50}/>
-                    <Bar data={dataBar}
-                        width={100}
-                        height={50}/>
+                }>{estadoGrafica ? '' : <Bar
+                  data={wepaje}
+                  options={{
+                  title: {
+                    display: true,
+                    text: indicadorSeleccionado + " en " + seleccionadoTerris.label,
+                    fontSize: 20
+                  },
+                  legend: {
+                    display: true,
+                    position: 'right'
+                  }
+                }}
+              />                
+            }            
                 </div>
                 <Footer></Footer>
             </div>
@@ -494,6 +437,7 @@ class EstadisticasContainer extends Component {
 
     async componentDidMount() {
         const array = [];
+        datos = "";        
         axios.get("http://localhost/serpacificows/dimension/all.php").then(response => {           
             let daticos = response.data;
             optionsDims = daticos.map(getParsedDimension);         
@@ -537,7 +481,7 @@ class EstadisticasContainer extends Component {
             optionsSubniv1 = daticosCat.map(getParsedIndicas);
             this.setState({opcionesSubniv1: optionsSubniv1, estadoSubniv1:false, estadoSubniv2:true, estadoSubniv3:true, estadoSubniv4:true, estadoTerris:true, estadoPeriodo:true});           
         }).catch(error => {console.log(error.response);
-            this.setState({idSeleccionada:idSearch});
+            this.setState({idSeleccionada:idSearch, indicadorSeleccionado:this.state.seleccionadoIndicadores.label});
             this.cargarTerris();});
     }
 
@@ -548,7 +492,7 @@ class EstadisticasContainer extends Component {
             optionsSubniv2 = daticosCat.map(getParsedIndicas);
             this.setState({opcionesSubniv2: optionsSubniv2, estadoSubniv2:false, estadoSubniv3:true, estadoSubniv4:true, estadoTerris:true, estadoPeriodo:true});           
         }).catch(error => {console.log(error.response);
-            this.setState({idSeleccionada:idSearch});
+            this.setState({idSeleccionada:idSearch, indicadorSeleccionado:this.state.seleccionadoSubniv1.label});
             this.cargarTerris();});
     }
 
@@ -559,7 +503,7 @@ class EstadisticasContainer extends Component {
             optionsSubniv3 = daticosCat.map(getParsedIndicas);
             this.setState({opcionesSubniv3: optionsSubniv3, estadoSubniv3:false, estadoSubniv4:true, estadoTerris:true, estadoPeriodo:true});           
         }).catch(error => {console.log(error.response)
-            this.setState({idSeleccionada:idSearch});
+            this.setState({idSeleccionada:idSearch, indicadorSeleccionado:this.state.seleccionadoSubniv2.label});
             this.cargarTerris();});
     }
 
@@ -568,7 +512,7 @@ class EstadisticasContainer extends Component {
         axios.get("http://localhost/sitws/indicador/subniv.php?id=" + idSearch).then(response => {
             let daticosCat = response.data;
             optionsSubniv4 = daticosCat.map(getParsedIndicas);
-            this.setState({opcionesSubniv4: optionsSubniv4, estadoSubniv4:false, estadoTerris:true, estadoPeriodo:true});           
+            this.setState({opcionesSubniv4: optionsSubniv4, estadoSubniv4:false, estadoTerris:true, estadoPeriodo:true, indicadorSeleccionado:this.state.seleccionadoSubniv3.label});           
         }).catch(error => console.log(error.response));
     }
 
@@ -589,6 +533,21 @@ class EstadisticasContainer extends Component {
             optionsPeriodo = daticosCat.map(getParsedPeriodo);
             this.setState({opcionesPeriodo: optionsPeriodo, estadoPeriodo:false});           
         }).catch(error => console.log(error.response));
+    }
+
+    pintarGrafico() {       
+        arrEjes.length = 0;
+        arrDatos.length = 0;
+    
+        //arrEjes.push("Ejesito");
+        //arrDatos.push(55);
+
+        arrEjes.push(this.state.seleccionadoPeriodo.label);
+        arrDatos.push(parseFloat(this.state.seleccionadoPeriodo.value));
+
+        console.log(this.state.seleccionadoPeriodo);
+        
+        this.setState({estadoGrafica:false});
     }
 }
 
@@ -631,8 +590,6 @@ function getParsedPeriodo(item) {
     };
     return opcionTemp;
 }
-
-
 
 EstadisticasContainer.propTypes = {};
 
