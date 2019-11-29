@@ -58,6 +58,31 @@
     justify-content: space-around;
     flex-wrap:wrap;
   }
+
+  .ayuda .preguntasFrecuentes{
+    margin: 1em;
+    max-width: 40em;
+  }
+
+  .ayuda .preguntasFrecuentes h3{
+    margin-bottom: 1em;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+
+  .ayuda .preguntasFrecuentes div{
+    display:"flex";
+  }
+
+  .ayuda .preguntasFrecuentes div .pregunta{
+    color:rgb(226, 106, 106);
+    margin-left: 0.5em;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+
+  .ayuda .preguntasFrecuentes div p{
+    margin-left: 0.5em;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
   
   .tabs{
     margin-top: 2em;
@@ -68,10 +93,10 @@
   }
 
   .footer{
-    margin-top: 4em;
+    margin-top: 6em;
   }
 
-  .titulo{
+  .titulo-container{
     text-align: left;
     padding-top: 0.5em;
     padding-bottom: 0.5em;
@@ -100,7 +125,7 @@
     }
 
     .carrousel{
-      height: 20em;
+      height: 22em;
       
     }
     
@@ -110,16 +135,78 @@
     }
 
     .map{
-      width: 35em;
-      height: 35em;
+      width: 40em;
+      height: 40em;
       margin: 0;
     }
 
     .mapdiv{
-      width: 35em;
-      height: 35em;
+      width: 40em;
+      height: 40em;
       margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     }
+
+    .mapdiv h5{
+      margin-top:.3em;
+      margin-bottom:-1em;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+
+    @media (min-width:320px){
+      .map{
+        width: 28em;
+        height: 28em;
+        margin: 0;
+      }
+
+      .mapdiv{
+        width: 28em;
+        height: 28em;
+        margin: 0;
+      }
+
+      .legend{
+        bottom:1.3em !important;
+        padding:0.4em !important;
+      }
+    }
+
+    @media (min-width:360px){
+      .map{
+        width: 30em;
+        height: 30em;
+        margin: 0;
+      }
+
+      .mapdiv{
+        width: 30em;
+        height: 30em;
+        margin: 0;
+      }
+
+      .legend{
+        bottom:1.3em !important;
+        padding:0em !important;
+      }
+    }
+
+    @media (min-width:411px){
+      .map{
+        width: 38em;
+        height: 38em;
+        margin: 0;
+        
+      }
+
+      .mapdiv{
+        width: 38em;
+        height: 38em;
+        margin: 0;
+      }
+    }
+
+    
 
     .mapdiv path{
       fill: rgb(214, 214, 214);
@@ -135,9 +222,98 @@
       transition: fill 0.3s;
     }
 
-    .mapdiv path.pacifico:hover{
-      fill: rgb(255, 130, 13);
+    .mapdiv path.choco:hover{
+      fill: #FFAB40;
       stroke: rgb(0, 0, 0);
+    }
+    .mapdiv path.cauca:hover{
+      fill: #00C853;
+      stroke: rgb(0, 0, 0);
+    }
+    .mapdiv path.valle:hover{
+      fill: #00B0FF;
+      stroke: rgb(0, 0, 0);
+    }
+    .mapdiv path.narino:hover{
+      fill: #B388FF;
+      stroke: rgb(0, 0, 0);
+    }
+
+    .results-card{
+      min-height: 15em;
+    }
+
+    .legend{
+      -webkit-transition:all .5s ease-in-out;
+      -moz-transition:all .5s ease-in-out;
+      -ms-transition:all .5s ease-in-out;
+      -o-transition:all .5s ease-in-out;
+      transition:all .5s ease-in-out;
+      position:absolute;
+      bottom:1.3em !important;
+      left:50%;
+      margin-left:-45%;
+      width:90%;
+      border-radius:10px;
+      background:#000;
+      color:#fff;
+      padding:0.4em !important;
+      font-size:55px !important;
+      text-align:center;
+      opacity:.7 !important;
+      -webkit-transition:opacity .35s ease-in-out;
+      -moz-transition:opacity .35s ease-in-out;
+      -ms-transition:opacity .35s ease-in-out;
+      -o-transition:opacity .35s ease-in-out;
+      transition:opacity .35s ease-in-out;
+    }
+    .titulo{
+      color:white !important;
+      opacity:1 !important;
+      text-align: center;
+      font-size:50px !important;
+      margin: 0;
+      padding: 0.2em;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+
+    .card-uao{
+      max-width: 50em;
+      border-radius: 0.5em;
+      padding: 1em;
+      margin: 1em;
+      box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+      text-align: left;
+      background-color: rgba(245, 245, 245, 1);
+    }
+
+    .card-uao p{
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      color:rgb(226, 106, 106);
+    }
+
+    .card-uao i{
+      color:rgb(230, 15, 15);
+    }
+
+    .card-uao h5{
+      font-size: 14px;
+    }
+
+    section nav ul a{
+      padding:0 !important;
+    }
+
+    @media (min-width:320px){
+      section nav ul a{
+        padding:0 !important;
+        width: 100% !important;
+        height: 100% !important;
+      }
+    }
+
+    .resources-section{
+      margin: 1em !important;
     }
 
 

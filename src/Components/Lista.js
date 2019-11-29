@@ -12,7 +12,7 @@ const Lista = props => {
             <div className="lista">
             
             <h3>{listaID}</h3>
-                <div class="form-table" >
+                <div className="form-table" >
                     <table style={{}}>
                         <thead>
                             <tr>
@@ -26,8 +26,8 @@ const Lista = props => {
                                 <td data-table-header="Nivel de formación">Sistema multimedia para favoreces el aprendizaje profundo en estudiantes de la materia arquitectura de sistemas multimedia</td>
                                 <td data-table-header="Docentes de planta">Camilo Andres Ramirez, Cristian Andres Olivares</td>
                                 <td data-table-header="Docentes de hora cátedra">
-                                    {/*<p><a>Detalles <span class="fas fa-search"></span></a></p>*/}
-                                    <a href="">Descargar <span class="fas fa-file-download"></span></a>
+                                    {/*<p><a>Detalles <span className="fas fa-search"></span></a></p>*/}
+                                    <a href="">Descargar <span className="fas fa-file-download"></span></a>
                                 </td>
                             </tr>
 

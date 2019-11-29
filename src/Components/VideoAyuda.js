@@ -4,13 +4,13 @@ import PropTypes from 'prop-types';
 const VideoAyuda = () => {
     return (
         <div>
-            <section class="video-section">
-                <div class="vs">
-                    <h1 class="section-title">
+            <section className="video-section">
+                <div className="vs">
+                    <h1 className="section-title">
                         Video guía
                     </h1>
-                    <div class="vs-wrap">
-                    <div class="vs-container">
+                    <div className="vs-wrap">
+                    <div className="vs-container">
                         <iframe src="https://www.youtube.com/embed/dvVOFNpando" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                     </div>
                     </div>

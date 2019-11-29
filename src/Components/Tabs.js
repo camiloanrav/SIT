@@ -21,32 +21,32 @@ const Tabs = props => {
     return (
         <div>
             <div  className="tabs">
-                <section class="tabs-cards-container ">
+                <section className="tabs-cards-container ">
                     <nav>
                         <ul>
-                            <Link to={`${url}/documentos`} onClick={()=>setTopic(1)} class={"tab program-tab"}>
-                                <li class={"tab program-tab ".concat(`${topic===1?"active":""}`)} data-box-class="program-box" data-tab-class="program-tab" data-box-id="box-1">
+                            <Link to={`${url}/documentos`} onClick={()=>setTopic(1)} className={"tab program-tab"}>
+                                <li className={"tab program-tab ".concat(`${topic===1?"active":""}`)} data-box-class="program-box" data-tab-class="program-tab" data-box-id="box-1">
                                     Documentos
                                 </li>
                             </Link>
-                            <Link to={`${url}/cuentas`} onClick={()=>setTopic(2)} class={"tab program-tab"}>
-                                <li class={"tab program-tab ".concat(`${topic===2?"active":""}`)} data-box-class="program-box" data-tab-class="program-tab" data-box-id="box-2">
-                                    Cuentas Económicas del Valle
+                            <Link to={`${url}/cuentas economicas del valle`} onClick={()=>setTopic(2)} className={"tab program-tab"}>
+                                <li className={"tab program-tab ".concat(`${topic===2?"active":""}`)} data-box-class="program-box" data-tab-class="program-tab" data-box-id="box-2">
+                                    Cuentas
                                 </li>
                             </Link>
-                            <Link to={`${url}/tesis`} onClick={()=>setTopic(3)} class={"tab program-tab"}>
-                                <li class={"tab program-tab ".concat(`${topic===3?"active":""}`)} data-box-class="program-box" data-tab-class="program-tab" data-box-id="box-3">
+                            <Link to={`${url}/tesis`} onClick={()=>setTopic(3)} className={"tab program-tab"}>
+                                <li className={"tab program-tab ".concat(`${topic===3?"active":""}`)} data-box-class="program-box" data-tab-class="program-tab" data-box-id="box-3">
                                     Tesis
                                 </li>
                             </Link>
-                            <Link to={`${url}/articulos`} onClick={()=>setTopic(4)} class={"tab program-tab"}>
-                                <li class={"tab program-tab ".concat(`${topic===4?"active":""}`)} data-box-class="program-box" data-tab-class="program-tab" data-box-id="box-4">
+                            <Link to={`${url}/articulos`} onClick={()=>setTopic(4)} className={"tab program-tab"}>
+                                <li className={"tab program-tab ".concat(`${topic===4?"active":""}`)} data-box-class="program-box" data-tab-class="program-tab" data-box-id="box-4">
                                     Artículos
                                 </li>
                             </Link>
                         </ul>
                     </nav>
-                    <div class="tabs-box-container">
+                    <div className="tabs-box-container">
                         <Buscador></Buscador>
                         
                         <Switch>

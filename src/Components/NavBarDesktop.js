@@ -6,11 +6,11 @@ import logo from '../logo-ser.png';
 const NavBarDesktop = () => {
     return (
         <div>
-            <header id="header-menu-desktop" class="">
+            <header id="header-menu-desktop">
 
                 <div id="hmd-bottom">
-                    <span class="hmdb-line-left"></span>
-                    <span class="hmdb-line-right"></span>
+                    <span className="hmdb-line-left"></span>
+                    <span className="hmdb-line-right"></span>
                     <div id="hmdb-logo-container">
                         <a id="hmdb-logo" href="" ></a>
                     </div>
@@ -18,42 +18,42 @@ const NavBarDesktop = () => {
                         <img src={logo} width="400" alt="Logo"></img>
                     </div>
                     <ul>
-                        <Link to="" style={{ textDecoration: 'none' }}  class="dropdown">
-                            <li class="dd-btn">
+                        <Link to="" style={{ textDecoration: 'none' }}  className="dropdown">
+                            <li className="dd-btn">
                                     Inicio
-                                <span class="icon fas fa-angle-down"></span>
+                                <span className="icon fas fa-angle-down"></span>
                             </li>
                         </Link>
                         
-                        <NavLink to="/estadisticas" style={{ textDecoration: 'none' }} class="dropdown">
-                            <li class="dd-btn">
+                        <NavLink to="/estadisticas" style={{ textDecoration: 'none' }} className="dropdown">
+                            <li className="dd-btn">
                                     Estadísticas Territoriales
-                                <span class="icon fas fa-angle-down"></span>
+                                <span className="icon fas fa-angle-down"></span>
                             </li>
                         </NavLink>
 
-                        <Link to="/publicaciones/documentos" style={{ textDecoration: 'none' }}  class="dropdown">
-                            <li class="dd-btn">
+                        <Link to="/publicaciones/documentos" style={{ textDecoration: 'none' }}  className="dropdown">
+                            <li className="dd-btn">
                                     Publicaciones
-                                <span class="icon fas fa-angle-down"></span>
+                                <span className="icon fas fa-angle-down"></span>
                             </li>
                         </Link>
 
-                        <Link to="/contacto" style={{ textDecoration: 'none' }}  class="dropdown">
-                            <li class="dd-btn">
+                        <Link to="/contacto" style={{ textDecoration: 'none' }}  className="dropdown">
+                            <li className="dd-btn">
                                     Contacto
-                                <span class="icon fas fa-angle-down"></span>
+                                <span className="icon fas fa-angle-down"></span>
                             </li>
                         </Link>
 
-                        <Link to="/ayuda" style={{ textDecoration: 'none' }}  class="dropdown">
-                            <li class="dd-btn">
+                        <Link to="/ayuda" style={{ textDecoration: 'none' }}  className="dropdown">
+                            <li className="dd-btn">
                                     Ayuda
-                                <span class="icon fas fa-angle-down"></span>
+                                <span className="icon fas fa-angle-down"></span>
                             </li>
                         </Link>
                     </ul>
-                    <span class="scroll-indicator"></span>
+                    <span className="scroll-indicator"></span>
                 </div>
             </header>
         </div>

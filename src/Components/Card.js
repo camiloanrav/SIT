@@ -7,19 +7,19 @@ class Card extends React.Component {
         const datosCard = (
             <div className="card">
                 <script type="application/ld+json"></script>
-                <article class="news-card">
+                <article className="news-card">
                     <a href="#">
-                        <div class="nc-top">
+                        <div className="nc-top">
                             <figure>
                                 <img alt="UAO" src="https://pattern.uao.edu.co/images/example-image.jpg"></img>
                             </figure>
                             <div>
-                                <p class="category-tag ">
+                                <p className="category-tag ">
                                     {nombreDimension} </p>
-                                <time class="date-text">03 de Abril de 2019</time>
+                                <time className="date-text">03 de Abril de 2019</time>
                             </div>
                         </div>
-                        <p class="nc-title">
+                        <p className="nc-title">
                             {descripcion}
                         </p>
                     </a>

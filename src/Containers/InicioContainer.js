@@ -10,7 +10,15 @@ import NavBarMovil from '../Components/NavBarMovil';
 import Card from '../Components/Card';
 import Mapa from '../Components/Mapa';
 import Acercade from '../Components/Acercade';
+import Acercade2 from '../Components/Acercade2';
 import { getDimension } from '../utils/api';
+
+import DemoCarousel from '../Components/DemoCarousel';
+
+import dimensionAmbiental from '../dimensionAmbiental.JPG';
+import dimensionEconomica from '../dimensionEconomica.jpeg';
+import dimensionInstitucional from '../dimensionInstitucional.jpg';
+import dimensionSocial from '../dimensionSocial.jpg';
 
 class InicioContainer extends Component {
     constructor(props) {
@@ -30,28 +38,33 @@ class InicioContainer extends Component {
                 <NavBarDesktop></NavBarDesktop>
                 <NavBarMovil></NavBarMovil>
                 {/* Contenido principal */}
-                <AwesomeSlider cssModule={AwsSliderStyles}
+                {/* <AwesomeSlider cssModule={AwsSliderStyles}
                     infinite={true}
                     bullets={false}
                     transitionDelay={2}
                     organicArrows={false}
                     className="carrousel">
-                    <div data-src="https://www.tuexperto.com/wp-content/uploads/2017/10/fondo-de-pantalla-paisaje.jpg"/>
-                    <div data-src="http://3.bp.blogspot.com/-p2_y6LEfNZw/VXdizrIH5qI/AAAAAAAAAGQ/DwiP8tr9D4Y/s1600/pre5.jpg"/>
-                    <div data-src="https://s2.best-wallpaper.net/wallpaper/1920x1080/1112/Tropical-beach_1920x1080.jpg"/>
-                </AwesomeSlider>
+                    <div data-src={carrousel6}/>
+                    <div data-src={carrousel2}/>
+                    <div data-src={carrousel8}/>
+                    <div data-src={carrousel4}/>
+                    <div data-src={carrousel1}/>
+                    <div data-src={carrousel7}/>
+                    <div data-src={carrousel3}/>
+                </AwesomeSlider> */}
+                <DemoCarousel></DemoCarousel>
 
-                <section class="investigation with-decoration">
+                <section className="investigation with-decoration">
                     <div className="cards">                     
                         {cargando ? 'Cargando...' : this.renderPosts()
                     } </div>
 
                 </section>
                 {/*<section class="circulation-of-links">
-        </section>*/}
+                </section>*/}
                 <div className='cards'>
                     <Mapa></Mapa>
-                    <Acercade></Acercade>
+                    <Acercade2></Acercade2>
                 </div>
 
 
