@@ -148,7 +148,6 @@ class EstadisticasContainer extends Component {
             estadoGrafica:true,          
             multiTerri:null,
             multiPeriodo:null,
-            estadoBoton:true,
             pintar:null        
         };       
 
@@ -214,7 +213,7 @@ class EstadisticasContainer extends Component {
                 seleccionadoSubniv4
             }, () => {
                 console.log(`Subnivel 4 seleccionado:`, this.state.seleccionadoSubniv4.value);
-                this.acumularTerris();});
+                this.cargarTerris();});
         };
 
         this.cambioTerris = seleccionadoTerris => {
@@ -233,33 +232,20 @@ class EstadisticasContainer extends Component {
                 this.pintarGrafico();});
         };
 
-        this.acumularTerritorios = seleccionadoTerris => {
+        this.acumularTerritorios = multiTerri => {
             this.setState({
-                seleccionadoTerris
+                multiTerri
             }, () => {
                 console.log(`Territorios acumulados:`, territorios);
-            //this.acumularTerris();
-              this.acumularTerris();
-                this.cargarPeriodo();});
+                this.acumularTerris();});
         };
 
-        this.acumularPeriodos = seleccionadoPeriodo => {
+        this.acumularPeriodos = multiPeriodo => {
             this.setState({
-                seleccionadoPeriodo
+                multiPeriodo
             }, () => {
                 console.log(`Periodos acumulados:`, periodos);
-                this.acumularPeris();
-                this.mostrarBoton();});
-                //this.pintarGrafico();
-        };
-
-        this.showButton = estadoBoton => {
-            this.setState({
-                estadoBoton:false
-            }, () => {
-                console.log("Prueba");           
-                this.pintarGrafico();});
-                //this.pintarGrafico();
+                this.acumularPeris();});
         };
 
         this.graficar = multiTerri => {
@@ -318,7 +304,6 @@ class EstadisticasContainer extends Component {
             territorios, 
             multiTerri,
             multiPeriodo,
-            estadoBoton,
             pintar
                    
          } = this.state;
@@ -326,7 +311,27 @@ class EstadisticasContainer extends Component {
         return (
             <div>
                 <NavBarDesktop></NavBarDesktop>
-                <NavBarMovil></NavBarMovil>         
+                <NavBarMovil></NavBarMovil>               
+
+                 {/*-----------Dropdown multiple de periodos------------*/} 
+                 <div style={
+                    {
+                        width: "25em",
+                        textAlign: "left",
+                        margin: "2em"
+                    }
+                }>
+                    <Select 
+                        value={multiPeriodo}
+                        options={opcionesPeriodo}
+                        isSearchable={true}
+                        isMulti
+                        onChange={
+                            this.acumularPeriodos
+                        }
+                        placeholder={"Escoja periodos"}
+                        captureMenuScroll={true}/>
+                </div>
                
                 {/*-----------Dropdown de dimensiones------------*/}
                 <div style={
@@ -468,7 +473,25 @@ class EstadisticasContainer extends Component {
                         isSearchable={true}
                         placeholder={"Indicador cuarto nivel"}
                     captureMenuScroll={true}/> }
-                </div>               
+                </div>   
+
+                {/*-----------Dropdown de territorios------------*/}
+                <div style={
+                    {
+                        width: "25em",
+                        textAlign: "left",
+                        margin: "2em"
+                    }
+                }> {estadoTerris ? '' :
+                    <Select value={seleccionadoTerris}
+                        onChange={
+                            this.cambioTerris
+                        }
+                        options={opcionesTerris}
+                        isSearchable={true}
+                        placeholder={"Terrritorio"}
+                    captureMenuScroll={true}/> }
+                </div>  
 
                   {/*-----------Dropdown multiple de territorios------------*/} 
                 <div style={
@@ -479,7 +502,7 @@ class EstadisticasContainer extends Component {
                     }
                 }>{estadoTerris ? '' :
                     <Select 
-                        value={seleccionadoTerris}
+                        value={multiTerri}
                         options={opcionesTerris}
                         isSearchable={true}
                         isMulti
@@ -489,44 +512,29 @@ class EstadisticasContainer extends Component {
                         placeholder={"Escoja territorios"}
                     captureMenuScroll={true}/> }
                 </div> 
-               
-                   {/*-----------Dropdown multiple de periodos------------*/} 
-                   <div style={
+
+                {/*-----------Dropdown de periodo------------*/}
+                <div style={
                     {
                         width: "25em",
                         textAlign: "left",
                         margin: "2em"
                     }
-                }>{estadoPeriodo ? '' :
-                    <Select 
-                        value={seleccionadoPeriodo}
+                }> {estadoPeriodo ? '' :
+                    <Select value={seleccionadoPeriodo}
+                        onChange={
+                            this.cambioPeriodo
+                        }
                         options={opcionesPeriodo}
                         isSearchable={true}
-                        isMulti
-                        onChange={
-                            this.acumularPeriodos
-                        }
-                        placeholder={"Escoja periodos"}
+                        placeholder={"Periodo"}
                     captureMenuScroll={true}/> }
-                </div>
-                  {/*-----------Botón Graficar------------*/}
-                  <div style={
-                    {
-                        width: "25em",
-                        textAlign: "left",
-                        margin: "2em"
-                    }
-                }>{estadoBoton ? '' :
-                 <a class="primary-btn " onClick={this.showButton} href="#">
-                Graficar
-                </a>}</div>
-               
+                </div> 
 
                   {/*-----------Grafica que se genera------------*/}       
                 <div style={
                     {
-                        display: "flex",
-                        width: "50em",
+                        width: "25em",
                         textAlign: "left",
                         margin: "2em"
                     }
@@ -574,7 +582,7 @@ class EstadisticasContainer extends Component {
 
     cargarCats() {
         let idSearch = this.state.seleccionadoDimension.value;        
-        axios.get("http://localhost/serpacificows/categoria/search.php?id=" + idSearch).then(response => {
+        axios.get("http://localhost/sitws/categoria/search.php?id=" + idSearch).then(response => {
             let daticosCat = response.data;
             optionsCats = daticosCat.map(getParsedCategories);
             this.setState({opcionesCategorias: optionsCats, estadoCategorias:false, estadoSubcategorias:true, estadoIndicadores:true, estadoSubniv1:true, estadoSubniv2:true, estadoSubniv3:true, estadoSubniv4:true, estadoTerris:true, estadoPeriodo:true});            
@@ -583,7 +591,7 @@ class EstadisticasContainer extends Component {
 
     cargarSubcats() {
         let idSearch = this.state.seleccionadoCategorias.value;        
-        axios.get("http://localhost/serpacificows/categoria/subcat.php?id=" + idSearch).then(response => {
+        axios.get("http://localhost/sitws/categoria/subcat.php?id=" + idSearch).then(response => {
             let daticosCat = response.data;
             optionsSubcats = daticosCat.map(getParsedCategories);
             this.setState({opcionesSubcategorias: optionsSubcats, estadoSubcategorias:false, estadoIndicadores:true, estadoSubniv1:true, estadoSubniv2:true, estadoSubniv3:true, estadoSubniv4:true, estadoTerris:true, estadoPeriodo:true});           
@@ -592,51 +600,51 @@ class EstadisticasContainer extends Component {
 
     cargarIndicas() {
         let idSearch = this.state.seleccionadoSubcategorias.value;        
-        axios.get("http://localhost/serpacificows/indicador/search.php?id=" + idSearch).then(response => {
+        axios.get("http://localhost/sitws/indicador/search.php?id=" + idSearch).then(response => {
             let daticosCat = response.data;
             optionsIndicas = daticosCat.map(getParsedIndicas);
             this.setState({opcionesIndicadores: optionsIndicas, estadoIndicadores:false, estadoSubniv1:true, estadoSubniv2:true, estadoSubniv3:true, estadoSubniv4:true, estadoTerris:true, estadoPeriodo:true});           
         }).catch(error => {console.log(error.response)
             this.setState({idSeleccionada:idSearch});
-            this.acumularTerris();});
+            this.cargarTerris();});
     }
 
     cargarSubniv1() {
         let idSearch = this.state.seleccionadoIndicadores.value;        
-        axios.get("http://localhost/serpacificows/indicador/subniv.php?id=" + idSearch).then(response => {
+        axios.get("http://localhost/sitws/indicador/subniv.php?id=" + idSearch).then(response => {
             let daticosCat = response.data;
             optionsSubniv1 = daticosCat.map(getParsedIndicas);
             this.setState({opcionesSubniv1: optionsSubniv1, estadoSubniv1:false, estadoSubniv2:true, estadoSubniv3:true, estadoSubniv4:true, estadoTerris:true, estadoPeriodo:true});           
         }).catch(error => {console.log(error.response);
             this.setState({idSeleccionada:idSearch, indicadorSeleccionado:this.state.seleccionadoIndicadores.label});
-            this.acumularTerris();});
+            this.cargarTerris();});
     }
 
     cargarSubniv2() {
         let idSearch = this.state.seleccionadoSubniv1.value;        
-        axios.get("http://localhost/serpacificows/indicador/subniv.php?id=" + idSearch).then(response => {
+        axios.get("http://localhost/sitws/indicador/subniv.php?id=" + idSearch).then(response => {
             let daticosCat = response.data;
             optionsSubniv2 = daticosCat.map(getParsedIndicas);
             this.setState({opcionesSubniv2: optionsSubniv2, estadoSubniv2:false, estadoSubniv3:true, estadoSubniv4:true, estadoTerris:true, estadoPeriodo:true});           
         }).catch(error => {console.log(error.response);
             this.setState({idSeleccionada:idSearch, indicadorSeleccionado:this.state.seleccionadoSubniv1.label});
-            this.acumularTerris();});
+            this.cargarTerris();});
     }
 
     cargarSubniv3() {
         let idSearch = this.state.seleccionadoSubniv2.value;        
-        axios.get("http://localhost/serpacificows/indicador/subniv.php?id=" + idSearch).then(response => {
+        axios.get("http://localhost/sitws/indicador/subniv.php?id=" + idSearch).then(response => {
             let daticosCat = response.data;
             optionsSubniv3 = daticosCat.map(getParsedIndicas);
             this.setState({opcionesSubniv3: optionsSubniv3, estadoSubniv3:false, estadoSubniv4:true, estadoTerris:true, estadoPeriodo:true});           
         }).catch(error => {console.log(error.response)
             this.setState({idSeleccionada:idSearch, indicadorSeleccionado:this.state.seleccionadoSubniv2.label});
-            this.acumularTerris();});
+            this.cargarTerris();});
     }
 
     cargarSubniv4() {
         let idSearch = this.state.seleccionadoSubniv3.value;        
-        axios.get("http://localhost/serpacificows/indicador/subniv.php?id=" + idSearch).then(response => {
+        axios.get("http://localhost/sitws/indicador/subniv.php?id=" + idSearch).then(response => {
             let daticosCat = response.data;
             optionsSubniv4 = daticosCat.map(getParsedIndicas);
             this.setState({opcionesSubniv4: optionsSubniv4, estadoSubniv4:false, estadoTerris:true, estadoPeriodo:true, indicadorSeleccionado:this.state.seleccionadoSubniv3.label});           
@@ -645,7 +653,7 @@ class EstadisticasContainer extends Component {
 
     cargarTerris() {
         let idSearch = this.state.idSeleccionada;       
-        axios.get("http://localhost/serpacificows/indicaterri/search.php?id=" + idSearch).then(response => {
+        axios.get("http://localhost/sitws/indicaterri/search.php?id=" + idSearch).then(response => {
             let daticosCat = response.data;
             optionsTerris = daticosCat.map(getParsedTerris);        
             this.setState({opcionesTerris: optionsTerris, estadoTerris:false, estadoPeriodo:true});           
@@ -653,8 +661,7 @@ class EstadisticasContainer extends Component {
     }
 
     cargarPeriodo() {
-        console.log(this.state.seleccionadoTerris);
-        let idTerritorio = this.state.seleccionadoTerris[0].value;
+        let idTerritorio = this.state.seleccionadoTerris.value;
         let idIndicador = this.state.idSeleccionada;             
         axios.get("http://localhost/sitws/periodo/search.php?id=" + idIndicador + "&dane=" + idTerritorio).then(response => {
             let daticosCat = response.data;
@@ -664,35 +671,19 @@ class EstadisticasContainer extends Component {
     }
 
    
-    acumularTerris() {  
-        let idSearch = this.state.idSeleccionada;       
-        axios.get("http://localhost/sitws/indicaterri/search.php?id=" + idSearch).then(response => {
-            let daticosCat = response.data;
-            optionsTerris = daticosCat.map(getParsedTerris);        
-            this.setState({opcionesTerris: optionsTerris, estadoTerris:false});           
-        }).catch(error => console.log(error.response));
-
-         let daticosMulti = this.state.multiTerri;        
+    acumularTerris() {   
+         let daticosMulti = this.state.multiTerri;
+         //territorios.push(daticosMulti);
          territorios = daticosMulti;  
-  
+         //let jsonPrueba = {label: territorios[0].label, data: territorios[0].value};
+         //datosPruebas.push(jsonPrueba);
+         //console.log(datosPruebas);  
+         //console.log(jsonPrueba);       
     }
 
     acumularPeris(){
-        console.log(this.state.seleccionadoTerris);
-        let idTerritorio = this.state.seleccionadoTerris[0].value;
-        let idIndicador = this.state.idSeleccionada;             
-        axios.get("http://localhost/serpacificows/periodo/search.php?id=" + idIndicador + "&dane=" + idTerritorio).then(response => {
-            let daticosCat = response.data;
-            optionsPeriodo = daticosCat.map(getParsedPeriodo);
-            this.setState({opcionesPeriodo: optionsPeriodo, estadoPeriodo:false});           
-        }).catch(error => console.log(error.response));
         let periodosMulti = this.state.multiPeriodo;
         periodos = periodosMulti;
-        
-    }
-
-    mostrarBoton(){
-        this.setState({estadoBoton:false});
     }
 
      pintarGrafico() {
@@ -702,9 +693,7 @@ class EstadisticasContainer extends Component {
         arrPrueba.length = 0; 
         promises.length = 0;    
 
-        let idIndicador = this.state.idSeleccionada; 
-        territorios = this.state.seleccionadoTerris;  
-        periodos =  this.state.seleccionadoPeriodo;   
+        let idIndicador = this.state.idSeleccionada;      
         
         for (var i = 0; i < territorios.length; i ++){
             //De aqui para abajo
