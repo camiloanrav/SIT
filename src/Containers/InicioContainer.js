@@ -74,16 +74,14 @@ class InicioContainer extends Component {
     }
 
     renderPosts = () => {
-        const {datos} = this.state;
-      
+        const {datos} = this.state;     
 
         return datos.map(card => {
             const {nombre, descripcion} = card;
 
             return (
                 <Card nombreDimension={nombre}
-                    descripcion={descripcion}/>
-                    
+                    descripcion={descripcion}/>                    
             );
         });
     }

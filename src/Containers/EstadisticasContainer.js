@@ -5,12 +5,14 @@ import axios from "axios";
 import Footer from "../Components/Footer";
 import NavBarDesktop from "../Components/NavBarDesktop";
 import NavBarMovil from "../Components/NavBarMovil";
+import Excel from "../Components/Excel";
 
 import Select from "react-select";
 
 import {Line} from "react-chartjs-2";
 import {Doughnut} from "react-chartjs-2";
 import {Bar} from "react-chartjs-2";
+
 
 var optionsDims = [];
 var optionsCats = [];
@@ -326,9 +328,11 @@ class EstadisticasContainer extends Component {
         return (
             <div>
                 <NavBarDesktop></NavBarDesktop>
-                <NavBarMovil></NavBarMovil>         
+                <NavBarMovil></NavBarMovil>   
+                <div style={{display:"flex"}}>     
                
                 {/*-----------Dropdown de dimensiones------------*/}
+                <div>
                 <div style={
                     {
                         width: "25em",
@@ -520,10 +524,10 @@ class EstadisticasContainer extends Component {
                  <a class="primary-btn " onClick={this.showButton} href="#">
                 Graficar
                 </a>}</div>
-               
+                </div>
 
                   {/*-----------Grafica que se genera------------*/}       
-                <div style={
+                  <div style={
                     {
                         display: "flex",
                         width: "50em",
@@ -546,18 +550,31 @@ class EstadisticasContainer extends Component {
                     }]
                  },
                   animation: {
-                    duration: 0
+                    duration: 1000
                  },
                   legend: {
                     display: true,
                     position: 'right'
                   }
                 }}
-              />                
-            }            
+              />                           
+            }  
+             
+                  
                 </div>
+                <div style={
+                    {
+                        width: "25em",
+                        textAlign: "left",
+                        margin: "2em"
+                    }
+                }>
+                {estadoGrafica ? '' :<Excel datos={arrPrueba}></Excel> }  
+                </div>  
+                </div> 
                 <Footer></Footer>
             </div>
+           
         );
     }
 
