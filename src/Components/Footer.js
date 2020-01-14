@@ -79,9 +79,9 @@ const Footer = () => {
                                 <a className="list-btn" href="#">
                                     <div className="lb-text">
                                         Contacto
-                    </div>
+                                    </div>
                                     <div className="lb-arrow">
-                                        <span className="icon icon-chevron-right"></span>
+                                        <span className="icon fas fa-chevron-right"></span>
                                     </div>
                                 </a>
 

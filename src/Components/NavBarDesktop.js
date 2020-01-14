@@ -2,8 +2,10 @@ import React, {useState}  from 'react';
 import PropTypes from 'prop-types';
 import { Link, NavLink} from 'react-router-dom';
 import logo from '../logo-ser.png';
+//import Select from 'react-select/src/Select';
 
 const NavBarDesktop = () => {
+    const [activo, setActivo] = useState(0);
     return (
         <div>
             <header id="header-menu-desktop">
@@ -18,40 +20,40 @@ const NavBarDesktop = () => {
                         <img src={logo} width="400" alt="Logo"></img>
                     </div>
                     <ul>
-                        <Link to="" style={{ textDecoration: 'none' }}  className="dropdown">
-                            <li className="dd-btn">
+                        <NavLink to="/inicio" className="dropdown" activeClassName="activeNavBar">
+                            <div className="dd-btn">
                                     Inicio
                                 <span className="icon fas fa-angle-down"></span>
-                            </li>
-                        </Link>
+                            </div>
+                        </NavLink>
                         
-                        <NavLink to="/estadisticas" style={{ textDecoration: 'none' }} className="dropdown">
-                            <li className="dd-btn">
+                        <NavLink to="/estadisticas" activeClassName="activeNavBar" className="dropdown">
+                            <li className="dd-btn" activeStyle={{color: 'white'}}>
                                     Estadísticas Territoriales
                                 <span className="icon fas fa-angle-down"></span>
                             </li>
                         </NavLink>
 
-                        <Link to="/publicaciones/documentos" style={{ textDecoration: 'none' }}  className="dropdown">
+                        <NavLink to="/publicaciones/documentos" activeClassName="activeNavBar"  className="dropdown">
                             <li className="dd-btn">
                                     Publicaciones
                                 <span className="icon fas fa-angle-down"></span>
                             </li>
-                        </Link>
+                        </NavLink>
 
-                        <Link to="/contacto" style={{ textDecoration: 'none' }}  className="dropdown">
+                        <NavLink to="/contacto" activeClassName="activeNavBar" className="dropdown">
                             <li className="dd-btn">
                                     Contacto
                                 <span className="icon fas fa-angle-down"></span>
                             </li>
-                        </Link>
+                        </NavLink>
 
-                        <Link to="/ayuda" style={{ textDecoration: 'none' }}  className="dropdown">
+                        <NavLink to="/ayuda" activeClassName="activeNavBar"  className="dropdown">
                             <li className="dd-btn">
                                     Ayuda
                                 <span className="icon fas fa-angle-down"></span>
                             </li>
-                        </Link>
+                        </NavLink>
                     </ul>
                     <span className="scroll-indicator"></span>
                 </div>

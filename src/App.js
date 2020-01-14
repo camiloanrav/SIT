@@ -37,15 +37,13 @@ function App() {
           
           <Switch>
             <Route exact path="/" component={InicioContainer}/>
+            <Route exact path="/inicio" component={InicioContainer}/>
             <Route path="/estadisticas" component={EstadisticasContainer}/>
             <Route path="/contacto" component={ContactoContainer}/>
             <Route path="/ayuda" component={AyudaContainer}/>
             <Route path="/publicaciones" component={PublicacionesContainer}/>
             <Route component={NoMatchPage} />
-            
           </Switch>
-          <Route path="/customers/new" component={InicioContainer}/>
-          <Route path="/customers/:dni" component={InicioContainer}/>
       </div>
     </Router>
   );

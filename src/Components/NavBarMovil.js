@@ -1,246 +1,70 @@
-import React from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
-import logo from '../logo-ser.png';
+import logo from '../logo-ser-2.png';
+import {NavLink} from 'react-router-dom';
 
 const NavBarMovil = ({ header, body }) => {
+    const [open, setOpen] = useState(false);
     return (
         <div>
 
             <header id="header-menu-mobile" class="">
-                <div id="hmm-top">
+                <div id="hmm-top" onClick={()=> setOpen(true)}>
                     <span class="hmmt-line"></span>
                     <a href="#" id="hmmt-menu-icon">
-                        <span class="icon fas fa-hamburguesa"></span>
+                        <span className="icon fas fa-bars"></span>
                         <p>Menú</p>
                     </a>
+                    <div id="hmdb-logo-container">
+                        <a id="hmdb-logo" href="" ></a>
+                    </div>
                     <a href="#" class="hmmt-logo">
                         <figure class="gf-figure-logo">
                             <img src={logo} alt="UAO"></img>
                         </figure>
                     </a>
-
                     <span class="scroll-indicator"></span>
                 </div>
-
-                <div id="hmm-bottom">
+ 
+                <div id="hmm-bottom" className={"".concat(`${open===true?"hmm-open":""}`)}>
                     <div class="hmmb-icons">
-                        <a href="#" id="hmmb-menu-icon-close">
+                        <a href="#" id="hmmb-menu-icon-close" onClick={()=> setOpen(false)}>
                             <div class="circle-icon">
-                                <span class="icon fas fa-close"></span>
+                                <span class="icon fas fa-times"></span>
                             </div>
                             <p>Cerrar</p>
                         </a>
-                        <div id="hmmb-profile">
-
-                            <button class="profile-btn ">
-                                <div class="pb-circle">
-                                    <div>
-                                        <span class="icon fas fa-hand-point-up"></span>
-                                    </div>
-                                </div>
-                                <div class="pb-rectangle">Elige tu perfil</div>
-                            </button>
-                        </div>
                         <div id="hmmb-profile-dropdown">
                             <a href="#" id="hmmbpd-close">
                                 <div class="circle-icon">
-                                    <span class="icon fas fa-close"></span>
+                                    <span class="icon fas fa-times"></span>
                                 </div>
                                 <p>Cerrar</p>
                             </a>
-                            <div class="hmmbpd-container">
-                                <span>Selecciona uno de los perfiles y encuentra información de tu interés.</span>
-                                <ul>
-                                    <a href="">
-                                        <li>
-                                            <div class="circle-icon">
-                                                <span class="icon fas fa-user-plus"></span>
-                                            </div>
-                                            <p>Aspirante</p>
-                                        </li>
-                                    </a>
-                                    <a href="">
-                                        <li>
-                                            <div class="circle-icon">
-                                                <span class="icon fas fa-users"></span>
-                                            </div>
-                                            <p>Estudiante</p>
-                                        </li>
-                                    </a>
-                                    <a href="">
-                                        <li>
-                                            <div class="circle-icon">
-                                                <span class="icon fas fa-graduation-cap"></span>
-                                            </div>
-                                            <p>Egresado</p>
-                                        </li>
-                                    </a>
-                                    <a href="">
-                                        <li>
-                                            <div class="circle-icon">
-                                                <span class="icon fas fa-book"></span>
-                                            </div>
-                                            <p>Docente</p>
-                                        </li>
-                                    </a>
-                                    <a href="">
-                                        <li>
-                                            <div class="circle-icon">
-                                                <span class="icon fas fa-address-card"></span>
-                                            </div>
-                                            <p>Colaborador</p>
-                                        </li>
-                                    </a>
-                                    <a href="">
-                                        <li>
-                                            <div class="circle-icon">
-                                                <span class="icon fas fa-university"></span>
-                                            </div>
-                                            <p>Entidad</p>
-                                        </li>
-                                    </a>
-                                </ul>
-                            </div>
                         </div>
                     </div>
                     <ul class="hmmb-sections">
-                        <li><a href="">CRAI Biblioteca</a></li>
-                        <li><a href="">Agencia de Noticias</a></li>
-                        <li><a href="">Agenda de Eventos</a></li>
-                        <li><a href="">UAO Virtual</a></li>
-                        <li>
-                            <a href="">
-                                <div class="circle-icon">
-                                    <span class="icon fas fa-envelope"></span>
-                                </div>
-                                Tu correo institucional
-                            </a>
-                        </li>
+                        <li><NavLink to="/inicio">Inicio</NavLink></li>
+                        <li><NavLink to="/estadisticas">Estadísticas Territoriales</NavLink></li>
+                        <li><NavLink to="/publicaciones/documentos">Publicaciones</NavLink></li>
+                        <li><NavLink to="/contacto">Contacto</NavLink></li>
+                        <li><NavLink to="/ayuda">Ayuda</NavLink></li>
                     </ul>
-                    <ul class="hmmb-principal">
-                        <li>
-                            <div class="hmmbp-title">
-                                <a href="">Institución</a>
-                                <a class="hmmbpt-dropbtn" href=""><span class="icon fas fa-angle-down"></span></a>
-                            </div>
-                            <ul class="hmmbp-submenu">
-                                <li><a href="#">Nuestro campus</a></li>
-                                <li><a href="#">Información institucional</a></li>
-                                <li><a href="#">Documentos institucionales</a></li>
-                                <li><a href="#">Símbolos institucionales</a></li>
-                                <li><a href="#">Órganos de gobierno institucionales</a></li>
-                                <li><a href="#">Planeación y efectividad institucional</a></li>
-                                <li><a href="#">Directorio general</a></li>
-                                <li><a href="#">Lista de docentes</a></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <div class="hmmbp-title">
-                                <a href="">Oferta Académica</a>
-                                <a class="hmmbpt-dropbtn" href=""><span class="icon fas fa-angle-down"></span></a>
-                            </div>
-                            <ul class="hmmbp-submenu">
-                                <li><a href="#">¿En qué estás interesado?</a></li>
-                                <li><a href="#">Pregrados</a></li>
-                                <li><a href="#">Posgrados</a></li>
-                                <li><a href="#">Programas tecnológicos UAOTEC</a></li>
-                                <li><a href="#">Educación continua</a></li>
-                                <li><a href="#">UAO Virtual</a></li>
-                                <li><a href="#">Consultorías y asesorías empresariales</a></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <div class="hmmbp-title">
-                                <a href="">Admisiones</a>
-                                <a class="hmmbpt-dropbtn" href=""><span class="icon fas fa-angle-down"></span></a>
-                            </div>
-                            <ul class="hmmbp-submenu">
-                                <li><a href="#">Para pregrados</a></li>
-                                <li><a href="#">Para posgrados</a></li>
-                                <li><a href="#">Para programas tecnológicos UAOTEC</a></li>
-                                <li><a href="#">Para educación continua</a></li>
-                                <li><a href="#">Becas y financiación</a></li>
-                                <li><a href="#">Opciones de transferencia y cambio</a></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <div class="hmmbp-title">
-                                <a href="">Experimenta la UAO</a>
-                                <a class="hmmbpt-dropbtn" href=""><span class="icon fas fa-angle-down"></span></a>
-                            </div>
-                            <ul class="hmmbp-submenu">
-                                <li><a href="#">¿Por qué estudiar en la UAO?</a></li>
-                                <li><a href="#">Opciones de internacionalización</a></li>
-                                <li><a href="#">Laboratorios UAO</a></li>
-                                <li><a href="#">Actividades culturales y artísticas</a></li>
-                                <li><a href="#">Nuestros medios UAO</a></li>
-                                <li><a href="#">Nuestros museos UAO</a></li>
-                                <li><a href="#">Agencia de noticias</a></li>
-                                <li><a href="#">Agenda de eventos</a></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <div class="hmmbp-title">
-                                <a href="">Investigación</a>
-                                <a class="hmmbpt-dropbtn" href=""><span class="icon fas fa-angle-down"></span></a>
-                            </div>
-                            <ul class="hmmbp-submenu">
-                                <li><a href="#">¿Quiénes somos?</a></li>
-                                <li><a href="#">Convocatorias de investigación</a></li>
-                                <li><a href="#">Portafolio de tecnologías para transferencia</a></li>
-                                <li><a href="#">Grupos de investigación</a></li>
-                                <li><a href="#">Semilleros de Investigación</a></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <div class="hmmbp-title">
-                                <a href="">Servicios Académicos</a>
-                                <a class="hmmbpt-dropbtn" href=""><span class="icon fas fa-angle-down"></span></a>
-                            </div>
-                            <ul class="hmmbp-submenu">
-                                <li><a href="#">Servicios generales</a></li>
-                                <li><a href="#">Ingreso a portales</a></li>
-                                <li><a href="#">Centros de servicio</a></li>
-                                <li><a href="#">Procesos y trámites administrativos</a></li>
-                                <li><a href="#">Convenios asociados</a></li>
-                                <li><a href="#">Instituto de idiomas</a></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <div class="hmmbp-title">
-                                <a href="">Bienestar</a>
-                                <a class="hmmbpt-dropbtn" href=""><span class="icon fas fa-angle-down"></span></a>
-                            </div>
-                            <ul class="hmmbp-submenu">
-                                <li><a href="#">Información y políticas</a></li>
-                                <li><a href="#">Deporte y recreación</a></li>
-                                <li><a href="#">Arte y cultura</a></li>
-                                <li><a href="#">Formación integral</a></li>
-                                <li><a href="#">CASA</a></li>
-                                <li><a href="#">Transporte y movilidad</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <div class="hmmb-language">
-                        <p>Idioma:</p>
-                        <a data-lang="es" id="hmmb-es" class="active" href="">Español</a>
-                        <a data-lang="en" id="hmmb-en" href="">English</a>
-                    </div>
                     <div class="hmmb-footer">
-                        <ul class="hmmbf-legal">
+                        {/* <ul class="hmmbf-legal">
                             <li><a href="">Política de Tratamiento de Datos Personales</a></li>
                             <li><a href="">Reglamento Estudiantil</a></li>
                             <li><a href="">Documentos legales</a></li>
                             <li><a href="">Transparencia y Acceso a la Información Pública</a></li>
-                        </ul>
+                        </ul> */}
                         <div id="hmmbf-contact">
                             <h5>Contacto</h5>
                             <ul class="social-links">
-                                <li><a href="" class="icon icon-Facebook"></a></li>
-                                <li><a href="" class="icon icon-Twitter"></a></li>
-                                <li><a href="" class="icon icon-Instagram"></a></li>
-                                <li><a href="" class="icon icon-Youtube"></a></li>
-                                <li><a href="" class="icon icon-Linkedin"></a></li>
+                                <li><a href="" class="icon fab fa-facebook-square"></a></li>
+                                <li><a href="" class="icon fab fa-twitter"></a></li>
+                                <li><a href="" class="icon fab fa-instagram"></a></li>
+                                <li><a href="" class="icon fab fa-youtube"></a></li>
+                                <li><a href="" class="icon fab fa-linkedin"></a></li>
                             </ul>
                             <ul class="contact-list">
                                 <li>

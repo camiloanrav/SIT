@@ -12,7 +12,7 @@ class DemoCarousel extends Component {
     render() {
         return (
             <div>
-                <Carousel  style={{maxHeight:'20em'}} showThumbs={false} showArrows={true} autoPlay={true} transitionTime={350} interval={3000} infiniteLoop={true}>
+                <Carousel  style={{maxHeight:'20em'}} showThumbs={false} showIndicators={false} showStatus={false} showArrows={true} autoPlay={true} transitionTime={350} interval={3000} infiniteLoop={true}>
                     {/* <div style={{maxHeight:'20em'}}>
                         <img src="https://s1.1zoom.me/big0/821/Ukraine_Autumn_500392.jpg" />
                         <p className="legend">
@@ -32,21 +32,21 @@ class DemoCarousel extends Component {
                     </div> */}
                     <div style={{maxHeight:'20em'}}>
                         <img src={carousel1} alt="" />
-                        <div className="legend">
-                            <p className="titulo">SER Pacífico</p>
-                        </div>
+                        <p className="legend">
+                            SER Pacífico
+                        </p>
                     </div>
                     <div style={{maxHeight:'20em'}}>
                         <img src={carousel2} alt="" />
-                        <div className="legend">
-                            <p className="titulo">SER Pacífico</p>
-                        </div>
+                        <p className="legend">
+                            SER Pacífico
+                        </p>
                     </div>
                     <div style={{maxHeight:'20em'}}>  
                         <img src={carousel3} alt="" />
-                        <div className="legend">
-                            <p className="titulo">SER Pacífico</p>
-                        </div>
+                        <p className="legend">
+                            SER Pacífico
+                        </p>
                     </div>
                     <div style={{maxHeight:'20em'}}>  
                         <img src={carousel4} alt="" />
@@ -56,7 +56,6 @@ class DemoCarousel extends Component {
                     </div>
                 </Carousel>
             </div>
-            
         );
     }
 };
