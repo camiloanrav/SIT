@@ -8,6 +8,7 @@ import EstadisticasContainer from './Containers/EstadisticasContainer';
 import ContactoContainer from './Containers/ContactoContainer';
 import AyudaContainer from './Containers/AyudaContainer';
 import PublicacionesContainer from './Containers/PublicacionesContainer';
+import AdminContainer from './Containers/AdminContainer';
 import NavBarDesktop from './Components/NavBarDesktop';
 import NavBarMovil from './Components/NavBarMovil';
 import Footer from './Components/Footer';
@@ -42,6 +43,10 @@ function App() {
             <Route path="/contacto" component={ContactoContainer}/>
             <Route path="/ayuda" component={AyudaContainer}/>
             <Route path="/publicaciones" component={PublicacionesContainer}/>
+            <Route path="/administrador" component={AdminContainer}/>
+            <Route path="/administrador/inicio" component={AdminContainer}/>
+            <Route path="/administrador/estadisticas" component={AdminContainer}/>
+            <Route path="/administrador/publicaciones" component={AdminContainer}/>
             <Route component={NoMatchPage} />
           </Switch>
       </div>

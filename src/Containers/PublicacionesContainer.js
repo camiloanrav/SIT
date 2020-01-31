@@ -25,7 +25,6 @@ const PublicacionesContainer = () => {
     function handleChange(epa) {
         console.log('Soy handleChange', epa)
         setindice(epa);
-
     }
 
     async function getAxios() {

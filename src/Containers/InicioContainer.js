@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import AwesomeSlider from 'react-awesome-slider';
@@ -12,6 +12,7 @@ import Mapa from '../Components/Mapa';
 import Acercade from '../Components/Acercade';
 import Acercade2 from '../Components/Acercade2';
 import { getDimension } from '../utils/api';
+import axios from "axios";
 
 import DemoCarousel from '../Components/DemoCarousel';
 
@@ -20,43 +21,49 @@ import dimensionEconomica from '../dimensionEconomica.jpeg';
 import dimensionInstitucional from '../dimensionInstitucional.jpg';
 import dimensionSocial from '../dimensionSocial.jpg';
 
-class InicioContainer extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            cargando: true,
-            nombreDimension: null,
-            descripcion: null,
-            datos: []
-        };
+const InicioContainer = () => {
+    const [cargando, setCargando] = useState(true);
+    const [nombreDimension, setNombre] = useState(null);
+    const [descripcion, setDescripcion] = useState(null);
+    const [datos, setDatos] =  useState([]);
+
+
+    async function getAxios() {  
+        await axios.get(`http://192.168.0.159/serpacificows/dimension/all.php`).then(response => {            
+            setDatos(response.data);
+            console.log("OK");    
+            renderPosts(datos);
+            console.log("Estado:", datos, "Respuesta:", response.data);
+        }).catch(error => console.log(error.response));
     }
-    // const [gradient, setGradient] = useState("");
-    render() {
-        const {cargando, nombreDimension, descripcion} = this.state;
+
+    useEffect(() => {
+        console.log('Entro');
+        setCargando(false);
+        getAxios()
+    }, [cargando] );
+ 
+
+      function renderPosts(datos) {           
+    
+            return datos.map(card => {
+                const {nombre, descripcion} = card;
+    
+                return (
+                    <Card nombreDimension={nombre}
+                        descripcion={descripcion}/>                    
+                );
+            });
+        }
+
         return (
             <div>
                 <NavBarDesktop></NavBarDesktop>
                 <NavBarMovil></NavBarMovil>
-                {/* Contenido principal */}
-                {/* <AwesomeSlider cssModule={AwsSliderStyles}
-                    infinite={true}
-                    bullets={false}
-                    transitionDelay={2}
-                    organicArrows={false}
-                    className="carrousel">
-                    <div data-src={carrousel6}/>
-                    <div data-src={carrousel2}/>
-                    <div data-src={carrousel8}/>
-                    <div data-src={carrousel4}/>
-                    <div data-src={carrousel1}/>
-                    <div data-src={carrousel7}/>
-                    <div data-src={carrousel3}/>
-                </AwesomeSlider> */}
                 <DemoCarousel></DemoCarousel>
-
                 <section className="investigation with-decoration">
                     <div className="cards">                     
-                        {cargando ? 'Cargando...' : this.renderPosts()
+                        {cargando ? 'Cargando...' : renderPosts(datos)
                     } </div>
 
                 </section>
@@ -66,32 +73,12 @@ class InicioContainer extends Component {
                     <Mapa></Mapa>
                     <Acercade2></Acercade2>
                 </div>
-
-
                 <Footer></Footer>
             </div>
         );
-    }
-
-    renderPosts = () => {
-        const {datos} = this.state;     
-
-        return datos.map(card => {
-            const {nombre, descripcion} = card;
-
-            return (
-                <Card nombreDimension={nombre}
-                    descripcion={descripcion}/>                    
-            );
-        });
-    }
-    async componentDidMount() {
-        getDimension().then((res) => {
-            this.setState({datos: res.data});
-        }).catch((err) => console.log(err));
-
-        this.setState({cargando:false});
-    }
+   
+  
+ 
 }
 InicioContainer.propTypes = {};
 
