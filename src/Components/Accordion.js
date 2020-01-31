@@ -148,7 +148,7 @@ export default function Accordion() {
         }
 
         const getDimensiones = () =>{
-            axios.get(`http://192.168.0.159/serpacificows/dimension/all.php`)
+            axios.get(`http://11.11.8.46/serpacificows/dimension/all.php`)
             .then(res => {
                 setDimensions(RenderDimensions(res.data));
             })
@@ -159,7 +159,7 @@ export default function Accordion() {
         }
     
         const getMap = () => {
-            axios.get(`http://192.168.0.159/serpacificows/informacion/all.php`)
+            axios.get(`http://11.11.8.46/serpacificows/informacion/all.php`)
             .then(res => {
                 setMap(RenderMap(res.data));
             })
@@ -210,7 +210,7 @@ export default function Accordion() {
         /* if(value !== "" && value != null){ */
             
             //alert(JSON.stringify(elements) + " : " + JSON.stringify(save));
-            const url = "http://192.168.0.159/serpacificows/dimension/update.php";
+            const url = "http://11.11.8.46/serpacificows/dimension/update.php";
 
             axios.post(url,elements, {
                 headers: {
@@ -229,7 +229,7 @@ export default function Accordion() {
 
     function handleSubmitMapa (elements) {
             //alert(JSON.stringify(elements));
-            const url = "http://192.168.0.159/serpacificows/informacion/update.php";
+            const url = "http://11.11.8.46/serpacificows/informacion/update.php";
 
             axios.post(url,elements, {
                 headers: {

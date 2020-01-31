@@ -29,7 +29,7 @@ const InicioContainer = () => {
 
 
     async function getAxios() {  
-        await axios.get(`http://192.168.0.159/serpacificows/dimension/all.php`).then(response => {            
+        await axios.get(`http://11.11.8.46/serpacificows/dimension/all.php`).then(response => {            
             setDatos(response.data);
             console.log("OK");    
             renderPosts(datos);

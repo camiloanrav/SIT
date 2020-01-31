@@ -29,7 +29,7 @@ const PublicacionesContainer = () => {
 
     async function getAxios() {
         console.log(indice)
-        await axios.get(`http://localhost/serpacificows/documento/search.php?id=${indice}`).then(response => {
+        await axios.get(`http://11.11.8.46/serpacificows/documento/search.php?id=${indice}`).then(response => {
             
             setdatos(response.data)
             setCargando(false)

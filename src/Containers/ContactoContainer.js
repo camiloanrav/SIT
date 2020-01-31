@@ -6,7 +6,7 @@ import NavBarMovil from '../Components/NavBarMovil';
 import Footer from '../Components/Footer';
 import Titulo from '../Components/Titulo';
 import axios from "axios";
-const API_PATH = 'http://localhost/enviarcorreo/index.php';
+const API_PATH = 'http://11.11.8.46/enviarcorreo/index.php';
 
 class ContactoContainer extends Component {
 

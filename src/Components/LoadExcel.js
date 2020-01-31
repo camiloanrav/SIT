@@ -22,15 +22,14 @@ const LoadExcel = () => {
         return o;
     }
 
-    const handleChange = (e) => {
-        alert("handleChange");
-        const files = e.target.files[0];
+    function handleChange(e){
+        const files = e.target.files;
         if (files && files[0]){
-            setFile({ file: files[0] });
+            setFile(files[0]);
         }
     };
      
-    const handleFile = () => {
+    function handleFile () {
         alert("handleFile");
         /* Boilerplate to set up FileReader */
         const reader = new FileReader();
@@ -38,23 +37,69 @@ const LoadExcel = () => {
         
         reader.onload = (e) => {
             /* Parse data */
-            const bstr = e.target.files;
+            const bstr = e.target.result;
             const wb = XLSX.read(bstr, { type: rABS ? 'binary' : 'array', bookVBA : true });
+            let total = [];
+            for(let i = 0; i < wb.SheetNames.length; i++){
+                total.push(wb.SheetNames[i]);
+            }
+            console.log(total);
             /* Get first worksheet */
-            const wsname = wb.SheetNames[0];
+            const wsname = wb.SheetNames[1];
             const ws = wb.Sheets[wsname];
             /* Convert array of arrays */
-            setData(XLSX.utils.sheet_to_json(ws));
-            setCols(make_cols(ws['!ref']));
-            console.log(data, null, 2);
-            
-        };
+            const json = XLSX.utils.sheet_to_json(ws);
+            //setCols(make_cols(ws['!ref']));
+            setData(json);
+            if(json !== undefined && json != null){
+                alert("Archivo cargado exitosamente");
+            }
+        }
 
         if (rABS) {
             reader.readAsBinaryString(file);
         } else {
             reader.readAsArrayBuffer(file);
         };
+    }
+
+    function handleFile2 () {
+        alert("handleFile2");
+        /* Boilerplate to set up FileReader */
+        const reader = new FileReader();
+        const rABS = !!reader.readAsBinaryString;
+        
+        reader.onload = (e) => {
+            /* Parse data */
+            const bstr = e.target.result;
+            const wb = XLSX.read(bstr, { type: rABS ? 'binary' : 'array', bookVBA : true });
+            let total = [];
+            let json = [];
+            for(let i = 1; i < wb.SheetNames.length; i++){
+                let wsname = wb.SheetNames[i];
+                let ws = wb.Sheets[wsname];
+                json.push(XLSX.utils.sheet_to_json(ws));
+            }
+
+            console.log(total);
+            console.log(json);
+            
+            setData(json);
+            if(json !== undefined && json != null){
+                alert("Archivo cargado exitosamente");
+            }
+        }
+
+        if (rABS) {
+            reader.readAsBinaryString(file);
+        } else {
+            reader.readAsArrayBuffer(file);
+        };
+    }
+
+    function Show(){
+        console.log(data);
+        console.log(cols);
     }
 
    /*  function UpdateInputExcel(evt) {
@@ -69,13 +114,14 @@ const LoadExcel = () => {
 
     return (
         <div>
-            <label htmlFor="file">Upload an excel to Process Triggers</label>
+            <label htmlFor="file">Cargar Excel</label>
             <br />
             <input type="file" className="form-control" id="file" accept={SheetJSFT} onChange={handleChange} />
             <br />
             <input type='submit' 
-                value="Process Triggers"
+                value="Excel"
                 onClick={()=>{handleFile()}} />
+            <button onClick={Show}>Mostrar</button>
         </div>
     );
 };
