@@ -1,12 +1,24 @@
-import React , { useState } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import DatosDepartamento from './DatosDepartamento';
+import axios from "axios";
 
 const Mapa = () => {
     const [Valle, setValle] = useState(false);
     const [Choco, setChoco] = useState(false);
     const [Narino, setNarino] = useState(false);
     const [Cauca, setCauca] = useState(false);
+    const [Info, setInfo] = useState([]);
+
+    async function getAxios() {  
+        await axios.get(`http://localhost/serpacificows/informacion/all.php`).then(response => {            
+            setInfo(response.data);  
+        }).catch(error => console.log(error.response));
+    }
+
+    useEffect(() => {  
+        getAxios()
+    }, [Valle] );
 
     var handleHover = (e) => {
         //Valle = true;
@@ -27,7 +39,7 @@ const Mapa = () => {
                 break;
         }
     }
-    
+   
     var handleOut = () => {
         //Valle = false;
         setValle(false);
@@ -35,7 +47,7 @@ const Mapa = () => {
         setCauca(false);
         setNarino(false);
     }
-    
+   
     return (
         <div className="mapdiv">
             <h5>Región Pacífico de Colombia</h5>
@@ -114,22 +126,22 @@ const Mapa = () => {
                 </circle>
                 <circle cx="437.3" cy="870.9" id="2">
                 </circle>
-                
+               
             </svg>
             {
-                Valle ?  <DatosDepartamento nombre={"Valle del Cauca"} extension={"22.140 Km2"} capital={"Cali"} poblacion={"9.608.978"} participacionPIB={"73%"} color={"#00B0FF"}></DatosDepartamento> : null
+                Valle ?  <DatosDepartamento nombre={Info[1].nombre} extension={Info[1].extension} capital={Info[1].capital} poblacion={Info[1].poblacion} participacionPIB={Info[1].participacion} color={"#00B0FF"}></DatosDepartamento> : null
             }
 
             {
-                Choco ?  <DatosDepartamento nombre={"Chocó"} extension={"46.530 Km2 "} capital={"Quibdó"} poblacion={"1.040.592"} participacionPIB={"3%"} color={"#FFAB40"}></DatosDepartamento> : null
+                Choco ?  <DatosDepartamento nombre={Info[0].nombre} extension={Info[0].extension} capital={Info[0].capital} poblacion={Info[0].poblacion} participacionPIB={Info[0].participacion} color={"#FFAB40"}></DatosDepartamento> : null
             }
 
             {
-                Narino ?  <DatosDepartamento nombre={"Nariño"} extension={"33.268 Km2"} capital={"Pasto"} poblacion={"3.660.946"} participacionPIB={"11%"} color={"#B388FF"}></DatosDepartamento> : null
+                Narino ?  <DatosDepartamento nombre={Info[3].nombre} extension={Info[3].extension} capital={Info[3].capital} poblacion={Info[3].poblacion} participacionPIB={Info[3].participacion} color={"#B388FF"}></DatosDepartamento> : null
             }
 
             {
-                Cauca ?  <DatosDepartamento nombre={"Cauca"} extension={"29.308 Km2"} capital={"Popayán"} poblacion={"2.853.876"} participacionPIB={"13%"} color={"#00C853"}></DatosDepartamento> : null
+                Cauca ?  <DatosDepartamento nombre={Info[2].nombre} extension={Info[2].extension} capital={Info[2].capital} poblacion={Info[2].poblacion} participacionPIB={Info[2].participacion} color={"#00C853"}></DatosDepartamento> : null
             }
         </div>
     );
@@ -138,7 +150,7 @@ const Mapa = () => {
 
 
 Mapa.propTypes = {
-    
+   
 };
 
 export default Mapa;
