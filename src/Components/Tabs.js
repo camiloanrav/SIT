@@ -18,21 +18,14 @@ import Buscador from '../Components/Buscador';
 import Lista from '../Components/Lista';
 import SelectorUAO from '../Components/SelectorUAO';
 
-   const Tabs = (props) => {
-
-    const mensaje = holi => {           
-        
-     
-    }
-
-
+    const Tabs = ({setindice}) => {
 
     let { path, url } = useRouteMatch();
     const [topic, setTopic] = useState(1);
 
     function handleClick(index){
         setTopic(index);
-        props.index(index);
+        setindice(index);
     }
 
     return (
@@ -64,16 +57,16 @@ import SelectorUAO from '../Components/SelectorUAO';
                         </ul>
                     </nav>
                     <div className="tabs-box-container">
-                        <Buscador></Buscador>                        
-                        <Switch>
+                        {/* <Buscador></Buscador> */}                        
+                        {/* <Switch>
                             <Route exact path={path}>
                             <h3>Selecione un tipo de publicación</h3>
                             </Route>
-                            <Route path={`${path}/:listaID`}>
+                            <Route path={`${path}/:listaID`}> */}
                                 {/*<Topic></Topic>*/}
-                                <Lista></Lista>
+                                {/* <Lista></Lista>
                             </Route>
-                        </Switch>
+                        </Switch> */}
                     </div>
                 </section>
             </div>

@@ -26,10 +26,15 @@ const InicioContainer = () => {
     const [nombreDimension, setNombre] = useState(null);
     const [descripcion, setDescripcion] = useState(null);
     const [datos, setDatos] =  useState([]);
+    const [imagenes] = useState([dimensionEconomica, dimensionSocial, dimensionAmbiental, dimensionInstitucional]);
 
 
     async function getAxios() {  
-        await axios.get(`http://11.11.8.46/serpacificows/dimension/all.php`).then(response => {            
+        await axios.get(`http://192.168.0.159/serpacificows/dimension/all.php`).then(response => {
+            for(let i = 0; i < response.data.length; i++){
+                response.data[i].rutaimagen = imagenes[i];
+            }
+                        
             setDatos(response.data);
             console.log("OK");    
             renderPosts(datos);
@@ -47,11 +52,10 @@ const InicioContainer = () => {
       function renderPosts(datos) {           
     
             return datos.map(card => {
-                const {nombre, descripcion} = card;
+                const {nombre, descripcion, rutaimagen} = card;
     
                 return (
-                    <Card nombreDimension={nombre}
-                        descripcion={descripcion}/>                    
+                    <Card nombreDimension={nombre} descripcion={descripcion} rutaimagen={rutaimagen}/>                    
                 );
             });
         }

@@ -1,17 +1,18 @@
-import React, {useState} from 'react';
+import React, {Component, useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {BrowserRouter as Router, useParams} from "react-router-dom";
 import ReactPaginate from 'react-paginate';
-import axios from "axios";
+import RowsTable from '../Components/RowsTable';
 
-export class CommentList extends React.Component {
-  
+
+/* export class CommentList extends React.Component {
+
     render() {
-        let commentNodes = this.props.dataPerPage.map(function(id, index) {
+        let commentNodes = this.props.dataPerPage.map(function(d, index) {
             return <tr key={index}>
-                    <td data-table-header="Título">Epa</td>
-                    <td data-table-header="Autor/es">{id.id}</td>
-                    <td data-table-header="Acciones">17</td>
+                    <td data-table-header="Título">{d.titulo}</td>
+                    <td data-table-header="Autor/es">{d.autor}</td>
+                    <td data-table-header="Acciones"> <Link target="_blank" to={d.urlarchivo}>Descargar</Link></td>
                 </tr>;
         });
         return (
@@ -20,104 +21,119 @@ export class CommentList extends React.Component {
             </tbody> 
         );
     }
-  }
+} */
 
-class Table extends React.Component {
 
-    constructor(props) {
-        super(props);
+const Table = ({datos}) => {
     
-        this.state = {
-          data: [],
-          offset:0,
-          pageCount:10,
-          dataPerPage:[],
-          perPage:10,
-        };
-    }
+    /* const [data, setData] = useState([]); */
+    const [offset, setOffset] = useState(0);
+    const [pageCount, setPageCount] = useState(10);
+    const [dataPerPage, setDataPerPage] = useState([]);
+    const [perPage, setPerPage] = useState(5);
+    const [currentPage, setCurrentPage] = useState(3);
+    
 
-    loadCommentsFromServer() {
+    /* useEffect(() => {
+        setData(datos);
+    }, [datos] ); */
+
+    useEffect(() => {
+        setPageCount(Math.ceil(datos.length /perPage));
+        setOffset(0 * perPage);
+        let elements = datos.slice(offset, offset + perPage);
+        setDataPerPage(elements);
+        setCurrentPage(0);
+    }, [datos] );
+
+    /* const loadCommentsFromServer = () => {
+        
         axios({
             method: "get",
             url: "https://jsonplaceholder.typicode.com/posts",
         }).then((res) => {
             console.log("RES: "+ JSON.stringify(res));
-            
+       
             this.setState({
                 data: res.data,
             });
             
             this.setState({
-                pageCount: Math.ceil(this.state.data.length /this.state.perPage),
+                pageCount: Math.ceil(data.length /perPage),
             });
 
             this.asignData(0);
+            
+            //setData(datos);
+            
         })
-    }
+    } */
 
-    componentDidMount() {
-        this.loadCommentsFromServer();
-    }
+    useEffect(() => {
+        const asignData = () => {
+            setOffset(currentPage * perPage);
+            let elements = datos.slice(offset, offset + perPage);
+            setDataPerPage(elements);
+        }
+        asignData();
+    }, [currentPage] );
 
-    handlePageClick = data => {
+    const handlePageClick = data => {
         let selected = data.selected;
-        this.asignData(selected);
+        //asignData(selected);
+        setCurrentPage(selected);
     };
 
-    asignData(selected) {
-        let offset =  selected * this.state.perPage
-        let elements = this.state.data.slice(offset, offset + this.state.perPage);
-        this.setState({
-            offset: offset,
-            dataPerPage:elements
-        });
-        
-    }
+    
 
-    render() {
-        const {contenido} = this.props;
-        
-        const body = (
-
-            <div>
-                <div className="lista">                
-                    <div className="form-table">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th scope="col">Título</th>
-                                    <th scope="col">Autor/es</th>
-                                    <th scope="col">Acciones</th>
-                                </tr>
-                            </thead>
-                            <CommentList dataPerPage={this.state.dataPerPage} />
+    
+    return(
+        <div>
+            <div className="lista">                
+                <div className="form-table">
+                    <table >
+                        <thead>
+                            <tr>
+                                <th scope="col">Título</th>
+                                <th scope="col">Autor/es</th>
+                                <th scope="col">Acciones</th>
+                            </tr>
+                        </thead>
+                        {/* <CommentList dataPerPage={dataPerPage} /> */}
+                        <RowsTable dataPerPage={dataPerPage}></RowsTable>
+                        <tbody>
                             
-                        </table>
-                        <ReactPaginate
-                                        previousLabel={'Anterior'}
-                                        nextLabel={'Siguiente'}
-                                        breakLabel={'...'}
-                                        breakClassName={'break-me'}
-                                        pageCount={this.state.pageCount}
-                                        marginPagesDisplayed={4}
-                                        pageRangeDisplayed={4}
-                                        onPageChange={this.handlePageClick}
-                                        containerClassName={'pagination'}
-                                        subContainerClassName={'pages pagination'}
-                                        activeClassName={'active'}
-                                        />
-                    </div>
+                        </tbody>
+                        
+                    </table>
+                    
+                    <ReactPaginate
+                                    previousLabel={'Anterior'}
+                                    nextLabel={<div>Siguiente</div>}
+                                    breakLabel={'...'}
+                                    breakClassName={'break-me'}
+                                    breakLinkClassName={'break-link'}
+                                    pageCount={pageCount}
+                                    marginPagesDisplayed={1}
+                                    pageRangeDisplayed={2}
+                                    onPageChange={handlePageClick}
+                                    containerClassName={'pagination'}
+                                    subContainerClassName={'subpagination'}
+                                    activeClassName={'active-page'}
+                                    activeLinkClassName={'active-link'}
+                                    previousClassName={'next'}
+                                    nextClassName={'next'}
+                                    pageClassName={'page'}
+                                    pageLinkClassName={'page-link'}
+                                    forcePage={currentPage}
+                                    />
                 </div>
             </div>
-        );
-
-        return (
-            <div> {body} </div>
-        );
-    };
-
-
+        </div>
+    )
 };
+
+
 
 Table.propTypes = {};
 

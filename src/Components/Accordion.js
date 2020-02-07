@@ -302,6 +302,7 @@ export default function Accordion() {
                         label="Dimensión"
                         type="text"
                         color="secondary"
+                        multiline={true}
                         defaultValue={data?data.descripcion:''}
                         fullWidth
                     />

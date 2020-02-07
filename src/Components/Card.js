@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 class Card extends React.Component {
     render() {
-        const {nombreDimension, descripcion, cargando} = this.props;
+        const {nombreDimension, descripcion, rutaimagen, cargando} = this.props;
         const datosCard = (
             <div className="card">
                 <script type="application/ld+json"></script>
@@ -11,12 +11,12 @@ class Card extends React.Component {
                     <a href="#">
                         <div className="nc-top">
                             <figure>
-                                <img alt="UAO" src="https://pattern.uao.edu.co/images/example-image.jpg"></img>
+                                <img alt="UAO" src={rutaimagen}></img>
                             </figure>
                             <div>
-                                <p className="category-tag ">
+                                <p style={{color:'red', fontFamily:'roboto', marginTop:'0.3em'}} /* className="category-tag " */>
+                                    <i style={{marginRight:'0.3em'}} class="fas fa-angle-right"></i>
                                     {nombreDimension} </p>
-                                <time className="date-text">03 de Abril de 2019</time>
                             </div>
                         </div>
                         <p className="nc-title">
