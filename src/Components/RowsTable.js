@@ -8,7 +8,7 @@ const RowsTable = ({dataPerPage}) => {
             return <tr key={index}>
                     <td data-table-header="Título">{d.titulo}</td>
                     <td data-table-header="Autor/es">{d.autor}</td>
-                    <td data-table-header="Acciones"> <Link target="_blank" to={d.urlarchivo}>Descargar</Link></td>
+                    <td data-table-header="Acciones"> <a target="_blank" rel="noopener noreferrer" href={d.urlarchivo}>Descargar</a></td>
                 </tr>;
         })
         )

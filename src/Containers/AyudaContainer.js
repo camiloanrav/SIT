@@ -25,7 +25,7 @@ class AyudaContainer extends Component {
                                 </div>
                                 <p className="pregunta">¿Cómo Consulto los datos?</p>
                             </div>
-                            <p style={{marginLeft:'2.5em', textAlign:'left'}}>En la pestañasaaaaavffddd dasdsadasdasdasd sadasdsadasdsadsadasdasda dwsadsadsadasdasdsa.</p>
+                            <p style={{marginLeft:'2.5em', textAlign:'left'}}>Para realizar la consulta de los datos, se debe ingresar a "Estadísticas Territoriales" y seleccionar la informmación que se desee visualizar.</p>
                         </div>
                         <div style={{marginBottom:"2em"}}>
                             <div style={{display:"flex"}}>
@@ -34,7 +34,7 @@ class AyudaContainer extends Component {
                                 </div>
                                 <p className="pregunta">¿Cómo Consulto los datos?</p>
                             </div>
-                            <p style={{marginLeft:'2.5em', textAlign:'left'}}>En la pestañasaaaaavffddd dsadsaddddddddddddddddddddddddd saddddddddddddddddddddddddddddddddddddsa saddddddddddd dfg.</p>
+                            <p style={{marginLeft:'2.5em', textAlign:'left'}}>Para realizar la consulta de los datos, se debe ingresar a "Estadísticas Territoriales" y seleccionar la informmación que se desee visualizar.</p>
                         </div>
                         
                     </div>

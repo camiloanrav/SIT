@@ -30,7 +30,7 @@ const InicioContainer = () => {
 
 
     async function getAxios() {  
-        await axios.get(`http://192.168.0.159/serpacificows/dimension/all.php`).then(response => {
+        await axios.get(`http://11.11.8.164/serpacificows/dimension/all.php`).then(response => {
             for(let i = 0; i < response.data.length; i++){
                 response.data[i].rutaimagen = imagenes[i];
             }

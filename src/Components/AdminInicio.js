@@ -18,7 +18,7 @@ const AdminInicio = ({setTitulo}) => {
     });
 
     const getDimensiones = () =>{
-        axios.get(`http://192.168.0.159/serpacificows/dimension/all.php`)
+        axios.get(`http://11.11.8.164/serpacificows/dimension/all.php`)
         .then(res => {
             /* setDimensions(renderDimensions(res.data)); */
             setDimensions(res.data);
@@ -26,7 +26,7 @@ const AdminInicio = ({setTitulo}) => {
     }
 
     const getMap = () => {
-        axios.get(`http://192.168.0.159/serpacificows/dimension/all.php`)
+        axios.get(`http://11.11.8.164/serpacificows/dimension/all.php`)
         .then(res => {
             /* setMap(RenderMap(res.data)); */
             setMap(res.data);

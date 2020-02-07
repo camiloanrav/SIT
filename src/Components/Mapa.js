@@ -11,7 +11,7 @@ const Mapa = () => {
     const [Info, setInfo] = useState([]);
 
     async function getAxios() {  
-        await axios.get(`http://11.11.8.46/serpacificows/informacion/all.php`).then(response => {            
+        await axios.get(`http://11.11.8.164/serpacificows/informacion/all.php`).then(response => {            
             setInfo(response.data);  
         }).catch(error => console.log(error.response));
     }
