@@ -799,8 +799,7 @@ class EstadisticasContainer extends Component {
                             // acumulador.push(aux[k].label); 
                             let tt = aux[k].value;
                             tt = tt.replace(/,/g, '.');
-                            arreglito.push(tt);
-                            
+                            arreglito.push(tt);                            
                         }
                     }
                 }

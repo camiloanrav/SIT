@@ -53,6 +53,11 @@
     flex-wrap:wrap;
   }
 
+  .contenido-inicio{
+    padding-bottom: 3em;
+    background-color: rgb(231, 231, 231);
+  }
+
   .ayuda{
     display: flex;
     justify-content: space-around;
@@ -89,7 +94,7 @@
   }
 
   .lista{
-    
+    margin-bottom: 5em;
   }
 
   .form-table{
@@ -101,7 +106,7 @@
   }
 
   .footer{
-    margin-top: 6em;
+    /* margin-top: 6em; */
   }
 
   .titulo-container{
@@ -155,12 +160,6 @@
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     }
 
-    .mapdiv h5{
-      margin-top:.3em;
-      margin-bottom:-1em;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    }
-
     @media (min-width:320px){
       .map{
         width: 28em;
@@ -175,8 +174,17 @@
       }
 
       .legend{
-        bottom:1.3em !important;
-        padding:0.4em !important;
+        /* bottom:1.3em !important; */
+        padding:0em !important;
+        width: 100% !important;
+        position: relative;
+        left: 0em !important;
+        margin-left: 0em !important;
+        bottom: 1.3em !important;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      }
+      .carousel .slide .legend {
+        opacity: 0.7 !important;
       }
     }
 
@@ -194,8 +202,15 @@
       }
 
       .legend{
-        bottom:1.3em !important;
+        /* bottom:1.3em !important; */
         padding:0em !important;
+        width: 100% !important;
+        position: relative;
+        left: 0em !important;
+        margin-left: 0em !important;
+      }
+      .carousel .slide .legend {
+        opacity: 0.7 !important;
       }
     }
 
@@ -212,12 +227,41 @@
         height: 38em;
         margin: 0;
       }
+
+      .legend{
+        /* bottom:1.3em !important; */
+        padding:0em !important;
+        width: 100% !important;
+        position: relative;
+        left: 0em !important;
+        margin-left: 0em !important;
+      }
+
+      .carousel .slide .legend {
+        opacity: 0.7 !important;
+      }
     }
 
-    
+    @media (min-width:768px){
+      .legend{
+        /* bottom:1.3em !important; */
+        padding:0em !important;
+        width: 29% !important;
+        position: relative;
+        left: 0em !important;
+        margin-left: 70% !important;
+      }
+    }
+
+    .mapdiv p{
+      color: black;
+      font-size: 26px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      padding-top: 0.6em;
+    }
 
     .mapdiv path{
-      fill: rgb(214, 214, 214);
+      fill: rgb(255, 255, 255);
       stroke: rgb(68, 68, 68);
       stroke-width: 2px;
       transition: fill 0.3s;
@@ -298,14 +342,17 @@
     .card-uao p{
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
       color:rgb(226, 106, 106);
+      font-size: 20px;
+      margin-bottom: 0.5em;
     }
 
     .card-uao i{
       color:rgb(230, 15, 15);
     }
 
-    .card-uao h5{
-      font-size: 14px;
+    .card-uao div{
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      font-size: 16px;
     }
 
     section nav ul a{
@@ -570,6 +617,10 @@
       border:none;
       right:0em;
       bottom:0.5em;
+    }
+
+    .footer-admin{
+      margin-top: 5em !important;
     }
     
 

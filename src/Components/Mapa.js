@@ -1,7 +1,7 @@
 import React, { Component, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import DatosDepartamento from './DatosDepartamento';
-import axios from "axios";
+import { getData } from '../utils/api';
 
 const Mapa = () => {
     const [Valle, setValle] = useState(false);
@@ -10,15 +10,17 @@ const Mapa = () => {
     const [Cauca, setCauca] = useState(false);
     const [Info, setInfo] = useState([]);
 
-    async function getAxios() {  
-        await axios.get(`http://localhosts/serpacificows/informacion/all.php`).then(response => {            
+   /*  async function getAxios() {  
+        await axios.get(`http://11.11.8.27/serpacificows/informacion/all.php`).then(response => {            
             setInfo(response.data);  
         }).catch(error => console.log(error.response));
-    }
+    } */
 
-    useEffect(() => {  
-        getAxios()
-    }, [Valle] );
+    useEffect(() => {
+        getData('/informacion/all.php').then(data => {
+            setInfo(data); 
+        }).catch(error => console.log(error.data));
+    }, [] );
 
     var handleHover = (e) => {
         //Valle = true;
@@ -50,7 +52,7 @@ const Mapa = () => {
    
     return (
         <div className="mapdiv">
-            <h5>Región Pacífico de Colombia</h5>
+            <p>Región Pacífico de Colombia</p>
             <svg className="map" version="1.2" viewBox="0 0 1190 1190" xmlns="http://www.w3.org/2000/svg">
                 {/*<path d="M10.5 640.1l0.2 0.9-0.6 0.5-0.4 0-0.8 0.7-0.4 0.1-0.3-0.3 0.5-0.8 0.5-0.3 0-0.6 0.4-0.2 0.9 0z" id="COL99" name="">
                 </path>*/}

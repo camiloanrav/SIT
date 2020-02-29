@@ -6,16 +6,17 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import SaveIcon from '@material-ui/icons/Save';
-import axios from 'axios';
 
 import Button from '@material-ui/core/Button';
-import Fab from '@material-ui/core/Fab';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+
+import { getData } from '../utils/api';
+import { postData } from '../utils/api';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -67,8 +68,6 @@ export default function Accordion() {
     };
 
     useEffect(() =>{
-        //alert("useEffect");
-
         const RenderDimensions = (data) => {   
 
             return data.map(dimension => {
@@ -86,13 +85,6 @@ export default function Accordion() {
                             <p style={{fontFamily:'roboto', textAlign:'left'}}>
                                 {descripcion}
                             </p>
-                            {/* <div class="input-form">
-                                <label class="if-text-area" for="mensaje"></label>
-                                <span class="wpcf7-form-control-wrap">
-                                    <textarea onChange={updateInputValue} id="mensaje" name="mensaje" cols="40" rows="4" required="required"></textarea>
-                                    <p class="message">Formato de nombre incorrecto</p>
-                                </span>
-                            </div> */}
                         </div>
                         <hr></hr>
                         <div style={{position:'relative' , paddingBottom:'1em', paddingRight:'1em', textAlign:'right'}}>
@@ -147,29 +139,36 @@ export default function Accordion() {
             });
         }
 
-        const getDimensiones = () =>{
-            axios.get(`http://11.11.8.46/serpacificows/dimension/all.php`)
+        /* const getDimensiones = () =>{
+            axios.get(`http://11.11.8.206/serpacificows/dimension/all.php`)
             .then(res => {
                 setDimensions(RenderDimensions(res.data));
             })
-            /* let dataFromServer = [{iddimensiones:"1", nombre:"Ambiente", descripcion:"Lorem dsadsad dsadasda dsads adsa d asd  asd sa dsadasdsadsa dsadasdas"},
+            let dataFromServer = [{iddimensiones:"1", nombre:"Ambiente", descripcion:"Lorem dsadsad dsadasda dsads adsa d asd  asd sa dsadasdsadsa dsadasdas"},
             {"iddimensiones":"2", "nombre":"Economica", "descripcion":"Lorem dsadsad dsadasda dsads adsa d asd  asd sa dsadasdsadsa dsadasdas"},
             {"iddimensiones":"3", "nombre":"Social", "descripcion":"Lorem dsadsad dsadasda dsads adsa d asd  asd sa dsadasdsadsa dsadasdas"}];
-            setDimensions(RenderDimensions(dataFromServer)); */
-        }
+            setDimensions(RenderDimensions(dataFromServer));
+        } */
+        getData('/dimension/all.php').then(data => {
+            setDimensions(RenderDimensions(data)); 
+        }).catch(error => console.log(error.data));
+
+        getData('/informacion/all.php').then(data => {
+            setMap(RenderMap(data)); 
+        }).catch(error => console.log(error.data));
     
-        const getMap = () => {
-            axios.get(`http://11.11.8.46/serpacificows/informacion/all.php`)
+        /* const getMap = () => {
+            axios.get(`http://11.11.8.206/serpacificows/informacion/all.php`)
             .then(res => {
                 setMap(RenderMap(res.data));
             })
-            /* let dataFromServer = [{"idinfo":"1", "nombre":"Valle", "capital":"Cali", "extension":"Lorem dsadsad dsadasda dsads adsa d asd  asd sa dsadasdsadsa dsadasdas", "poblacion":100, "participacion":10},
+            let dataFromServer = [{"idinfo":"1", "nombre":"Valle", "capital":"Cali", "extension":"Lorem dsadsad dsadasda dsads adsa d asd  asd sa dsadasdsadsa dsadasdas", "poblacion":100, "participacion":10},
             {"idinfo":"2", "nombre":"Cauca", "capital":"Popayan", "extension":"Lorem dsadsad dsadasda dsads adsa d asd  asd sa dsadasdsadsa dsadasdas", "poblacion":100, "participacion":10},
             {"idinfo":"3", "nombre":"Nariño", "capital":"Pasto", "extension":"Lorem dsadsad dsadasda dsads adsa d asd  asd sa dsadasdsadsa dsadasdas", "poblacion":100, "participacion":10}];
-            setMap(RenderMap(dataFromServer)); */
+            setMap(RenderMap(dataFromServer));
         }
         getDimensiones();
-        getMap();
+        getMap(); */
     },[data,save]);
 
     function updateInputValue(evt) {
@@ -180,13 +179,6 @@ export default function Accordion() {
     }
 
     function updateInputMapa(evt) {
-        /* setId(prevState => {
-            const newState;
-            prevState.forEach(element => {
-                
-            });
-            return newState;
-        }) */
         if(evt.target.id === "1"){
             let aux = data;
             aux.capital = evt.target.value;
@@ -207,44 +199,21 @@ export default function Accordion() {
     }
 
     function handleSubmitDimension (elements) {
-        /* if(value !== "" && value != null){ */
-            
-            //alert(JSON.stringify(elements) + " : " + JSON.stringify(save));
-            const url = "http://11.11.8.46/serpacificows/dimension/update.php";
-
-            axios.post(url,elements, {
-                headers: {
-                'content-type': 'application/json'
-            }}).then(res => {
-                /* console.log(res);
-                console.log(res.data); */
-                console.log(res.data);
-                setSave(res.data);
-                handleClose();
-                //getDimensiones();
-            })
-        /* } */
-        
+        postData('/dimension/update.php',elements).then(data => {
+            console.log(data);
+            setSave(data);
+            handleClose();
+        });
     }
 
     function handleSubmitMapa (elements) {
-            //alert(JSON.stringify(elements));
-            const url = "http://11.11.8.46/serpacificows/informacion/update.php";
-
-            axios.post(url,elements, {
-                headers: {
-                'content-type': 'application/json'
-            }}).then(res => {
-                /* console.log(res); */
-                console.log(res.data);
-                setSave(res.data);
-                handleClose();
-            })
-            
+        postData('/informacion/update.php',elements).then(data => {
+            console.log(data);
+            setSave(data);
+            handleClose();
+        }); 
     }
     
-    
-  
     const handleChange = panel => (event, isExpanded) => {
       setExpanded(isExpanded ? panel : false);
     };

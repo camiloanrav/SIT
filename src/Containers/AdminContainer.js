@@ -47,6 +47,7 @@ const AdminContainer = () => {
                     {content}
                 </Route>
             </Switch> */}
+            <div className="footer-admin"></div>
             <Footer></Footer>
         </div>
     );

@@ -11,75 +11,62 @@ import Card from '../Components/Card';
 import Mapa from '../Components/Mapa';
 import Acercade from '../Components/Acercade';
 import Acercade2 from '../Components/Acercade2';
-import { getDimension } from '../utils/api';
-import axios from "axios";
+import { getData } from '../utils/api';
 
 import DemoCarousel from '../Components/DemoCarousel';
 
-import dimensionAmbiental from '../dimensionAmbiental.JPG';
+import dimensionAmbiental from '../dimensionAmbiental.jpg';
 import dimensionEconomica from '../dimensionEconomica.jpeg';
 import dimensionInstitucional from '../dimensionInstitucional.jpg';
-import dimensionSocial from '../dimensionSocial.jpg';
+import dimensionSocial from '../dimensionSocial2.jpg';
 
 const InicioContainer = () => {
     const [cargando, setCargando] = useState(true);
-    const [nombreDimension, setNombre] = useState(null);
-    const [descripcion, setDescripcion] = useState(null);
     const [datos, setDatos] =  useState([]);
     const [imagenes] = useState([dimensionEconomica, dimensionSocial, dimensionAmbiental, dimensionInstitucional]);
 
-
-    async function getAxios() {  
-        await axios.get(`http://localhost/serpacificows/dimension/all.php`).then(response => {
-            for(let i = 0; i < response.data.length; i++){
-                response.data[i].rutaimagen = imagenes[i];
-            }
-                        
-            setDatos(response.data);
-            console.log("OK");    
+    useEffect(() => {
+        getData('/dimension/all.php').then(data => {
+            setCargando(false);
+            for(let i = 0; i < data.length; i++){
+                data[i].rutaimagen = imagenes[i];
+            }       
+            setDatos(data);
             renderPosts(datos);
-            console.log("Estado:", datos, "Respuesta:", response.data);
-        }).catch(error => console.log(error.response));
+        }).catch(error => console.log(error.data));
+    }, []);
+
+    function renderPosts(datos) {
+
+        return datos.map(card => {
+            const {nombre, descripcion, rutaimagen} = card;
+
+            return (
+                <Card nombreDimension={nombre} descripcion={descripcion} rutaimagen={rutaimagen}/>                    
+            );
+        });
     }
 
-    useEffect(() => {
-        console.log('Entro');
-        setCargando(false);
-        getAxios()
-    }, [cargando] );
- 
+    return (
+        <div>
+            <NavBarDesktop></NavBarDesktop>
+            <NavBarMovil></NavBarMovil>
+            <DemoCarousel></DemoCarousel>
+            <section className="investigation with-decoration">
+                <div className="cards">                     
+                    {cargando ? 'Cargando...' : renderPosts(datos)
+                } </div>
 
-      function renderPosts(datos) {           
-    
-            return datos.map(card => {
-                const {nombre, descripcion, rutaimagen} = card;
-    
-                return (
-                    <Card nombreDimension={nombre} descripcion={descripcion} rutaimagen={rutaimagen}/>                    
-                );
-            });
-        }
-
-        return (
-            <div>
-                <NavBarDesktop></NavBarDesktop>
-                <NavBarMovil></NavBarMovil>
-                <DemoCarousel></DemoCarousel>
-                <section className="investigation with-decoration">
-                    <div className="cards">                     
-                        {cargando ? 'Cargando...' : renderPosts(datos)
-                    } </div>
-
-                </section>
-                {/*<section class="circulation-of-links">
-                </section>*/}
-                <div className='cards'>
-                    <Mapa></Mapa>
-                    <Acercade2></Acercade2>
-                </div>
-                <Footer></Footer>
+            </section>
+            {/*<section class="circulation-of-links">
+            </section>*/}
+            <div className='cards contenido-inicio'>
+                <Mapa></Mapa>
+                <Acercade2></Acercade2>
             </div>
-        );
+            <Footer></Footer>
+        </div>
+    );
    
   
  

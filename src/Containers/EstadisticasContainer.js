@@ -757,6 +757,18 @@ class EstadisticasContainer extends Component {
             console.log(unidadMedida);      
             this.setState({ unidad: unidadMedida });
         }).catch(error => console.log(error.response));
+        let periodosMulti = this.state.multiPeriodo;
+        periodos = periodosMulti;
+    }
+
+    buscarUnidad(idIndicador) {
+        console.log("Lo que llega: " + idIndicador);
+        //let idIndicador = this.state.idSeleccionada;
+        axios.get("http://11.11.8.206/serpacificows/unidad/search.php?id=" + idIndicador).then(response => {
+            let unidadMedida = response.data[0].nombre; 
+            console.log(unidadMedida);      
+            this.setState({ unidad: unidadMedida });
+        }).catch(error => console.log(error.response));
     }
 
     buscarFuente(idIndicador) {
