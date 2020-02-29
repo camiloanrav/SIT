@@ -11,7 +11,7 @@ const Mapa = () => {
     const [Info, setInfo] = useState([]);
 
     async function getAxios() {  
-        await axios.get(`http://11.11.8.164/serpacificows/informacion/all.php`).then(response => {            
+        await axios.get(`http://localhosts/serpacificows/informacion/all.php`).then(response => {            
             setInfo(response.data);  
         }).catch(error => console.log(error.response));
     }
@@ -125,8 +125,7 @@ const Mapa = () => {
                 <circle cx="524.8" cy="663.2" id="1">
                 </circle>
                 <circle cx="437.3" cy="870.9" id="2">
-                </circle>
-               
+                </circle>               
             </svg>
             {
                 Valle ?  <DatosDepartamento nombre={Info[1].nombre} extension={Info[1].extension} capital={Info[1].capital} poblacion={Info[1].poblacion} participacionPIB={Info[1].participacion} color={"#00B0FF"}></DatosDepartamento> : null

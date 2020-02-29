@@ -41,7 +41,7 @@ import SelectorUAO from '../Components/SelectorUAO';
                             </Link>
                             <Link to={`${url}/cuentas economicas del valle`} onClick={()=> handleClick(2)} className={"tab program-tab"}>
                                 <li className={"tab program-tab ".concat(`${topic===2?"active":""}`)} data-box-class="program-box" data-tab-class="program-tab" data-box-id="box-2">
-                                    Cuentas
+                                    Cuentas Economicas del Valle
                                 </li>
                             </Link>
                             <Link to={`${url}/tesis`} onClick={()=> handleClick(3)} className={"tab program-tab"}>

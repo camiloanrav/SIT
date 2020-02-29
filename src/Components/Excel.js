@@ -8,8 +8,8 @@ const Excel = props => {
 
     return (
         <div>
-            <div >
-                <button className="button-card-uao" style={{margin:'0.5em', backgroundColor:'lightblue'}} onClick={()=>ConvertJSON(datos, years)}> Generar Excel </button>
+            <div > 
+                <button className="button-card-uao" style={{margin:'0.5em', marginTop:'5em' ,backgroundColor:'lightblue'}} onClick={()=>ConvertJSON(datos, years)}> Generar Excel </button>
             </div>
         </div>
     );
