@@ -6,7 +6,8 @@ import NavBarMovil from '../Components/NavBarMovil';
 import Footer from '../Components/Footer';
 import Titulo from '../Components/Titulo';
 import axios from "axios";
-const API_PATH = 'http://11.11.8.164/enviarcorreo/index.php';
+import { postEmail } from '../utils/api';
+const API_PATH = 'http://11.11.8.27/enviarcorreo/index.php';
 
 class ContactoContainer extends Component {
 
@@ -27,10 +28,18 @@ class ContactoContainer extends Component {
         console.log(this.state);
     }
 
-
     handleFormSubmit = e => {
         e.preventDefault();
-        axios({
+        postEmail('/enviarcorreo/index.php',this.state).then(data => {
+            console.log(data);
+            if (data === 200) {
+                this.setState({
+                    mailSent: true
+                });
+            }
+        }).catch(error => this.setState({ error: error.message })); 
+        
+        /* axios({
             method: 'post',
             url: API_PATH,
             headers: { 'content-type': 'application/json' },
@@ -44,7 +53,7 @@ class ContactoContainer extends Component {
                     })
                 }
             })
-            .catch(error => this.setState({ error: error.message }));
+            .catch(error => this.setState({ error: error.message })); */
     }
 
     render() {

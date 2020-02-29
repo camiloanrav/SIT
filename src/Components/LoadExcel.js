@@ -73,16 +73,14 @@ const LoadExcel = () => {
             /* Parse data */
             const bstr = e.target.result;
             const wb = XLSX.read(bstr, { type: rABS ? 'binary' : 'array', bookVBA : true });
-            let total = [];
             let json = [];
+
             for(let i = 1; i < wb.SheetNames.length; i++){
                 let wsname = wb.SheetNames[i];
                 let ws = wb.Sheets[wsname];
-                json.push(XLSX.utils.sheet_to_json(ws));
+                let x = XLSX.utils.sheet_to_json(ws);
+                json = json.concat(x);
             }
-
-            console.log(total);
-            console.log(json);
             
             setData(json);
             if(json !== undefined && json != null){
@@ -98,7 +96,7 @@ const LoadExcel = () => {
     }
 
     function Show(){
-        console.log(data);
+        console.log(JSON.stringify(data));
         console.log(cols);
     }
 
@@ -113,14 +111,14 @@ const LoadExcel = () => {
     } */
 
     return (
-        <div>
+        <div style={{padding:'1em'}}>
             <label htmlFor="file">Cargar Excel</label>
             <br />
             <input type="file" className="form-control" id="file" accept={SheetJSFT} onChange={handleChange} />
             <br />
             <input type='submit' 
                 value="Excel"
-                onClick={()=>{handleFile()}} />
+                onClick={()=>{handleFile2()}} />
             <button onClick={Show}>Mostrar</button>
         </div>
     );

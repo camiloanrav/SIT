@@ -30,7 +30,7 @@ const Table = ({datos}) => {
     const [offset, setOffset] = useState(0);
     const [pageCount, setPageCount] = useState(10);
     const [dataPerPage, setDataPerPage] = useState([]);
-    const [perPage, setPerPage] = useState(5);
+    const [perPage, setPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(3);
     
 
