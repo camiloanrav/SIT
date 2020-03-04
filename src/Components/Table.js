@@ -4,7 +4,6 @@ import {BrowserRouter as Router, useParams} from "react-router-dom";
 import ReactPaginate from 'react-paginate';
 import RowsTable from '../Components/RowsTable';
 
-
 /* export class CommentList extends React.Component {
 
     render() {
@@ -23,7 +22,6 @@ import RowsTable from '../Components/RowsTable';
     }
 } */
 
-
 const Table = ({datos}) => {
     
     /* const [data, setData] = useState([]); */
@@ -33,17 +31,18 @@ const Table = ({datos}) => {
     const [perPage, setPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(3);
     
-
     /* useEffect(() => {
         setData(datos);
     }, [datos] ); */
 
     useEffect(() => {
-        setPageCount(Math.ceil(datos.length /perPage));
-        setOffset(0 * perPage);
-        let elements = datos.slice(offset, offset + perPage);
-        setDataPerPage(elements);
-        setCurrentPage(0);
+        if(datos){
+            setPageCount(Math.ceil(datos.length /perPage));
+            setOffset(0 * perPage);
+            let elements = datos.slice(offset, offset + perPage);
+            setDataPerPage(elements);
+            setCurrentPage(0);
+        }
     }, [datos] );
 
     /* const loadCommentsFromServer = () => {
@@ -83,9 +82,6 @@ const Table = ({datos}) => {
         //asignData(selected);
         setCurrentPage(selected);
     };
-
-    
-
     
     return(
         <div>
@@ -104,7 +100,6 @@ const Table = ({datos}) => {
                         <tbody>
                             
                         </tbody>
-                        
                     </table>
                     
                     <ReactPaginate

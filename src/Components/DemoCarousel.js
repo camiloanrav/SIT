@@ -8,48 +8,72 @@ import carousel2 from '../carousel-02.jpg';
 import carousel3 from '../carousel-03.jpg';
 import carousel4 from '../carousel-04.jpg';
 import carousel5 from '../carousel-05.jpg';
+import carousel6 from '../carousel-06.jpg';
+import carousel7 from '../carousel-07.jpg';
 
 class DemoCarousel extends Component {
     render() {
         return (
             <div>
-                <Carousel  style={{maxHeight:'20em'}}
+                {/* <div style={{position:'relative', left:'5em', bottom:'0em', zIndex:'1', backgroundColor:'red', height:'0em'}}>
+                    <div style={{position:'absolute', offset:'10em'}}>
+                        Hola
+                    </div>
+                </div> */}
+                <div className="titulo">
+                    <p>Estadísticas Territoriales<br></br>de la Región Pacífico</p>
+                </div>
+                <Carousel
+                /* className="carousel" 
+                style={{maxHeight:'20em'}} */
                 showThumbs={false}
                 showIndicators={false}
                 showStatus={false}
                 showArrows={true}
                 autoPlay={true}
-                transitionTime={350}
-                interval={3000}
+                transitionTime={300}
+                interval={10000}
                 infiniteLoop={true}>
                     <div style={{maxHeight:'20em'}}>
                         <img src={carousel1} alt="" />
                         <p className="legend">
-                            Lugar
+                            Nariño
                         </p>
                     </div>
                     <div style={{maxHeight:'20em'}}>
                         <img src={carousel2} alt="" />
                         <p className="legend">
-                            Lugar
+                            Nariño
                         </p>
                     </div>
                     <div style={{maxHeight:'20em'}}>  
                         <img src={carousel3} alt="" />
                         <p className="legend">
-                            Lugar
+                            Nariño
                         </p>
                     </div>
                     <div style={{maxHeight:'20em'}}>  
                         <img src={carousel4} alt="" />
                         <p className="legend">
-                            Lugar
+                            Valle del Cauca
                         </p>
                     </div>
                     <div style={{maxHeight:'20em'}}>  
                         <img src={carousel5} alt="" />
                         <p className="legend">
-                            Lugar
+                            Cauca
+                        </p>
+                    </div>
+                    <div style={{maxHeight:'20em'}}>  
+                        <img src={carousel6} alt="" />
+                        <p className="legend">
+                            Chocó
+                        </p>
+                    </div>
+                    <div style={{maxHeight:'20em'}}>  
+                        <img src={carousel7} alt="" />
+                        <p className="legend">
+                            Chocó
                         </p>
                     </div>
                 </Carousel>

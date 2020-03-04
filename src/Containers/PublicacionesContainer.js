@@ -39,7 +39,7 @@ const PublicacionesContainer = () => {
     }, [indice]);
 
     useEffect(() => {
-        if(buscar !== ""){
+        if(buscar !== "" && datos){
             setFiltrado(
                 datos.filter(function (i){
                     if(tipoBusqueda === "Titulo")

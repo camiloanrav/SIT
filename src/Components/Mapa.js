@@ -23,7 +23,6 @@ const Mapa = () => {
     }, [] );
 
     var handleHover = (e) => {
-        //Valle = true;
         switch (e) {
             case e = 1:
                 setValle(true);
@@ -43,7 +42,6 @@ const Mapa = () => {
     }
    
     var handleOut = () => {
-        //Valle = false;
         setValle(false);
         setChoco(false);
         setCauca(false);

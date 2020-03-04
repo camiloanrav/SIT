@@ -66,7 +66,7 @@ class ContactoContainer extends Component {
                 <div className="contactoMenu">
                     <section className="signature" >
                         <div className="signature-wrap">
-                            <div className="sw-info ">
+                            <div className="sw-info">
                                 {/*
                             <div className="signature-logo">
                                 <figure>
@@ -74,7 +74,7 @@ class ContactoContainer extends Component {
                                 </figure>
                             </div>
                             */}
-                                <div className="sw-title">Universidad Autónoma de Occidente</div>
+                                <div className="sw-title">SER Pacífico</div>
                                 <ul>
                                     <li>
                                         <p>Director</p>

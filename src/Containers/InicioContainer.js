@@ -60,7 +60,7 @@ const InicioContainer = () => {
             </section>
             {/*<section class="circulation-of-links">
             </section>*/}
-            <div className='cards contenido-inicio'>
+            <div className='contenido-inicio'>
                 <Mapa></Mapa>
                 <Acercade2></Acercade2>
             </div>

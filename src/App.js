@@ -1,7 +1,7 @@
 import React from 'react';
 import logo from './logo-ser-2.png';
 import './App.css';
-import { Link, BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Link, BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 
 import InicioContainer from './Containers/InicioContainer';
 import EstadisticasContainer from './Containers/EstadisticasContainer';
@@ -13,6 +13,7 @@ import NavBarDesktop from './Components/NavBarDesktop';
 import NavBarMovil from './Components/NavBarMovil';
 import Footer from './Components/Footer';
 import Topics from './Components/Tabs';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const NoMatchPage = () => {
   return (
@@ -20,7 +21,7 @@ const NoMatchPage = () => {
       <NavBarDesktop></NavBarDesktop>
       <NavBarMovil></NavBarMovil>
       <div style={{marginBottom:'7em'}}>
-        <img src={logo} width="500em"></img>
+        <img alt="logo" src={logo} width="500em"></img>
         <h2><b>Error 404</b></h2>
         <h3>Página no encontrada</h3>
       </div>
@@ -37,7 +38,8 @@ function App() {
       <div className="App">
           
           <Switch>
-            <Route exact path="/" component={InicioContainer}/>
+            <Redirect exact from="/" to="/inicio"/>
+            <Redirect exact from="/publicaciones" to="/publicaciones/documentos"/>
             <Route exact path="/inicio" component={InicioContainer}/>
             <Route path="/estadisticas" component={EstadisticasContainer}/>
             <Route path="/contacto" component={ContactoContainer}/>

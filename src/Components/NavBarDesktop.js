@@ -15,31 +15,28 @@ const NavBarDesktop = ({user, url, setPage}) => {
         <div id="hmd-bottom">
             <span className="hmdb-line-left"></span>
             <span className="hmdb-line-right"></span>
-            <div id="hmdb-logo-container">
+            {/* <div id="hmdb-logo-container">
                 <a id="hmdb-logo" href="" ></a>
-            </div>
-            <div id="">
+            </div> */}
+            <div>
                 <img src={logo} width="400" alt="Logo"></img>
             </div>
             <ul>
                 <NavLink to={`${url}/inicio`} onClick={()=> handleClick(1)} className="dropdown" activeClassName="activeNavBar">
                     <div className="dd-btn">
                             Inicio
-                        <span className="icon fas fa-angle-down"></span>
                     </div>
                 </NavLink>
                 
                 <NavLink to={`${url}/estadisticas`} onClick={()=> handleClick(2)} activeClassName="activeNavBar" className="dropdown">
                     <li className="dd-btn">
                             Estadísticas Territoriales
-                        <span className="icon fas fa-angle-down"></span>
                     </li>
                 </NavLink>
 
                 <NavLink to={`${url}/publicaciones`} onClick={()=> handleClick(3)} activeClassName="activeNavBar"  className="dropdown">
                     <li className="dd-btn">
                             Publicaciones
-                        <span className="icon fas fa-angle-down"></span>
                     </li>
                 </NavLink>
             </ul>
@@ -51,9 +48,9 @@ const NavBarDesktop = ({user, url, setPage}) => {
         <div id="hmd-bottom">
             <span className="hmdb-line-left"></span>
             <span className="hmdb-line-right"></span>
-            <div id="hmdb-logo-container">
+            {/* <div id="hmdb-logo-container">
                 <a id="hmdb-logo" href="" ></a>
-            </div>
+            </div> */}
             <div id="">
                 <img src={logo} width="400" alt="Logo"></img>
             </div>
@@ -61,35 +58,30 @@ const NavBarDesktop = ({user, url, setPage}) => {
                 <NavLink to="/inicio" className="dropdown" activeClassName="activeNavBar">
                     <div className="dd-btn">
                             Inicio
-                        <span className="icon fas fa-angle-down"></span>
                     </div>
                 </NavLink>
                 
                 <NavLink to="/estadisticas" activeClassName="activeNavBar" className="dropdown">
                     <li className="dd-btn">
                             Estadísticas Territoriales
-                        <span className="icon fas fa-angle-down"></span>
                     </li>
                 </NavLink>
 
                 <NavLink to="/publicaciones" activeClassName="activeNavBar"  className="dropdown">
                     <li className="dd-btn">
                             Publicaciones
-                        <span className="icon fas fa-angle-down"></span>
                     </li>
                 </NavLink>
 
                 <NavLink to="/contacto" activeClassName="activeNavBar" className="dropdown">
                     <li className="dd-btn">
                             Contacto
-                        <span className="icon fas fa-angle-down"></span>
                     </li>
                 </NavLink>
 
                 <NavLink to="/ayuda" activeClassName="activeNavBar"  className="dropdown">
                     <li className="dd-btn">
                             Ayuda
-                        <span className="icon fas fa-angle-down"></span>
                     </li>
                 </NavLink>
             </ul>

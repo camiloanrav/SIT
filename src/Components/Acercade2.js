@@ -1,27 +1,21 @@
 import React from 'react';
+import logo from '../logo-ser-2.png';
 
 const Acercade2 = () => {
     return (
         <div>
-            <div className="card-uao">
-                <p>
-                    <i class="fas fa-angle-right"></i>
-                    ¿Qué es el SER Pacífico?
-                </p>
-                <div>
-                    SER PACIFICO, una iniciativa de la Universidad Autónoma de Occidente, la Facultad de Comunicación y Ciencias Sociales y el Grupo de Investigación Economía y Desarrollo (GIED) que tiene como propósito suministrar a los actores locales información útil y actualizada sobre las dimensiones Económica, Socio-Cultural, Ambiental e Institucional, con la finalidad de contribuir a impulsar la competitividad territorial y fortalecer la identidad de la Región Pacífico de Colombia.
-                </div>
-            </div>
-            <div className="card-uao">
-                <p>
-                    <i class="fas fa-angle-right"></i>
-                    El Porqué de SER PACIFICO
-                </p>
-                <div>
-                Las iniciativas orientadas al fomento del desarrollo económico local y la competitividad territorial requieren disponer de información pertinente, actualizada y confiable para mejorar la efectividad de la planificación, ejecución y evaluación de las estrategias territoriales. Uno de los mecanismos para generar esta información y poder visualizarla de una manera más apropiada es un Sistema de Información Territorial, los cuales en la actualidad son elementos claves para la gestión de programas de desarrollo económico local y competitividad regional.
-                </div>
+            <img style={{marginTop:'4em'}} alt="logo" src={logo} width="380em"></img>
+            <div className="informacion">
+                    <p>
+                        <i class="fas fa-angle-right"></i>
+                        ¿QUIENES SOMOS?
+                    </p>
+                    <div>
+                        SER PACIFICO, una iniciativa de la Universidad Autónoma de Occidente, la Facultad de Comunicación y Ciencias Sociales y el Grupo de Investigación Economía y Desarrollo (GIED), tiene como propósito el fomento del desarrollo económico local y la competitividad territorial suministrando a los actores locales información útil y actualizada sobre las dimensiones Económica, Socio-Cultural, Ambiental e Institucional, con la finalidad de mejorar la planificación, ejecución y evaluación de estrategias municipales y fortalecer la identidad de la Región Pacífico de Colombia.
+                    </div>
             </div>
         </div>
+        
     );
 };
 

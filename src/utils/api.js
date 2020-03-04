@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const URL_base = 'http://11.11.8.77/serpacificows';
-const URL_base_correo = 'http://11.11.8.77';
+const URL_base = 'https://7b34368f.ngrok.io/serpacificows';
+const URL_base_correo = 'http://7b34368f.ngrok.io';
 
 export function getData(path) {
   return axios.get(URL_base + path).then(response => {
