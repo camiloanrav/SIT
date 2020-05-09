@@ -45,7 +45,7 @@ const NavBarMovil = ({ header, body }) => {
                     </div>
                     <ul class="hmmb-sections">
                         <li><NavLink to="/inicio">Inicio</NavLink></li>
-                        <li><NavLink to="/estadisticas">Estadísticas Territoriales</NavLink></li>
+                        <li><NavLink to="/estadisticas">Estadísticas Municipales</NavLink></li>
                         <li><NavLink to="/publicaciones/documentos">Publicaciones</NavLink></li>
                         <li><NavLink to="/contacto">Contacto</NavLink></li>
                         <li><NavLink to="/ayuda">Ayuda</NavLink></li>

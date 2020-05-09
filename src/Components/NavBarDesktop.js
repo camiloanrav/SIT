@@ -30,7 +30,7 @@ const NavBarDesktop = ({user, url, setPage}) => {
                 
                 <NavLink to={`${url}/estadisticas`} onClick={()=> handleClick(2)} activeClassName="activeNavBar" className="dropdown">
                     <li className="dd-btn">
-                            Estadísticas Territoriales
+                            Estadísticas Municipales
                     </li>
                 </NavLink>
 
@@ -63,7 +63,7 @@ const NavBarDesktop = ({user, url, setPage}) => {
                 
                 <NavLink to="/estadisticas" activeClassName="activeNavBar" className="dropdown">
                     <li className="dd-btn">
-                            Estadísticas Territoriales
+                            Estadísticas Municipales
                     </li>
                 </NavLink>
 
@@ -103,18 +103,5 @@ NavBarDesktop.propTypes = {
 
 export default NavBarDesktop;
 
-
-{/*
-btn:after {
-    background-color: #000;
-    content: '';
-    display: block;
-    height: .0625rem;
-    left: -.75rem;
-    position: absolute;
-    top: 3.6875rem;
-    width: calc(100% + 1.5rem);
-}
-*/}
 
 

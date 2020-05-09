@@ -8,7 +8,7 @@ const Mapa = () => {
     const [Choco, setChoco] = useState(false);
     const [Narino, setNarino] = useState(false);
     const [Cauca, setCauca] = useState(false);
-    const [Info, setInfo] = useState([]);
+    const [Info, setInfo] = useState(null);
 
    /*  async function getAxios() {  
         await axios.get(`http://11.11.8.27/serpacificows/informacion/all.php`).then(response => {            
@@ -128,19 +128,19 @@ const Mapa = () => {
                 </circle>               
             </svg>
             {
-                Valle ?  <DatosDepartamento nombre={Info[1].nombre} extension={Info[1].extension} capital={Info[1].capital} poblacion={Info[1].poblacion} participacionPIB={Info[1].participacion} color={"#00B0FF"}></DatosDepartamento> : null
+                Valle && Info!=null ?  <DatosDepartamento nombre={Info[1].nombre} extension={Info[1].extension} capital={Info[1].capital} poblacion={Info[1].poblacion} participacionPIB={Info[1].participacion} color={"#00B0FF"}></DatosDepartamento> : null
             }
 
             {
-                Choco ?  <DatosDepartamento nombre={Info[0].nombre} extension={Info[0].extension} capital={Info[0].capital} poblacion={Info[0].poblacion} participacionPIB={Info[0].participacion} color={"#FFAB40"}></DatosDepartamento> : null
+                Choco && Info!=null ?  <DatosDepartamento nombre={Info[0].nombre} extension={Info[0].extension} capital={Info[0].capital} poblacion={Info[0].poblacion} participacionPIB={Info[0].participacion} color={"#FFAB40"}></DatosDepartamento> : null
             }
 
             {
-                Narino ?  <DatosDepartamento nombre={Info[3].nombre} extension={Info[3].extension} capital={Info[3].capital} poblacion={Info[3].poblacion} participacionPIB={Info[3].participacion} color={"#B388FF"}></DatosDepartamento> : null
+                Narino && Info!=null ?  <DatosDepartamento nombre={Info[3].nombre} extension={Info[3].extension} capital={Info[3].capital} poblacion={Info[3].poblacion} participacionPIB={Info[3].participacion} color={"#B388FF"}></DatosDepartamento> : null
             }
 
             {
-                Cauca ?  <DatosDepartamento nombre={Info[2].nombre} extension={Info[2].extension} capital={Info[2].capital} poblacion={Info[2].poblacion} participacionPIB={Info[2].participacion} color={"#00C853"}></DatosDepartamento> : null
+                Cauca && Info!=null ?  <DatosDepartamento nombre={Info[2].nombre} extension={Info[2].extension} capital={Info[2].capital} poblacion={Info[2].poblacion} participacionPIB={Info[2].participacion} color={"#00C853"}></DatosDepartamento> : null
             }
         </div>
     );

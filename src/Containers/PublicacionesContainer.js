@@ -6,9 +6,8 @@ import Footer from '../Components/Footer';
 import Tabs from '../Components/Tabs';
 import Buscador from '../Components/Buscador';
 import Titulo from '../Components/Titulo';
-import Table from '../Components/Table';
-import TableContent from '../Components/TableContent';
-import SelectorUAO from '../Components/SelectorUAO';
+import Tabla from '../Components/Tabla';
+
 import {getData} from '../utils/api';
 
 import Radio from '@material-ui/core/Radio';
@@ -59,9 +58,9 @@ const PublicacionesContainer = () => {
             <NavBarMovil></NavBarMovil>
 
             <Titulo titulo="Publicaciones"></Titulo>
-            <Tabs setindice={setindice}></Tabs>
+            <Tabs setindice={setindice} tab1="Documentos" tab2="Cuentas Económicas del Valle"></Tabs>
             <div style={{margin:'2em 0em 0.5em 2.5em', display:'flex', flexWrap:'wrap'}} >
-                <FormControl component="fieldset">
+                <FormControl style={{marginBottom:'1.2em'}} component="fieldset">
                     <FormLabel component="legend">Tipo de busqueda:</FormLabel>
                         <RadioGroup aria-label="position" name="position" value={tipoBusqueda} onChange={e => setTipoBusqueda(e.target.value)} row>
                             
@@ -84,7 +83,7 @@ const PublicacionesContainer = () => {
                 
             </div>
             
-            <Table /* contenido={cargando ? 'Cargando...' : renderInfo(datos)} */ datos={filtrado/* ===[]?filtrado:datos */} /* datos={datos} */></Table>
+            <Tabla isAdmin={false} /* contenido={cargando ? 'Cargando...' : renderInfo(datos)} */ datos={filtrado/* ===[]?filtrado:datos */} /* datos={datos} */></Tabla>
             <Footer></Footer>
         </div>
     );

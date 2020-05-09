@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import NavBarDesktop from '../Components/NavBarDesktop';
 import NavBarMovil from '../Components/NavBarMovil';
 import Footer from '../Components/Footer';
@@ -23,15 +23,30 @@ const AdminContainer = () => {
     let { path, url } = useRouteMatch();
     let { params } = useParams();
     const [titulo, setTitulo] = useState("Administrador / Inicio");
-    let content;
+    const [pathName, setPathName] = useState(window.location.pathname);
+    const [content, setContent] = useState(null);
 
-    if(page === 1){
+    useEffect(()=>{
+        setPathName(window.location.pathname);
+    }, [window.location.pathname]);
+
+    useEffect(()=>{
+        if(pathName === "/administrador/inicio"){
+            setContent (<AdminInicio setTitulo={setTitulo}></AdminInicio>);
+        } else if(pathName === "/administrador/publicaciones"){
+            setContent (<AdminPublicaciones setTitulo={setTitulo}></AdminPublicaciones>);
+        } else if(pathName === "/administrador/estadisticas"){
+            setContent (<AdminEstadisticas setTitulo={setTitulo}></AdminEstadisticas>);
+        }
+    }, [pathName])
+
+    /* if(page === 1){
         content = <AdminInicio setTitulo={setTitulo}></AdminInicio>
     } else if(page === 3){
         content = <AdminPublicaciones setTitulo={setTitulo}></AdminPublicaciones>
     } else if(page === 2){
         content = <AdminEstadisticas setTitulo={setTitulo}></AdminEstadisticas>
-    }
+    } */
 
     return (
         <div>
@@ -43,7 +58,7 @@ const AdminContainer = () => {
                 <Route exact path={path}>
                 <h3>Selecione un tipo de publicación</h3>
                 </Route>
-                <Route path={`${path}/:listaID`}>
+                <Route path={`${path}/inicio`}>
                     {content}
                 </Route>
             </Switch> */}

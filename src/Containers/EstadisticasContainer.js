@@ -38,7 +38,7 @@ var acumulador = [];
 var datos = {
     labels: arrEjes,
     datasets: [
-        {
+        {      
             label: 'Rainfall',
             backgroundColor: 'rgba(75,192,192,1)',
             borderColor: 'rgba(0,0,0,1)',
@@ -51,7 +51,7 @@ var datos = {
 var wepaje = {
     labels: arrEjes,
     datasets: [
-        {
+        {             
             label: 'Rainfall',
             backgroundColor: 'rgba(75,192,192,1)',
             borderColor: 'rgba(0,0,0,1)',
@@ -121,7 +121,11 @@ class EstadisticasContainer extends Component {
             informativo: "Una DIMENSIÓN es el componente macro en donde se agrupan las diferentes categorias.", 
             estadoInformativo: false,
             unidad: null,
-            fuente: null
+            fuente: null,
+            estadoLimpiar:true,
+            estadoGraficaLinea:true,
+            estadoFuente: true,
+            estadoTextoNo: true
         };
 
         this.cambioDimensiones = seleccionadoDimension => {
@@ -248,9 +252,39 @@ class EstadisticasContainer extends Component {
             //this.pintarGrafico();
         };
 
+        this.cambiarGrafico = estadoBoton => {
+            this.setState({
+                estadoGrafica: true,
+                estadoGraficaLinea: false
+            }, () => {
+                console.log("Cambiando Grafico");
+                 });
+       
+        };
+
+        this.cambiarGraficoBarras = estadoBoton => {
+            this.setState({
+                estadoGrafica: false,
+                estadoGraficaLinea: true
+            }, () => {
+                console.log("Cambiando Grafico");
+                 });
+       
+        };
+
+        this.limpiar = estadoLimpiar => {
+            this.setState({
+                estadoLimpiar: true
+            }, () => {              
+                this.limpiarTodo();
+            });
+            //this.pintarGrafico();
+        };
+
         this.graficar = multiTerri => {
             this.setState({
-                estadoGrafica: false
+                estadoGrafica: false,
+                estadoFuente: false
             }, () => {
                 console.log("Final");
             });
@@ -309,7 +343,11 @@ class EstadisticasContainer extends Component {
             informativo,
             estadoInformativo, 
             unidad,
-            fuente
+            fuente,
+            estadoLimpiar,
+            estadoGraficaLinea,
+            estadoFuente, 
+            estadoTextoNo
 
         } = this.state;
 
@@ -514,7 +552,12 @@ class EstadisticasContainer extends Component {
                         }>{estadoBoton ? '' :
                             <button className="button-card-uao " onClick={this.showButton} >
                                 Graficar
-                </button>}</div>
+                          </button>}
+                          {estadoLimpiar ? '':
+                            <button style={{marginLeft:"2em", marginRight:"2em"}}className="button-card-uao " onClick={this.limpiar}>
+                            Limpiar
+                            </button>
+                          }</div>
                     </div>
                     {/* Caja izquierda hasta aquí */}
 
@@ -538,6 +581,16 @@ class EstadisticasContainer extends Component {
                     }> {informativo}
                        </div> }
 
+                    {/*----Texto de cuando no se puede graficar*/}               
+
+                  
+                    {estadoTextoNo ? '' :  
+                    <blockquote class="feature-text" >
+                    <div>Estos datos son cualitativos, solo estan disponibles para descarga</div>
+
+                </blockquote>}  
+
+
                     {/*-----------Grafica que se genera------------*/}
                     <div style={
                         {
@@ -548,9 +601,34 @@ class EstadisticasContainer extends Component {
                             marginLeft: "2em",
                             textAlign:"center"
                         }
-                    }>{estadoGrafica ? '' : <Bar
+                    }>
+                    {estadoGrafica ? '' :
+                            <div style={
+                                {
+                                    textAlign: "left",
+                                    margin: "0em",
+                                    marginLeft: "1em"
+                                }
+                            }>
+                    
+                    <button className="button-card-uao " onClick={this.cambiarGrafico} >
+                        Ver Como Lineas
+                    </button> </div>}
+                    {estadoGraficaLinea ? '' :
+                            <div style={
+                                {
+                                    textAlign: "left",
+                                    margin: "0em",
+                                    marginLeft: "1em"
+                                }
+                            }>
+                    
+                    <button className="button-card-uao " onClick={this.cambiarGraficoBarras} >
+                        Ver Como Barras
+                    </button> </div>}
+                        {estadoGrafica ? '' : <Bar
                         data={jsonFinal}
-                        options={{  
+                        options={{
                             title: {
                                 display: true,
                                 text: indicadorSeleccionado,
@@ -580,17 +658,59 @@ class EstadisticasContainer extends Component {
                                 display: true,                                
                                 position: 'right'
                             }
-                        }}
+                        }}                     
+                        
                     /> 
                         }
-                        {estadoGrafica ? '':  <div style={
+
+                        {/*----------------Grafica de Lineas-----*/}
+
+                        {estadoGraficaLinea ? '' : <Line
+                        data={jsonFinal}
+                        options={{
+                            title: {
+                                display: true,
+                                text: indicadorSeleccionado,
+                                fontSize: 20
+                            },
+                            scales: {
+                                yAxes: [{                            
+                                    ticks: {
+                                        beginAtZero: true                                   
+                                    },
+                                    scaleLabel:{
+                                        display: true,
+                                        labelString: unidad
+                                    }
+                                }],
+                                xAxes: [{
+                                    scaleLabel:{
+                                        display: true,
+                                        labelString: "Años"
+                                    }
+                                }]
+                            },
+                            animation: {
+                                duration: 1000
+                            },
+                            legend: {
+                                display: true,                                
+                                position: 'right'
+                            }
+                        }}                     
+                        
+                    /> 
+                        }
+                        {/*----Fuente datos----*/}
+
+                        {estadoFuente ? '':  <div style={
                         {
                             textAlign: "left",
                             margin: "0em",
                             marginLeft: "1em"
                         }
                     }><i><b>Fuente: </b>{fuente}</i></div>}
-                        {estadoGrafica ? '' : <Excel datos={arrPrueba} years={jsonFinal.labels}></Excel>}
+                        {estadoFuente ? '' : <Excel datos={arrPrueba} years={jsonFinal.labels}></Excel>}
                     </div>                   
                 </div>
                 <Footer ></Footer>
@@ -615,7 +735,7 @@ class EstadisticasContainer extends Component {
         axios.get("http://localhost/serpacificows/categoria/search.php?id=" + idSearch).then(response => {
             let daticosCat = response.data;
             optionsCats = daticosCat.map(getParsedCategories);
-            this.setState({ opcionesCategorias: optionsCats, estadoCategorias: false, estadoSubcategorias: true, estadoIndicadores: true, estadoSubniv1: true, estadoSubniv2: true, estadoSubniv3: true, estadoSubniv4: true, estadoTerris: true, estadoPeriodo: true, informativo: "Las CATEGORIAS son un conjunto de objetos agrupados normalmente con un criterio de máxima homogeneidad. \n Corresponde a la categoría de análisis que contiene subcategorías y los indicadores."});
+            this.setState({ seleccionadoTerris:null, seleccionadoPeriodo:null, seleccionadoCategorias:null, opcionesCategorias: optionsCats, estadoCategorias: false, estadoSubcategorias: true, estadoIndicadores: true, estadoSubniv1: true, estadoSubniv2: true, estadoSubniv3: true, estadoSubniv4: true, estadoGrafica:true ,estadoTerris: true, estadoPeriodo: true, informativo: "Las CATEGORIAS son un conjunto de objetos agrupados normalmente con un criterio de máxima homogeneidad. \n Corresponde a la categoría de análisis que contiene subcategorías y los indicadores."});
         }).catch(error => console.log(error.response));
     }
 
@@ -624,7 +744,7 @@ class EstadisticasContainer extends Component {
         axios.get("http://localhost/serpacificows/categoria/subcat.php?id=" + idSearch).then(response => {
             let daticosCat = response.data;
             optionsSubcats = daticosCat.map(getParsedCategories);
-            this.setState({ opcionesSubcategorias: optionsSubcats, estadoSubcategorias: false, estadoIndicadores: true, estadoSubniv1: true, estadoSubniv2: true, estadoSubniv3: true, estadoSubniv4: true, estadoTerris: true, estadoPeriodo: true, informativo: "Una SUBCATEGORIA es un agrupamiento de objetos en conjuntos homogéneos de acuerdo con criterios preestablecidos y en función del uso que tendrá la subcategoría. \n Corresponde a la desagregación que tiene una categoría de análisis y en las cuales se encontraran los indicadores." });
+            this.setState({ seleccionadoTerris:null, seleccionadoPeriodo:null, seleccionadoSubcategorias:null, opcionesSubcategorias: optionsSubcats, estadoSubcategorias: false, estadoIndicadores: true, estadoSubniv1: true, estadoSubniv2: true, estadoSubniv3: true, estadoSubniv4: true, estadoGrafica:true,estadoTerris: true, estadoPeriodo: true, informativo: "Una SUBCATEGORIA es un agrupamiento de objetos en conjuntos homogéneos de acuerdo con criterios preestablecidos y en función del uso que tendrá la subcategoría. \n Corresponde a la desagregación que tiene una categoría de análisis y en las cuales se encontraran los indicadores." });
         }).catch(error => console.log(error.response));
     }
 
@@ -633,7 +753,7 @@ class EstadisticasContainer extends Component {
         axios.get("http://localhost/serpacificows/indicador/search.php?id=" + idSearch).then(response => {
             let daticosCat = response.data;
             optionsIndicas = daticosCat.map(getParsedIndicas);
-            this.setState({ opcionesIndicadores: optionsIndicas, estadoIndicadores: false, estadoSubniv1: true, estadoSubniv2: true, estadoSubniv3: true, estadoSubniv4: true, estadoTerris: true, estadoPeriodo: true, informativo: "Los INDICADORES son datos o información que sirve para conocer o valorar las categorías y subcategorías y la intensidad de un hecho o para determinar su evolución futura. Es decir, aquellos medibles con base en información secundaria. \n \n  Los indicadores son jerárquicos y se presentan indicadores de nivel 1, nivel 2, nivel 3 y hasta nivel 4."});
+            this.setState({ seleccionadoTerris:null, seleccionadoPeriodo:null, seleccionadoIndicadores:null, opcionesIndicadores: optionsIndicas, estadoIndicadores: false, estadoSubniv1: true, estadoSubniv2: true,estadoGrafica:true,estadoSubniv3: true, estadoSubniv4: true, estadoTerris: true, estadoPeriodo: true, informativo: "Los INDICADORES son datos o información que sirve para conocer o valorar las categorías y subcategorías y la intensidad de un hecho o para determinar su evolución futura. Es decir, aquellos medibles con base en información secundaria. \n \n  Los indicadores son jerárquicos y se presentan indicadores de nivel 1, nivel 2, nivel 3 y hasta nivel 4."});
         }).catch(error => {
             console.log(error.response)
             this.setState({ idSeleccionada: idSearch });
@@ -648,10 +768,10 @@ class EstadisticasContainer extends Component {
         axios.get("http://localhost/serpacificows/indicador/subniv.php?id=" + idSearch).then(response => {
             let daticosCat = response.data;
             optionsSubniv1 = daticosCat.map(getParsedIndicas);
-            this.setState({ opcionesSubniv1: optionsSubniv1, estadoSubniv1: false, estadoSubniv2: true, estadoSubniv3: true, estadoSubniv4: true, estadoTerris: true, estadoPeriodo: true });
+            this.setState({seleccionadoTerris:null, seleccionadoPeriodo:null, opcionesSubniv1: optionsSubniv1, estadoSubniv1: false, estadoSubniv2: true, estadoSubniv3: true, estadoSubniv4: true, estadoTerris: true, estadoPeriodo: true, estadoGrafica:true });
         }).catch(error => {
             console.log(error.response);
-            this.setState({ idSeleccionada: idSearch, indicadorSeleccionado: this.state.seleccionadoIndicadores.label });
+            this.setState({seleccionadoTerris:null, seleccionadoPeriodo:null, idSeleccionada: idSearch, indicadorSeleccionado: this.state.seleccionadoIndicadores.label, estadoGrafica:true });
             this.buscarUnidad(idSearch);
             this.buscarFuente(idSearch);
             this.acumularTerris();
@@ -663,10 +783,10 @@ class EstadisticasContainer extends Component {
         axios.get("http://localhost/serpacificows/indicador/subniv.php?id=" + idSearch).then(response => {
             let daticosCat = response.data;
             optionsSubniv2 = daticosCat.map(getParsedIndicas);
-            this.setState({ opcionesSubniv2: optionsSubniv2, estadoSubniv2: false, estadoSubniv3: true, estadoSubniv4: true, estadoTerris: true, estadoPeriodo: true });
+            this.setState({seleccionadoTerris:null, seleccionadoPeriodo:null, opcionesSubniv2: optionsSubniv2, estadoSubniv2: false, estadoSubniv3: true, estadoSubniv4: true, estadoTerris: true, estadoPeriodo: true, estadoGrafica:true, estadoFuente:true, estadoGraficaLinea:true });
         }).catch(error => {
             console.log(error.response);
-            this.setState({ idSeleccionada: idSearch, indicadorSeleccionado: this.state.seleccionadoSubniv1.label });
+            this.setState({seleccionadoTerris:null, seleccionadoPeriodo:null, idSeleccionada: idSearch, indicadorSeleccionado: this.state.seleccionadoSubniv1.label, estadoGrafica:true, estadoFuente:true, estadoGraficaLinea:true });
             this.buscarUnidad(idSearch);
             this.buscarFuente(idSearch);
             this.acumularTerris();           
@@ -678,10 +798,10 @@ class EstadisticasContainer extends Component {
         axios.get("http://localhost/serpacificows/indicador/subniv.php?id=" + idSearch).then(response => {
             let daticosCat = response.data;
             optionsSubniv3 = daticosCat.map(getParsedIndicas);
-            this.setState({ opcionesSubniv3: optionsSubniv3, estadoSubniv3: false, estadoSubniv4: true, estadoTerris: true, estadoPeriodo: true });
+            this.setState({seleccionadoPeriodo:null, opcionesSubniv3: optionsSubniv3, estadoSubniv3: false, estadoSubniv4: true, estadoTerris: true, estadoPeriodo: true, estadoGrafica:true, estadoFuente:true, estadoGraficaLinea:true });
         }).catch(error => {
             console.log(error.response)
-            this.setState({ idSeleccionada: idSearch, indicadorSeleccionado: this.state.seleccionadoSubniv2.label });
+            this.setState({seleccionadoPeriodo:null, idSeleccionada: idSearch, indicadorSeleccionado: this.state.seleccionadoSubniv2.label, estadoGrafica:true, estadoFuente:true, estadoGraficaLinea:true });
             this.buscarUnidad(idSearch);
             this.buscarFuente(idSearch);
             this.acumularTerris();           
@@ -695,7 +815,7 @@ class EstadisticasContainer extends Component {
             optionsSubniv4 = daticosCat.map(getParsedIndicas);
              this.buscarUnidad(idSearch);
              this.buscarFuente(idSearch);
-            this.setState({ opcionesSubniv4: optionsSubniv4, estadoSubniv4: false, estadoTerris: true, estadoPeriodo: true, indicadorSeleccionado: this.state.seleccionadoSubniv3.label, estadoGrafica:true });
+            this.setState({seleccionadoPeriodo:null, opcionesSubniv4: optionsSubniv4, estadoSubniv4: false, estadoTerris: true, estadoPeriodo: true, indicadorSeleccionado: this.state.seleccionadoSubniv3.label, estadoGrafica:true, estadoFuente:true, estadoGraficaLinea:true });
         }).catch(error => console.log(error.response));
     }
 
@@ -704,7 +824,7 @@ class EstadisticasContainer extends Component {
         axios.get("http://localhost/serpacificows/indicaterri/search.php?id=" + idSearch).then(response => {
             let daticosCat = response.data;
             optionsTerris = daticosCat.map(getParsedTerris);
-            this.setState({ opcionesTerris: optionsTerris, estadoTerris: false, estadoPeriodo: true, estadoGrafica:true });
+            this.setState({ opcionesTerris: optionsTerris, estadoTerris: false, estadoPeriodo: true, estadoGrafica:true, estadoFuente:true, estadoGraficaLinea:true });
         }).catch(error => console.log(error.response));
     }
 
@@ -724,7 +844,7 @@ class EstadisticasContainer extends Component {
         axios.get("http://localhost/serpacificows/indicaterri/search.php?id=" + idSearch).then(response => {
             let daticosCat = response.data;
             optionsTerris = daticosCat.map(getParsedTerris);
-            this.setState({ opcionesTerris: optionsTerris, estadoTerris: false, estadoGrafica:true });
+            this.setState({ opcionesTerris: optionsTerris, estadoTerris: false, estadoGrafica:true, estadoFuente:true, estadoGraficaLinea:true});
         }).catch(error => console.log(error.response));
         let daticosMulti = this.state.multiTerri;
         territorios = daticosMulti;
@@ -735,13 +855,13 @@ class EstadisticasContainer extends Component {
         //console.log(this.state.seleccionadoTerris);
         let idTerritorio = this.state.seleccionadoTerris[0].value;
         let idIndicador = this.state.idSeleccionada;
-        //console.log(idTerritorio);
-        //console.log(idIndicador);
+        console.log(idTerritorio);
+        console.log(idIndicador);
         axios.get("http://localhost/serpacificows/periodo/search.php?id=" + idIndicador + "&dane=" + idTerritorio).then(response => {
             let daticosCat = response.data;
-            //console.log(response.data);
+            console.log(response.data);
             optionsPeriodo = daticosCat.map(getParsedPeriodo);
-            //console.log(optionsPeriodo);
+            console.log(optionsPeriodo);
             this.setState({ opcionesPeriodo: optionsPeriodo, estadoPeriodo: false, estadoGrafica:true });
         }).catch(error => console.log(error.response));
         let periodosMulti = this.state.multiPeriodo;    
@@ -757,20 +877,10 @@ class EstadisticasContainer extends Component {
             console.log(unidadMedida);      
             this.setState({ unidad: unidadMedida });
         }).catch(error => console.log(error.response));
-        let periodosMulti = this.state.multiPeriodo;
-        periodos = periodosMulti;
+        //let periodosMulti = this.state.multiPeriodo;
+        //periodos = periodosMulti;
     }
-
-    buscarUnidad(idIndicador) {
-        console.log("Lo que llega: " + idIndicador);
-        //let idIndicador = this.state.idSeleccionada;
-        axios.get("http://11.11.8.206/serpacificows/unidad/search.php?id=" + idIndicador).then(response => {
-            let unidadMedida = response.data[0].nombre; 
-            console.log(unidadMedida);      
-            this.setState({ unidad: unidadMedida });
-        }).catch(error => console.log(error.response));
-    }
-
+  
     buscarFuente(idIndicador) {
         console.log("Lo que llega: " + idIndicador);
         //let idIndicador = this.state.idSeleccionada;
@@ -785,14 +895,16 @@ class EstadisticasContainer extends Component {
         this.setState({ estadoBoton: false });
     }
 
-    pintarGrafico() {
+    limpiarTodo(){
+        this.setState({ estadoGraficaLinea:true, estadoFuente:true, estadoLimpiar:true, seleccionadoTerris:null, seleccionadoPeriodo:null, seleccionadoCategorias:null, opcionesCategorias: optionsCats, estadoCategorias: false, estadoSubcategorias: true, estadoIndicadores: true, estadoSubniv1: true, estadoSubniv2: true, estadoSubniv3: true, estadoSubniv4: true, estadoGrafica:true ,estadoTerris: true, estadoPeriodo: true, informativo: "Las CATEGORIAS son un conjunto de objetos agrupados normalmente con un criterio de máxima homogeneidad. \n Corresponde a la categoría de análisis que contiene subcategorías y los indicadores." });
+    }
 
+    pintarGrafico() {
         arrEjes.length = 0;
         arrDatos.length = 0;
         arrPrueba.length = 0;
         promises.length = 0;
-        this.setState({ estadoInformativo: true });
-
+        this.setState({ estadoInformativo: true, estadoLimpiar: false, estadoFuente: false});
         let idIndicador = this.state.idSeleccionada;
         territorios = this.state.seleccionadoTerris;
         periodos = this.state.seleccionadoPeriodo;
@@ -811,14 +923,15 @@ class EstadisticasContainer extends Component {
                             // acumulador.push(aux[k].label); 
                             let tt = aux[k].value;
                             tt = tt.replace(/,/g, '.');
-                            arreglito.push(tt);
-                            
+                            if(isNaN(tt)){this.setState({ estadoTextoNo: false})};
+                            arreglito.push(tt);                            
                         }
                     }
                 }
                 //console.log(acumulador);
-                //arreglito.push(parseFloat(aux[i].value));              
-                let jsonPrueba = { label: terreno, backgroundColor: getRandomColor(), data: arreglito };
+                //arreglito.push(parseFloat(aux[i].value)); 
+                let colorTemporal =  getRandomColor();            
+                let jsonPrueba = { label: terreno, backgroundColor: colorTemporal, borderColor: colorTemporal, fill:false, data: arreglito };
                 datosMultiples.datasets.push(jsonPrueba);
                 promises.push(jsonPrueba);
             }).catch(error => console.log(error.response));

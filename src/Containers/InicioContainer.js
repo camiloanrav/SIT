@@ -1,24 +1,21 @@
 import React, { Component, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-import AwesomeSlider from 'react-awesome-slider';
-import AwsSliderStyles from 'react-awesome-slider/src/core/styles.scss';
-
 import Footer from '../Components/Footer';
 import NavBarDesktop from '../Components/NavBarDesktop';
 import NavBarMovil from '../Components/NavBarMovil';
 import Card from '../Components/Card';
 import Mapa from '../Components/Mapa';
-import Acercade from '../Components/Acercade';
-import Acercade2 from '../Components/Acercade2';
+import InformacionInicio from '../Components/InformacionInicio';
+
 import { getData } from '../utils/api';
 
-import DemoCarousel from '../Components/DemoCarousel';
+import CarouselInicio from '../Components/CarouselInicio';
 
 import dimensionAmbiental from '../dimensionAmbiental.jpg';
 import dimensionEconomica from '../dimensionEconomica.jpeg';
 import dimensionInstitucional from '../dimensionInstitucional.jpg';
-import dimensionSocial from '../dimensionSocial2.jpg';
+import dimensionSocial from '../dimensionSocial.jpg';
 
 const InicioContainer = () => {
     const [cargando, setCargando] = useState(true);
@@ -51,18 +48,16 @@ const InicioContainer = () => {
         <div>
             <NavBarDesktop></NavBarDesktop>
             <NavBarMovil></NavBarMovil>
-            <DemoCarousel></DemoCarousel>
+            <CarouselInicio></CarouselInicio>
             <section className="investigation with-decoration">
                 <div className="cards">                     
                     {cargando ? 'Cargando...' : renderPosts(datos)
                 } </div>
 
             </section>
-            {/*<section class="circulation-of-links">
-            </section>*/}
             <div className='contenido-inicio'>
                 <Mapa></Mapa>
-                <Acercade2></Acercade2>
+                <InformacionInicio></InformacionInicio>
             </div>
             <Footer></Footer>
         </div>

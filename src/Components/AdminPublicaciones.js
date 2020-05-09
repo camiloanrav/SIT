@@ -1,11 +1,80 @@
-import React from 'react';
+
+import React, {Component, useState, useEffect} from 'react';
 import background from '../background.png';
+import Tabs from '../Components/Tabs';
+import Buscador from '../Components/Buscador';
+import Tabla from './Tabla';
+import {getData} from '../utils/api';
+
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
+
 
 const AdminPublicaciones = ({setTitulo}) => {
     setTitulo("Administrador / Publicaciones");
+    const [datos, setDatos] = useState([]);
+    const [filtrado, setFiltrado]= useState([]);
+    const [indice, setindice] = useState(1);
+    const [buscar, setBuscar] = useState("");
+    const [tipoBusqueda,setTipoBusqueda] = useState("Titulo");
+
+    
+    useEffect(() => {
+        getData(`/documento/search.php?id=${indice}`).then(data => {
+            setDatos(data); 
+        });
+    }, [] );
+
+    useEffect(() => {
+        getData(`/documento/search.php?id=${indice}`).then(data => {
+            setDatos(data); 
+        });
+    }, [indice]);
+
+    useEffect(() => {
+        if(buscar !== "" && datos){
+            setFiltrado(
+                datos.filter(function (i){
+                    if(tipoBusqueda === "Titulo")
+                        return i.titulo.toLowerCase().match(buscar.toLowerCase());
+                    else
+                        return i.autor.toLowerCase().match(buscar.toLowerCase());
+                })
+            )
+        }else{
+            setFiltrado(datos)
+        }
+    }, [buscar,datos] );
     return (
-        <div>
-            <div style={{height:'300px', backgroundImage:'url(https://assets.v7-io.invisionapp.com/assets/A_MGFjZjlkZDY2YjhlM2JmOXGduWSPr0GpJuqaftpafqx53KzkGVJp2YJV4wC0GGwX-uB8mz7Ur3_Bs2eXUUggftMV1yxHPBfd0cnVJyLiPeMkFQpPP3USKGgccBltcH9avxqwtxJaUxTOEsPJAtzVSrHrh7TdtPHKP89f8G5pPf2SWtSHrNd7wLC4ddhEBlem-sLodnCz8kpuMbHa9G5lXw==)', backgroundSize:'cover', backgroundRepeat:'no-repeat', backgroundPosition:'center'}}></div>
+        <div style={{minHeight:'28em'}}>
+            <Tabs setindice={setindice} tab1="Documentos" tab2="Cuentas Económicas del Valle"></Tabs>
+            <div style={{margin:'2em 0em 0.5em 2.5em', display:'flex', flexWrap:'wrap'}} >
+                <FormControl style={{marginBottom:'1.2em'}} component="fieldset">
+                    <FormLabel component="legend">Tipo de busqueda:</FormLabel>
+                        <RadioGroup aria-label="position" name="position" value={tipoBusqueda} onChange={e => setTipoBusqueda(e.target.value)} row>
+                            
+                        <FormControlLabel
+                        value="Titulo"
+                        control={<Radio color="primary" />}
+                        label="Titulo"
+                        labelPlacement="Titulo"
+                        />
+
+                        <FormControlLabel
+                        value="Autor"
+                        control={<Radio color="primary" />}
+                        label="Autor"
+                        labelPlacement="Autor"
+                        />
+                    </RadioGroup>
+                </FormControl>
+                <Buscador tipoBusqueda={tipoBusqueda} setBuscar={setBuscar}></Buscador>
+                
+            </div>
+            <Tabla tab={indice}  isAdmin={true}  datos={filtrado}></Tabla>
         </div>
     );
 };

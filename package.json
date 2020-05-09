@@ -1,5 +1,6 @@
 {
   "name": "sit",
+  "homepage": "http://localhost/serpacifico/inicio",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -9,7 +10,6 @@
     "chart.js": "^2.8.0",
     "node-sass": "^4.13.1",
     "react": "^16.9.0",
-    "react-awesome-slider": "^2.0.0",
     "react-chartjs-2": "^2.8.0",
     "react-dom": "^16.9.0",
     "react-paginate": "^6.3.2",

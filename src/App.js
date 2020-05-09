@@ -13,6 +13,7 @@ import NavBarDesktop from './Components/NavBarDesktop';
 import NavBarMovil from './Components/NavBarMovil';
 import Footer from './Components/Footer';
 import Topics from './Components/Tabs';
+import Login from './Components/Login';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const NoMatchPage = () => {
@@ -40,15 +41,14 @@ function App() {
           <Switch>
             <Redirect exact from="/" to="/inicio"/>
             <Redirect exact from="/publicaciones" to="/publicaciones/documentos"/>
+            <Redirect exact from="/administrador" to="/administrador/inicio"/>
             <Route exact path="/inicio" component={InicioContainer}/>
             <Route path="/estadisticas" component={EstadisticasContainer}/>
             <Route path="/contacto" component={ContactoContainer}/>
             <Route path="/ayuda" component={AyudaContainer}/>
             <Route path="/publicaciones" component={PublicacionesContainer}/>
             <Route path="/administrador" component={AdminContainer}/>
-            <Route path="/administrador/inicio" component={AdminContainer}/>
-            <Route path="/administrador/estadisticas" component={AdminContainer}/>
-            <Route path="/administrador/publicaciones" component={AdminContainer}/>
+            <Route path="/login" component={Login}/>
             <Route component={NoMatchPage} />
           </Switch>
       </div>
