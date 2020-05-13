@@ -126,8 +126,6 @@ const CargarExcel = () => {
         } else {
             reader.readAsArrayBuffer(file);
         };
-        
-        
     }
 
     function Show(){
@@ -151,7 +149,7 @@ const CargarExcel = () => {
     } */
 
     return (
-        <div style={{padding:'3em', marginTop:'5em'}}>
+        <div style={{padding:'3em', marginTop:'3em'}}>
             <Button
                 variant="contained"
                 component="label"
@@ -172,7 +170,6 @@ const CargarExcel = () => {
                     <LinearProgress color="secondary"/>
                 </div>
             }
-            
         </div>
     );
 };

@@ -15,11 +15,11 @@ import PropTypes from 'prop-types';
     const Tabs = ({setindice, tab1, tab2}) => {
 
     let { url } = useRouteMatch();
-    const [topic, setTopic] = useState(1);
+    const [indicador, setIndicador] = useState(1);
 
-    function handleClick(index){
-        setTopic(index);
-        setindice(index);
+    function handleClick(indicador){
+        setIndicador(indicador);
+        setindice(indicador);
     }
 
     return (
@@ -29,12 +29,12 @@ import PropTypes from 'prop-types';
                     <nav>
                         <ul>
                             <Link to={`${url + "/" + tab1.toLowerCase().replace(/ /g,"-")}`} onClick={()=> handleClick(1)} className={"tab program-tab"}>
-                                <li className={"tab program-tab ".concat(`${topic===1?"active":""}`)} data-box-class="program-box" data-tab-class="program-tab" data-box-id="box-1">
+                                <li className={"tab program-tab ".concat(`${indicador===1?"active":""}`)} data-box-class="program-box" data-tab-class="program-tab" data-box-id="box-1">
                                     {tab1}
                                 </li>
                             </Link>
                             <Link to={`${url + "/" + tab2.toLowerCase().replace(/ /g,"-")}`} onClick={()=> handleClick(2)} className={"tab program-tab"}>
-                                <li className={"tab program-tab ".concat(`${topic===2?"active":""}`)} data-box-class="program-box" data-tab-class="program-tab" data-box-id="box-2">
+                                <li className={"tab program-tab ".concat(`${indicador===2?"active":""}`)} data-box-class="program-box" data-tab-class="program-tab" data-box-id="box-2">
                                     {tab2}
                                 </li>
                             </Link>

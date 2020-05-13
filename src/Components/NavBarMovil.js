@@ -1,14 +1,13 @@
 import React, {useState} from 'react';
-import PropTypes from 'prop-types';
 import logo from '../logo-ser-2.png';
 import {NavLink} from 'react-router-dom';
 
-const NavBarMovil = ({ header, body }) => {
+const NavBarMovil = ({user}) => {
     const [open, setOpen] = useState(false);
     return (
         <div>
 
-            <header id="header-menu-mobile" class="">
+            <header id="header-menu-mobile">
                 <div id="hmm-top" onClick={()=> setOpen(true)}>
                     <span class="hmmt-line"></span>
                     <a href="#" id="hmmt-menu-icon">
@@ -43,13 +42,22 @@ const NavBarMovil = ({ header, body }) => {
                             </a>
                         </div>
                     </div>
-                    <ul class="hmmb-sections">
-                        <li><NavLink to="/inicio">Inicio</NavLink></li>
-                        <li><NavLink to="/estadisticas">Estadísticas Municipales</NavLink></li>
-                        <li><NavLink to="/publicaciones/documentos">Publicaciones</NavLink></li>
-                        <li><NavLink to="/contacto">Contacto</NavLink></li>
-                        <li><NavLink to="/ayuda">Ayuda</NavLink></li>
-                    </ul>
+                    {
+                        user === "administrador" ?
+                        <ul class="hmmb-sections">
+                            <li><NavLink to="/administrador-inicio">Admin Inicio</NavLink></li>
+                            <li><NavLink to="/administrador-estadisticas"> Admin Estadísticas</NavLink></li>
+                            <li><NavLink to="/administrador-publicaciones/documentos">Admin Publicaciones</NavLink></li>
+                        </ul>
+                        :
+                        <ul class="hmmb-sections">
+                            <li><NavLink to="/inicio">Inicio</NavLink></li>
+                            <li><NavLink to="/estadisticas">Estadísticas Municipales</NavLink></li>
+                            <li><NavLink to="/publicaciones/documentos">Publicaciones</NavLink></li>
+                            <li><NavLink to="/contacto">Contacto</NavLink></li>
+                            <li><NavLink to="/ayuda">Ayuda</NavLink></li>
+                        </ul>
+                    }
                     <div class="hmmb-footer">
                         {/* <ul class="hmmbf-legal">
                             <li><a href="">Política de Tratamiento de Datos Personales</a></li>
@@ -129,11 +137,6 @@ const NavBarMovil = ({ header, body }) => {
             </header>
         </div>
     );
-};
-
-NavBarMovil.propTypes = {
-    header: PropTypes.string.isRequired,
-    body: PropTypes.element.isRequired,
 };
 
 export default NavBarMovil;

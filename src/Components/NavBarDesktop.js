@@ -4,11 +4,9 @@ import { Link, NavLink} from 'react-router-dom';
 import logo from '../logo-ser.png';
 //import Select from 'react-select/src/Select';
 
-const NavBarDesktop = ({user, url, setPage}) => {
+const NavBarDesktop = ({user}) => {
     //const [activo, setActivo] = useState(0);
-    function handleClick(e){
-        setPage(e);
-    }
+
     let nav;
     if(user === "administrador"){
         nav = <header id="header-menu-desktop">
@@ -22,19 +20,19 @@ const NavBarDesktop = ({user, url, setPage}) => {
                 <img src={logo} width="400" alt="Logo"></img>
             </div>
             <ul>
-                <NavLink to={`${url}/inicio`} onClick={()=> handleClick(1)} className="dropdown" activeClassName="activeNavBar">
+                <NavLink to="/administrador-inicio" className="dropdown" activeClassName="activeNavBar">
                     <div className="dd-btn">
                             Inicio
                     </div>
                 </NavLink>
                 
-                <NavLink to={`${url}/estadisticas`} onClick={()=> handleClick(2)} activeClassName="activeNavBar" className="dropdown">
+                <NavLink to="/administrador-estadisticas" activeClassName="activeNavBar" className="dropdown">
                     <li className="dd-btn">
                             Estadísticas Municipales
                     </li>
                 </NavLink>
 
-                <NavLink to={`${url}/publicaciones`} onClick={()=> handleClick(3)} activeClassName="activeNavBar"  className="dropdown">
+                <NavLink to="/administrador-publicaciones" activeClassName="activeNavBar"  className="dropdown">
                     <li className="dd-btn">
                             Publicaciones
                     </li>
