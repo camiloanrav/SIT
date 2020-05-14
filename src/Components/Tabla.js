@@ -13,7 +13,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 
 import TextField from '@material-ui/core/TextField';
 
-import Select from "react-select";
+import {postData} from '../utils/api';
+import {getData} from '../utils/api';
 
 /* export class CommentList extends React.Component {
 
@@ -33,7 +34,7 @@ import Select from "react-select";
     }
 } */
 
-const Tabla = ({ datos, isAdmin, tab }) => {
+const Tabla = ({ datos, isAdmin, tab, setDatos }) => {
 
     /* const [data, setData] = useState([]); */
     const [offset, setOffset] = useState(0);
@@ -53,7 +54,7 @@ const Tabla = ({ datos, isAdmin, tab }) => {
     const [idPublicacion, setIdPublicacion] = useState("");
     const [categoriaPublicacion, setCategoriaPublicacion] = useState("");
 
-    const [categoriasPublicaciones] = useState([{value:1,label:'Documentos'},{value:2,label:'Cuentas Ecónomicas'}]);
+    //const [categoriasPublicaciones] = useState([{value:1,label:'Documentos'},{value:2,label:'Cuentas Ecónomicas'}]);
 
     const handleClickOpen = (option, titulo, autores, fecha, url, idPublicacion, categoriaPublicacion) => {
         setTitulo(titulo);
@@ -72,11 +73,62 @@ const Tabla = ({ datos, isAdmin, tab }) => {
         }
     };
 
+    const handleCreate = () => {
+        let aux = {
+            "titulo": titulo,
+            "anio": fecha,
+            "autor": autores,
+            "urlarchivo": url,
+            "categoria": categoriaPublicacion,
+            "fuentes_idfuentes": "0"
+        }; 
+        postData('/documento/create.php',aux).then(data => {
+            alert(data.message);
+            actualizarVista();
+            handleClose();
+        });
+    }
+
+    const handleEdit = () => {
+        let aux = {
+            "iddocumentos":idPublicacion,
+            "titulo": titulo,
+            "anio": fecha,
+            "autor": autores,
+            "urlarchivo": url,
+            "categoria": categoriaPublicacion,
+            "fuentes_idfuentes": "0"
+        };
+        postData('/documento/update.php',aux).then(data => {
+            alert(data.message);
+            actualizarVista();
+            handleClose();
+        });
+    }
+
+    const handleDelete = () => {
+        let aux = {
+            "iddocumentos":idPublicacion
+        };
+        postData('/documento/delete.php',aux).then(data => {
+            alert(data.message);
+            actualizarVista();
+            handleClose();
+        });
+    }
+
+
     const handleClose = () => {
         setDeleteDialog(false);
         setEditDialog(false);
         setCreateDialog(false);
     };
+
+    const actualizarVista = () => {
+        getData(`/documento/search.php?id=${tab}`).then(data => {
+            setDatos(data); 
+        });
+    }
 
     useEffect(() => {
         if (datos) {
@@ -108,7 +160,7 @@ const Tabla = ({ datos, isAdmin, tab }) => {
             {
                 isAdmin?
                     <div style={{display:'flex', justifyContent:'flex-end'}}>
-                        <Button size="small" variant="contained" onClick={() => handleClickOpen(2)} color="secondary" style={{marginRight:'4em' ,background:'linear-gradient(to right, #c4161c 0%, #9e0b0f  100%)'}} autoFocus>
+                        <Button size="small" variant="contained" onClick={() => handleClickOpen(2,'', '', '', '', '')} color="secondary" style={{marginRight:'4em' ,background:'linear-gradient(to right, #c4161c 0%, #9e0b0f  100%)'}} autoFocus>
                             {tab === 1?"Agregar documento":"Agregar cuenta económica"}
                         </Button>
                     </div>
@@ -173,7 +225,7 @@ const Tabla = ({ datos, isAdmin, tab }) => {
                     <Button size="small" variant="outlined" onClick={handleClose} color="default">
                         CANCELAR
                     </Button>
-                    <Button size="small" variant="contained" onClick={handleClose} color="secondary" style={{margin:'0.5em', background:'linear-gradient(to right, #c4161c 0%, #9e0b0f  100%)'}} autoFocus>
+                    <Button size="small" variant="contained" onClick={handleDelete} color="secondary" style={{margin:'0.5em', background:'linear-gradient(to right, #c4161c 0%, #9e0b0f  100%)'}} autoFocus>
                         ACEPTAR
                     </Button>
                 </DialogActions>
@@ -201,7 +253,7 @@ const Tabla = ({ datos, isAdmin, tab }) => {
                     <Button size="small" variant="outlined" onClick={handleClose} color="default">
                         Cancelar
                     </Button>
-                    <Button size="small" variant="contained" onClick={handleClose} color="secondary" style={{margin:'0.5em', background:'linear-gradient(to right, #c4161c 0%, #9e0b0f  100%)'}} autoFocus>
+                    <Button size="small" variant="contained" onClick={handleEdit} color="secondary" style={{margin:'0.5em', background:'linear-gradient(to right, #c4161c 0%, #9e0b0f  100%)'}} autoFocus>
                         Confirmar
                     </Button>
                 </DialogActions>
@@ -238,7 +290,7 @@ const Tabla = ({ datos, isAdmin, tab }) => {
                     <Button size="small" variant="outlined" onClick={handleClose} color="default">
                         Cancelar
                     </Button>
-                    <Button size="small" variant="contained" onClick={handleClose} color="secondary" style={{margin:'0.5em', background:'linear-gradient(to right, #c4161c 0%, #9e0b0f  100%)'}} autoFocus>
+                    <Button size="small" variant="contained" onClick={handleCreate} color="secondary" style={{margin:'0.5em', background:'linear-gradient(to right, #c4161c 0%, #9e0b0f  100%)'}} autoFocus>
                         Confirmar
                     </Button>
                 </DialogActions>

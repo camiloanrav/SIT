@@ -26,7 +26,6 @@ const AdminPublicaciones = () => {
     const [indice, setindice] = useState(1);
     const [buscar, setBuscar] = useState("");
     const [tipoBusqueda,setTipoBusqueda] = useState("Titulo");
-
     
     useEffect(() => {
         getData(`/documento/search.php?id=${indice}`).then(data => {
@@ -83,7 +82,7 @@ const AdminPublicaciones = () => {
                 <Buscador tipoBusqueda={tipoBusqueda} setBuscar={setBuscar}></Buscador>
                 
             </div>
-            <Tabla tab={indice}  isAdmin={true}  datos={filtrado}></Tabla>
+            <Tabla tab={indice}  isAdmin={true}  datos={filtrado} setDatos={setDatos}></Tabla>
             <div className="footer-admin"></div>
             <Footer></Footer>
         </div>

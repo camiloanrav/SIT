@@ -43,8 +43,8 @@ const ModificarIndicadores = () =>{
     const [fuentes, setFuentes] = useState('');
     const [categorias, setCategorias] = useState([]);
     const [indicadores, setindIndicadores] = useState([]);
-    const [niveles] = useState([{value:0,label:'Cero'},{value:1,label:'Uno'}, {value:2,label:'Dos'}, {value:3,label:'Tres'}, {value:4,label:'Cuatro'}]);
-    const [tipos] = useState([{value:'Númerico',label:'Númerico'},{value:'Texto',label:'Texto'}, {value:'null',label:'No Aplica'}]);
+    const [niveles] = useState([{value:"0",label:'Cero'},{value:"1",label:'Uno'}, {value:"2",label:'Dos'}, {value:"3",label:'Tres'}, {value:"4",label:'Cuatro'}]);
+    const [tipos] = useState([{value:'null',label:'No Aplica'},{value:'Númerico',label:'Númerico'},{value:'Texto',label:'Texto'}]);
     const [periodicidades] = useState([{value:'null',label:'No Aplica'},{value:'Anual',label:'Texto'}, {value:'Trimestral',label:'Trimestral'}]);
 
     const [creando, setCreando] = useState(false);
@@ -56,9 +56,9 @@ const ModificarIndicadores = () =>{
     const [indicador, setIndicador] = useState({
         idindicador: '',
         nombre: '',
-        periodicidad: '',
-        tipo_valor:'',
-        nivel:'',
+        periodicidad: 'null',
+        tipo_valor:'null',
+        nivel:'0',
         fuentes_idfuentes: '',
         unidades_medida: '',
         indicadorSuperior: '',
@@ -89,6 +89,8 @@ const ModificarIndicadores = () =>{
                     temp.push({value: dato.idcategorias , label:dato.nombre});
                 }
             });
+
+            //handleChange({value:temp[0].value},{name:"categoria"});
             setCategorias(temp);
         }).catch(error => console.log(error.data));
 
@@ -170,7 +172,7 @@ const ModificarIndicadores = () =>{
                 temp.push({value: data[i].idindicadores , label:data[i].nombre.charAt(0).toUpperCase() + data[i].nombre.slice(1), unidad:data[i].unidades_medida_idunidades, periodicidad:data[i].periodicidad, tipo_valor:data[i].tipo_valor, nivel: data[i].nivel, padre: data[i].indicadores_idindicadores, fuente:data[i].fuentes_idfuentes, categoria:data[i].categorias_idcategorias});
             }
             console.log(temp);
-            
+            //handleChange({value:temp[0].value},{name:"indicadorSuperior"});
             setindIndicadores(temp);
 
         }).catch(error => console.log(error.data));
@@ -187,6 +189,10 @@ const ModificarIndicadores = () =>{
         setIndicador({ ...indicador, [prop]: event.target.value });
     }; */
     const handleChange = (selectedOption,e) => {
+        /* console.log(selectedOption);
+        console.log(e); */
+        
+        
         e!==undefined?
         setIndicador({ ...indicador, [e.name]: selectedOption.value })
         :
