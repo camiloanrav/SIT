@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 
 import {postData} from '../utils/api';
 
-const ModificarIndicador = ({setGestionando, setModificando,indicadorSeleccionado,fuentes,periodicidades,tipos,unidades}) => {
+const ModificarIndicador = ({setIndicadorSeleccionado, setGestionando, setModificando,indicadorSeleccionado,fuentes,periodicidades,tipos,unidades}) => {
     
     const [nombre, setNombre] = useState(()=>{
         let a = indicadorSeleccionado.label.split("=>");
@@ -44,21 +44,22 @@ const ModificarIndicador = ({setGestionando, setModificando,indicadorSeleccionad
         let aux = {
             "idindicadores": indicadorSeleccionado.value,
             "nombre": nombre,
-            "periodicidad": periodicidadSeleccionada,
-            "tipo_valor": tipoSeleccionado,
+            "periodicidad": periodicidadSeleccionada.value,
+            "tipo_valor": tipoSeleccionado.value,
             "nivel": indicadorSeleccionado.nivel,
-            "fuentes_idfuentes": fuenteSeleccionada,
-            "unidades_medida_idunidades": unidadSeleccionada,
+            "fuentes_idfuentes": fuenteSeleccionada.value,
+            "unidades_medida_idunidades": unidadSeleccionada.value,
             "indicadores_idindicadores": indicadorSeleccionado.padre,
             "categorias_idcategorias": indicadorSeleccionado.categoria
-    }
+        }
+        console.log(aux);
+        
     if(aux.nombre.trim() !==""){
         postData('/indicador/update.php',aux).then(data => {
-            console.log(data.message);
-            
-            alert("Modificado");
+            alert(data.message);
             setModificando(false);
             setGestionando(false);
+            setIndicadorSeleccionado(null);
         });
     }else{
         alert("El nombre no es valido");

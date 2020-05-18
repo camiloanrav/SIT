@@ -5,41 +5,28 @@ import Button from '@material-ui/core/Button';
 
 import {postData} from '../utils/api';
 
-const FormularioIndicadorOrdenSuperior = ({indicador, indicadores, handleChange, niveles, categorias, setOrder}) => {
-    const [nivelSeleccionado, setNivelSeleccionado] = useState(false);
+const FormularioIndicadorOrdenSuperior = ({indicadores, niveles, categorias, setOrder}) => {
+    
     const [indicadorFiltrado, setIndicadorFiltrado] = useState([]);
+    const [nombre, setNombre] = useState("");
+    const [nivelSeleccionado, setNivelSeleccionado] = useState(null);
     const [indicadorSeleccionado, setIndicadorSeleccionado] = useState(null);
     const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(null);
 
-    const [indicadorFinal, setIndicadorFinal] = useState(null);
-
     useEffect(()=>{
-        handleChange({value:''},{name:"indicadorSuperior"});
-        handleChange({value:''},{name:"categoria"});
-        handleChange({value:''},{name:"idindicador"});
         setIndicadorSeleccionado(null);
         setCategoriaSeleccionada(null);
-
-        if(indicador.nivel==="1"){
-            setIndicadorFiltrado(indicadores.filter((currentValue,i,array) => { return currentValue.nivel ==="0" && currentValue.unidad==="0"}));
-        }else if(indicador.nivel==="2"){
-            setIndicadorFiltrado(indicadores.filter((currentValue,i,array) => { return currentValue.nivel ==="1" && currentValue.unidad==="0"}));
-        }else if(indicador.nivel==="3"){
-            setIndicadorFiltrado(indicadores.filter((currentValue,i,array) => { return currentValue.nivel ==="2" && currentValue.unidad==="0"}));
+        if(nivelSeleccionado != null){
+            if(nivelSeleccionado.value==="1"){
+                setIndicadorFiltrado(indicadores.filter((currentValue,i,array) => { return currentValue.nivel ==="0" && currentValue.unidad==="0"}));
+            }else if(nivelSeleccionado.value==="2"){
+                setIndicadorFiltrado(indicadores.filter((currentValue,i,array) => { return currentValue.nivel ==="1" && currentValue.unidad==="0"}));
+            }else if(nivelSeleccionado.value==="3"){
+                setIndicadorFiltrado(indicadores.filter((currentValue,i,array) => { return currentValue.nivel ==="2" && currentValue.unidad==="0"}));
+            }
         }
-    }, [indicador.nivel]);
-
-    useEffect(()=>{
-        handleChange({value:''},{name:"idindicador"});
-        handleChange({value:''},{name:"nombre"});
-        handleChange({value:'null'},{name:"periodicidad"});
-        handleChange({value:'null'},{name:"tipo_valor"});
-        handleChange({value:'0'},{name:"nivel"});
-        handleChange({value:'0'},{name:"fuentes_idfuentes"});
-        handleChange({value:'0'},{name:"unidades_medida"});
-        handleChange({value:''},{name:"indicadorSuperior"});
-        handleChange({value:''},{name:"categoria"});
-    },[]);
+        
+    }, [nivelSeleccionado]);
 
     const handleChangeNivel = (valor,e) => {
         console.log(valor);
@@ -47,43 +34,39 @@ const FormularioIndicadorOrdenSuperior = ({indicador, indicadores, handleChange,
     }
 
     const handleChangeIndicador = (valor,e) => {
-        handleChange(valor,e);
         console.log(valor);
         setIndicadorSeleccionado(valor);
     }
 
     const handleChangeCategoria = (valor,e) => {
-        handleChange(valor,e);
         console.log(valor);
         setCategoriaSeleccionada(valor);
     }
 
     const CrearIndicador = () => {
-        handleChange({value:'null'},{name:"periodicidad"});
-        handleChange({value:'null'},{name:"tipo_valor"});
-        handleChange({value:'0'},{name:"fuentes_idfuentes"});
-        handleChange({value:'0'},{name:"unidades_medida"});
-
-        handleChange({value:''},{name:"idindicador"});
-        
         let indicadoresDeLaCategoria = [];
         let indicadoresDeLaCategoriaSubst = [];
         let ultimoIndicador = 0;
-        let indicadorFinalAux = '';
 
-        if(indicador.nivel === "0"){
+        let indicadorFinalAux = '';
+        let categoriaAux = {"value":""};
+        let indicadorSuperiorAux = {"value":""};
+
+        if(nivelSeleccionado.value === "0"){
             indicadoresDeLaCategoria = indicadores.filter((i) => {
-                return i.value.substring(0,5) === indicador.categoria && i.value.length === 7;
+                return i.value.substring(0,5) === categoriaSeleccionada.value && i.value.length === 7;
             });
+            console.log(indicadoresDeLaCategoria);
             indicadoresDeLaCategoria.forEach(i => {
                 indicadoresDeLaCategoriaSubst.push(parseInt(i.value.substring(5, i.length)));
             });
-        }else if(indicador.nivel === "1"){
+            console.log(indicadoresDeLaCategoriaSubst);
+        }else if(nivelSeleccionado.value === "1"){
             console.log("Nivel 1");
             console.log(indicadores);
             
             indicadoresDeLaCategoria = indicadores.filter(i => {
-                return i.value.substring(0,7) === indicador.indicadorSuperior  && i.nivel === indicador.nivel;
+                return i.value.substring(0,7) === indicadorSeleccionado.value  && i.nivel === nivelSeleccionado.value;
             });
 
             console.log(indicadoresDeLaCategoria);
@@ -91,12 +74,12 @@ const FormularioIndicadorOrdenSuperior = ({indicador, indicadores, handleChange,
                 indicadoresDeLaCategoriaSubst.push(parseInt(i.value.substring(7, i.length)));
             });
             console.log(indicadoresDeLaCategoriaSubst);
-        }else if(indicador.nivel === "2"){
+        }else if(nivelSeleccionado.value === "2"){
             console.log("Nivel 2");
             console.log(indicadores);
             
             indicadoresDeLaCategoria = indicadores.filter(i => {
-                return i.value.substring(0,9) === indicador.indicadorSuperior  && i.nivel === indicador.nivel;
+                return i.value.substring(0,9) === indicadorSeleccionado.value  && i.nivel === nivelSeleccionado.value;
             });
 
             console.log(indicadoresDeLaCategoria);
@@ -104,12 +87,12 @@ const FormularioIndicadorOrdenSuperior = ({indicador, indicadores, handleChange,
                 indicadoresDeLaCategoriaSubst.push(parseInt(i.value.substring(9, i.length)));
             });
             console.log(indicadoresDeLaCategoriaSubst);
-        }else if(indicador.nivel === "3"){
+        }else if(nivelSeleccionado.value === "3"){
             console.log("Nivel 3");
             console.log(indicadores);
             
             indicadoresDeLaCategoria = indicadores.filter(i => {
-                return i.value.substring(0,11) === indicador.indicadorSuperior  && i.nivel === indicador.nivel;
+                return i.value.substring(0,11) === indicadorSeleccionado.value  && i.nivel === nivelSeleccionado.value;
             });
 
             console.log(indicadoresDeLaCategoria);
@@ -128,29 +111,41 @@ const FormularioIndicadorOrdenSuperior = ({indicador, indicadores, handleChange,
                 indicadorFinalAux = "0" + ultimoIndicador;
             }
 
-            if(indicador.nivel === "0"){
-                indicadorFinalAux = indicador.categoria + indicadorFinalAux;
-                handleChange({value:'0'},{name:"indicadorSuperior"});
+            if(nivelSeleccionado.value === "0"){
+                indicadorFinalAux = categoriaSeleccionada.value + indicadorFinalAux;
+                setIndicadorSeleccionado({value: "0", label: "Cero"});
+                indicadorSuperiorAux={"value": "0"};
             }else{
-                indicadorFinalAux = indicador.indicadorSuperior + indicadorFinalAux;
-                handleChange({value:indicadorFinalAux.substr(0,5)},{name:"categoria"});
+                indicadorFinalAux = indicadorSeleccionado.value + indicadorFinalAux;
+                setCategoriaSeleccionada({value:indicadorFinalAux.substr(0,5)},{name:"categoria"});
+                categoriaAux={"value":indicadorFinalAux.substr(0,5)};
             }
         }else{
-            indicadorFinalAux = indicador.indicadorSuperior + "01";
+            indicadorFinalAux = indicadorSeleccionado.value + "01";
         }
         //indi
         console.log(indicadorFinalAux);
-        handleChange({value:indicadorFinalAux},{name:"idindicador"});
-        console.log(indicador);
-        Crear(indicador);
+        Crear(indicadorFinalAux, categoriaAux, indicadorSuperiorAux);// Modificar
     }
 
-    const Crear = (i) => {
-        if(i.nombre.trim() === ""){
+    const Crear = (indicadorFinal, categoriaAux, indicadorSuperiorAux) => {
+
+        let aux = {
+            "idindicadores": indicadorFinal,
+            "nombre": nombre,
+            "periodicidad": null,
+            "tipo_valor": null,
+            "nivel": nivelSeleccionado.value,
+            "fuentes_idfuentes": null,
+            "unidades_medida_idunidades": null,
+            "indicadores_idindicadores": indicadorSuperiorAux.value===""?indicadorSeleccionado.value:indicadorSuperiorAux.value,
+            "categorias_idcategorias": categoriaAux.value===""?categoriaSeleccionada.value:categoriaAux.value
+        }
+        if(aux.nombre.trim() === ""){
             alert("El nombre no es valido");
         }else{
-            console.log(i);
-            
+            console.log(aux);
+            alert("creado");
             /* postData('/indicador/create.php',i).then(data => {
                 console.log(data.message);
                 alert("Creado");
@@ -160,21 +155,22 @@ const FormularioIndicadorOrdenSuperior = ({indicador, indicadores, handleChange,
     
     return(
         <div style={{minWidth:'15em', width:'50em', margin:'2em 1em 0em 1em', textAlign:'left'}}>
-            {/* {indicador.categoria}
-            {indicador.nivel} */}
-            <TextField onChange={handleChange}/* value={values.newPass} onChange={handleChange('newPass')} */ type="text" fullWidth id="indicador" label="Nombre" />
+            {/* {categoriaSeleccionada.value}
+            {nivelSeleccionado.value} */}
+            <TextField onChange={(event)=>{setNombre(event.target.value)}}/* value={values.newPass} onChange={handleChange('newPass')} */ type="text" fullWidth id="indicador" label="Nombre" />
             <div style={{margin:'1em 0em 1em 0em'}}>
                 <div>Nivel</div>
                 <Select options={niveles.filter((currentValue,i,array) => { return i !== array.length-1 })}
                         /* defaultValue={niveles[0]} */
+                        value={nivelSeleccionado}
                         isSearchable={false}
-                        onChange={(e,name)=>{setNivelSeleccionado(true); handleChange(e,{name:'nivel'});}}
+                        onChange={handleChangeNivel}
                         name="nivel"
                         placeholder="Selecciona el nivel"
                 />
             </div>
             {
-                indicador.nivel==="0" && nivelSeleccionado ?
+                nivelSeleccionado!==null && nivelSeleccionado.value ==="0" ?
                 <div style={{margin:'1em 0em 1em 0em'}}>
                     <div>Categoría</div>
                     <Select options={categorias}
@@ -191,7 +187,7 @@ const FormularioIndicadorOrdenSuperior = ({indicador, indicadores, handleChange,
             }
             
             {
-                indicador.nivel!=="0" && nivelSeleccionado ?
+                nivelSeleccionado!==null && nivelSeleccionado.value !=="0" ?
                 <div style={{margin:'1em 0em 1em 0em'}}>
                     <div>Indicador de orden superior</div>
                     <Select options={indicadorFiltrado}
@@ -581,7 +577,7 @@ const CrearIndicador = ({indicador,handleChange,orden,setOrder,indicadores,fuent
     return(
         <div style={{display:'flex', justifyContent:'center'}}>
             {
-                orden === "superior"?<FormularioIndicadorOrdenSuperior indicador={indicador} indicadores={indicadores} handleChange={handleChange} setOrder={setOrder} niveles={niveles} categorias={categorias}/>:null
+                orden === "superior"?<FormularioIndicadorOrdenSuperior  indicadores={indicadores} setOrder={setOrder} niveles={niveles} categorias={categorias}/>:null
             }
             {
                 orden === "inferior"?<FormularioIndicadorOrdenInferior indicador={indicador} indicadores={indicadores} handleChange={handleChange} setOrder={setOrder} niveles={niveles} categorias={categorias} fuentes={fuentes} periodicidades={periodicidades} tipos={tipos} unidades={unidades}/>:null

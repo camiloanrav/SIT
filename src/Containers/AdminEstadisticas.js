@@ -97,6 +97,14 @@ const ModificarIndicadores = () =>{
             setCategorias(temp);
         }).catch(error => console.log(error.data));
 
+        getIndicadores();
+    }, [] );
+
+    useEffect(()=>{
+        getIndicadores();
+    },[modificando]);
+
+    const getIndicadores = () => {
         getData('/indicador/all.php').then(data => {
             console.log(data);
             var tempIDMalo = [];
@@ -178,7 +186,7 @@ const ModificarIndicadores = () =>{
             setindIndicadores(temp);
 
         }).catch(error => console.log(error.data));
-    }, [] );
+    }
 
     const handleClose = () => {
         setCreando(false);
@@ -276,7 +284,7 @@ const ModificarIndicadores = () =>{
                 {
                     modificando?
                     <div style={{display:'flex', justifyContent:'center'}}>
-                        <ModificarIndicador setGestionando={setGestionando} setModificando={setModificando} indicadorSeleccionado={indicadorSeleccionado} fuentes={fuentes} periodicidades={periodicidades} tipos={tipos} unidades={unidades}></ModificarIndicador>
+                        <ModificarIndicador setIndicadorSeleccionado={setIndicadorSeleccionado} setGestionando={setGestionando} setModificando={setModificando} indicadorSeleccionado={indicadorSeleccionado} fuentes={fuentes} periodicidades={periodicidades} tipos={tipos} unidades={unidades}></ModificarIndicador>
                     </div>
                     : null
                 }
