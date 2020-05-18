@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import PropTypes from 'prop-types';
 import ContactoMenu from '../Components/ContactoMenu';
 import NavBarDesktop from '../Components/NavBarDesktop';
 import NavBarMovil from '../Components/NavBarMovil';
@@ -46,7 +45,6 @@ const ContactoContainer = () => {
     const [message, setMessage] = React.useState("");
     const descriptionElementRef = React.useRef(null);
     const handleClose = () => {
-        setOpenSnackbar(false);
         setOpenDialog(false);
     };
 
@@ -117,7 +115,7 @@ const ContactoContainer = () => {
                                             <div className="circle-icon">
                                                 <span className="icon fas fa-user"></span>
                                             </div>
-                                            <p>Decano: Hernán Montaño Motato</p>
+                                            <p>Docente: Paula Andrea Garizado</p>
                                         </div>
                                     </li>
                                     <li>
@@ -126,7 +124,7 @@ const ContactoContainer = () => {
                                             <div className="circle-icon">
                                                 <span className="icon fas fa-phone"></span>
                                             </div>
-                                            <p>PBX: +2 318 8000</p>
+                                            <p>PBX. (57 -2) 318 8000 ext. 11541</p>
                                         </div>
                                     </li>
                                     <li>
@@ -172,7 +170,7 @@ const ContactoContainer = () => {
                                             onChange={() => handleChangeCheckBox(politicas)}
                                             inputProps={{ 'aria-label': 'primary checkbox' }}
                                         />
-                                        <p>Acepto las <a href="#/" onClick={handleOpenDialog}>Políticas de privacidad</a></p>
+                                        <p>Acepto el <a href="#/" onClick={handleOpenDialog}>Tratamiento de datos personales.</a></p>
                                         {/* <span className="icon far fa-square"></span> */}
                                     </label>
 
@@ -223,8 +221,8 @@ const ContactoContainer = () => {
                     horizontal: 'center',
                     }}
                     open={openSnackbar}
-                    autoHideDuration={8000}
-                    onClose={handleClose}
+                    autoHideDuration={4000}
+                    onClose={()=>{setOpenSnackbar(false)}}
                     message={message}
                     action={
                         <React.Fragment>
@@ -241,14 +239,16 @@ const ContactoContainer = () => {
                     aria-labelledby="scroll-dialog-title"
                     aria-describedby="scroll-dialog-description"
                 >
-                    <DialogTitle id="scroll-dialog-title">Políticas de privacidad</DialogTitle>
+                    <DialogTitle id="scroll-dialog-title">Autorización para el tratamiento de Datos Personales</DialogTitle>
                     <DialogContent dividers='paper'>
                     <DialogContentText
                         id="scroll-dialog-description"
                         ref={descriptionElementRef}
                         tabIndex={-1}
                     >
-                        
+                        <p style={{fontFamily:'roboto'}}>
+                        En mi calidad de titular de datos personales, al diligenciar de manera voluntaria este formulario y bajo el conocimiento de que no estoy obligado a hacerlo, autorizo a la Universidad Autónoma de Occidente a utilizar la información que a continuación suministrará con el propósito de que sea usada con el fin de proporcionar un servicio de calidad en mejoramiento continuo, mantener un registro de usuarios, atención de solicitudes, sugerencias respecto al Portal Institucional y la información contenida en él, mejorar el servicio prestado, adelantar la promoción y publicidad relacionada con productos y servicios académicos que ofrece la Universidad, promoción y publicidad de actividades desarrolladas por la Universidad o las instituciones con las cuales desarrolle eventos en asocio, la información podrá ser transmitida a instituciones y organizaciones con las cuales la Universidad ha establecido convenios para el desarrollo de actividades académicas y sociales. Conozco que la Universidad ha establecido su Política de Tratamiento y Protección de Datos Personales la cual puede ser consultada en el link http://www.uao.edu.co/la-universidad/aviso-de-privacidad. Así mismo tengo conocimiento de que podré conocer, modificar o suprimir la información aquí suministrada mediante comunicación dirigida a Secretaría General - Protección de Datos - Universidad Autónoma de Occidente a la  dirección Calle 25 # 115-85 Km 2 Vía Cali – Jamundí,  o a través de correo un electrónico dirigido a la dirección datospersonales@uao.edu.co.
+                        </p>
                     </DialogContentText>
                     </DialogContent>
                     <DialogActions>
@@ -260,9 +260,5 @@ const ContactoContainer = () => {
             </div>
         );
     }
-
-ContactoContainer.propTypes = {
-
-};
 
 export default ContactoContainer;

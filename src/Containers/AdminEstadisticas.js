@@ -8,6 +8,7 @@ import Footer from '../Components/Footer';
 import NavBarDesktop from '../Components/NavBarDesktop';
 import NavBarMovil from '../Components/NavBarMovil';
 import CrearIndicador from '../Components/CrearIndicador';
+import ModificarIndicador from '../Components/ModificarIndicador';
 
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -44,14 +45,16 @@ const ModificarIndicadores = () =>{
     const [categorias, setCategorias] = useState([]);
     const [indicadores, setindIndicadores] = useState([]);
     const [niveles] = useState([{value:"0",label:'Cero'},{value:"1",label:'Uno'}, {value:"2",label:'Dos'}, {value:"3",label:'Tres'}, {value:"4",label:'Cuatro'}]);
-    const [tipos] = useState([{value:'null',label:'No Aplica'},{value:'Númerico',label:'Númerico'},{value:'Texto',label:'Texto'}]);
-    const [periodicidades] = useState([{value:'null',label:'No Aplica'},{value:'Anual',label:'Texto'}, {value:'Trimestral',label:'Trimestral'}]);
+    const [tipos] = useState([{value:'Númerico',label:'Númerico'},{value:'Texto',label:'Texto'}]);
+    const [periodicidades] = useState([{value:'Anual',label:'Anual'}, {value:'Trimestral',label:'Trimestral'}]);
 
     const [creando, setCreando] = useState(false);
+    const [eliminando, setEliminando] = useState(false);
     const [ordenIndicadorACrear, setOrdenIndicadorACrear] = useState('');
     const [gestionando, setGestionando] = useState(false);
+    const [modificando, setModificando] = useState(false);
 
-    const [indicadorNuevoConHijoschecked, setIndicadorNuevoConHijosChecked] = React.useState(false);
+    const [indicadorSeleccionado, setIndicadorSeleccionado] = useState(null);
 
     const [indicador, setIndicador] = useState({
         idindicador: '',
@@ -143,7 +146,6 @@ const ModificarIndicadores = () =>{
             console.log(tempIDMalo);
             console.log(tempNivelMalo);
 
-            let tempData = [];
             let temp = [];
 
             /* for(let i = 0; data.length > i; i++){
@@ -180,38 +182,32 @@ const ModificarIndicadores = () =>{
 
     const handleClose = () => {
         setCreando(false);
+        setEliminando(false);
     };
 
-    /* const handleChange = prop => event => {
-        console.log('Probando');
-        console.log(event.target.value);
+    const Eliminar = (i) => {
+        let aux = {"idindicadores":i.value};
         
-        setIndicador({ ...indicador, [prop]: event.target.value });
-    }; */
+        postData('/indicador/delete.php',aux).then(data => {
+            console.log(data.message);
+            
+            alert("Eliminado");
+            setEliminando(false);
+        });
+    }
+
     const handleChange = (selectedOption,e) => {
         /* console.log(selectedOption);
         console.log(e); */
-        
-        
         e!==undefined?
         setIndicador({ ...indicador, [e.name]: selectedOption.value })
         :
         setIndicador({ ...indicador, "nombre": selectedOption.target.value })
     };
 
-    const handleOpen = (accion) => {
-    }
-
-    const handleSearch = () => {
-        if(indicador.idindicador !== ''){
-            //Se llama la petición para validar que existe el indicador
-            setIndicadorExistente(true);
-        }
-    }
-
-    const handleCancel = () => {
-        setIndicadorExistente(null);
-        indicador.idindicador = '';
+    const handleChangeIndicadorSeleccionado = (valor,e) => {
+        console.log(valor);
+        setIndicadorSeleccionado(valor);
     }
 
     const handleCreate = () => {
@@ -246,7 +242,7 @@ const ModificarIndicadores = () =>{
                 }
                 
                 {
-                    gestionando ?
+                    gestionando && !modificando ?
                     <div>
                         <div style={{margin:'2em 2.5em 2em 2.5em', textAlign:'left'}}>
                             <div style={{margin:'0em 0em 1em 0em', textAlign:'center'}}>
@@ -254,17 +250,35 @@ const ModificarIndicadores = () =>{
                             </div>
                             <Select options={indicadores} 
                                     isSearchable={true}
+                                    value={indicadorSeleccionado}
+                                    onChange={handleChangeIndicadorSeleccionado}
+                                    name="indicador"
                                     placeholder='Seleccionar Indicador...'
                             />
                         </div>
-                        <div >
-                            <Button color="primary" variant="outlined" onClick={()=>{setGestionando(false)}}>Cancelar</Button>
-                            <Button color="default" style={{marginLeft:'0.5em'}} variant="contained" onClick={()=>{}}>Modificar indicador</Button>
-                            <Button color="secondary" style={{marginLeft:'0.5em', background:'linear-gradient(to right, #c4161c 0%, #9e0b0f  100%)'}} variant="contained" onClick={()=>{}}>Eliminar indicador</Button>  
-                        </div>
+                        {
+                            indicadorSeleccionado != null ?
+                            <div>
+                                <div style={{margin:'0 0 1em 0'}}>
+                                    Indicador con ID: {indicadorSeleccionado.value}
+                                </div>
+                                <Button color="primary" variant="outlined" onClick={()=>{setGestionando(false); setIndicadorSeleccionado(null)}}>Cancelar</Button>
+                                <Button color="default" style={{marginLeft:'0.5em'}} variant="contained" onClick={()=>{setModificando(true)}}>Modificar indicador</Button>
+                                <Button color="secondary" style={{marginLeft:'0.5em', background:'linear-gradient(to right, #c4161c 0%, #9e0b0f  100%)'}} variant="contained" onClick={()=>{setEliminando(true)}}>Eliminar indicador</Button>  
+                            </div>
+                            :
+                            null
+                        }
                     </div>
                     :
                     null
+                }
+                {
+                    modificando?
+                    <div style={{display:'flex', justifyContent:'center'}}>
+                        <ModificarIndicador setGestionando={setGestionando} setModificando={setModificando} indicadorSeleccionado={indicadorSeleccionado} fuentes={fuentes} periodicidades={periodicidades} tipos={tipos} unidades={unidades}></ModificarIndicador>
+                    </div>
+                    : null
                 }
             </div>
             
@@ -280,79 +294,14 @@ const ModificarIndicadores = () =>{
                     Cancelar
                 </Button>
             </Dialog>
-            <Dialog
-                /* open={openCrearIndicadorHijoDialog} */
-                onClose={handleClose}
-                scroll={"body"}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-                fullWidth={true}
-                >
-                <DialogTitle id="alert-dialog-title">Titulo</DialogTitle>
-                <DialogContent>
-                {/* <DialogContentText id="alert-dialog-description">
-                    {message}
-                </DialogContentText> */}
-                    <div>
-                        <TextField /* value={values.newPass} onChange={handleChange('newPass')} */ type="text" fullWidth id="indicador" label="Nombre" />
-                        <div style={{margin:'1em 0em 1em 0em'}}>
-                            <div>Nivel</div>
-                            <Select options={niveles} 
-                                    defaultValue={niveles[0]}
-                                    isSearchable={false}
-                            />
-                        </div>
-                        <div style={{margin:'1em 0em 1em 0em'}}>
-                            <div>Categoría</div>
-                            <Select options={categorias} 
-                                    isSearchable={true}
-                                    defaultValue={categorias[0]}
-                            />
-                        </div>
-                        <div style={{margin:'1em 0em 0em 0em'}}>
-                            <div>Indicador de orden superior</div>
-                            <Select options={tipos} 
-                                    isSearchable={false}
-                                    defaultValue={periodicidades[0]}
-                            />
-                        </div>
-                        <div style={{margin:'1em 0em 1em 0em'}}>
-                            <div>Fuente</div>
-                            <Select options={fuentes} 
-                                    isSearchable={true}
-                                    defaultValue={fuentes[0]}
-                            />
-                        </div>
-                        <div>
-                            <div>Unidad</div>
-                            <Select options={unidades} 
-                                    isSearchable={true}
-                                    defaultValue={unidades[0]}
-                            />
-                        </div>
-                        <div style={{margin:'1em 0em 0em 0em'}}>
-                            <div>Tipo de valor</div>
-                            <Select options={tipos} 
-                                    isSearchable={true}
-                                    defaultValue={tipos[0]}
-                            />
-                        </div>
-                        <div style={{margin:'1em 0em 0em 0em'}}>
-                            <div>Periodicidad</div>
-                            <Select options={tipos} 
-                                    isSearchable={false}
-                                    defaultValue={periodicidades[0]}
-                            />
-                        </div>
-                        
-                    </div>
-                </DialogContent>
+            <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={eliminando}>
+                <DialogTitle id="simple-dialog-title">¿Desea eliminar el indicador {indicadorSeleccionado?indicadorSeleccionado.label:null} ?</DialogTitle>
                 <DialogActions>
-                    <Button size="small" variant="outlined" onClick={handleClose} color="default">
+                    <Button onClick={handleClose} color="primary">
                         Cancelar
                     </Button>
-                    <Button size="small" variant="contained" onClick={handleCreate} color="secondary" style={{margin:'0.5em', background:'linear-gradient(to right, #c4161c 0%, #9e0b0f  100%)'}} autoFocus>
-                        Confirmar
+                    <Button onClick={()=>{Eliminar(indicadorSeleccionado)}} color="primary" autoFocus>
+                        Eliminar
                     </Button>
                 </DialogActions>
             </Dialog>

@@ -36,14 +36,14 @@ const CargarExcel = () => {
         "xlsx", "xlsb", "xlsm", "xls", "xml", "csv", "txt", "ods", "fods", "uos", "sylk", "dif", "dbf", "prn", "qpw", "123", "wb*", "wq*", "html", "htm"
     ].map(function(x) { return "." + x; }).join(",");
 
-    /* const make_cols =(refstr) => {
+    function make_cols(refstr){
         var o = [];
         var range = XLSX.utils.decode_range(refstr);
         for(var i = 0; i <= range.e.c; ++i) {
             o.push({name: XLSX.utils.encode_col(i), key:i});
         }
         return o;
-    } */
+    }
 
     function handleChange(e){
         const files = e.target.files;
@@ -94,31 +94,33 @@ const CargarExcel = () => {
             const bstr = e.target.result;
             const wb = XLSX.read(bstr, { type: rABS ? 'binary' : 'array', bookVBA : true });
             let json = [];
+            let col = [];
 
             for(let i = 1; i < wb.SheetNames.length; i++){
                 let wsname = wb.SheetNames[i];
                 let ws = wb.Sheets[wsname];
                 let x = XLSX.utils.sheet_to_json(ws);
+                col = make_cols(ws['!ref']);
                 json = json.concat(x);
             }
-            
             
             if(json !== undefined && json != null){
                 setData(json);
                 console.log(json.length);
+                
+                for(let i = 0; i < json.length; i ++){
+                    json[i].id = json[i].indicadores_idindicadores.toString() + '99' + json[i].territorios_codigo_dane.toString() + json[i].periodo.toString();
+                }
+                
+                console.log(json);
+                console.log(col);
+                
+                postData('/indicaterri/create.php',json).then((json) => {
+                    setIsLoading(false);
+                    setName('El archivo ha sido cargado correctamente.');
+                    console.timeEnd();
+                });
             }
-
-            for(let i = 0; i < json.length; i ++){
-                json[i].id = json[i].indicadores_idindicadores.toString() + '99' + json[i].territorios_codigo_dane.toString() + json[i].periodo.toString();
-            }
-            /* console.log( JSON.stringify(data));
-            console.log(cols); */
-            
-            postData('/indicaterri/create.php',json).then((json) => {
-                setIsLoading(false);
-                setName('El archivo ha sido cargado correctamente.');
-                console.timeEnd();
-            });
         }
 
         if (rABS) {

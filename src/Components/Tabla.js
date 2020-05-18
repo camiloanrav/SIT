@@ -11,6 +11,10 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
+import Snackbar from '@material-ui/core/Snackbar';
+import CloseIcon from '@material-ui/icons/Close';
+import IconButton from '@material-ui/core/IconButton';
+
 import TextField from '@material-ui/core/TextField';
 
 import {postData} from '../utils/api';
@@ -54,6 +58,9 @@ const Tabla = ({ datos, isAdmin, tab, setDatos }) => {
     const [idPublicacion, setIdPublicacion] = useState("");
     const [categoriaPublicacion, setCategoriaPublicacion] = useState("");
 
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [mensaje, setMensaje] = useState("");
+
     //const [categoriasPublicaciones] = useState([{value:1,label:'Documentos'},{value:2,label:'Cuentas Ecónomicas'}]);
 
     const handleClickOpen = (option, titulo, autores, fecha, url, idPublicacion, categoriaPublicacion) => {
@@ -74,6 +81,12 @@ const Tabla = ({ datos, isAdmin, tab, setDatos }) => {
     };
 
     const handleCreate = () => {
+        if(titulo === "" || fecha === "" || autores === "" || url === ""){
+            setMensaje("Llena todos los campos para continuar");
+            setOpenSnackbar(true);
+            return;
+        }
+        
         let aux = {
             "titulo": titulo,
             "anio": fecha,
@@ -83,7 +96,8 @@ const Tabla = ({ datos, isAdmin, tab, setDatos }) => {
             "fuentes_idfuentes": "0"
         }; 
         postData('/documento/create.php',aux).then(data => {
-            alert(data.message);
+            setMensaje(data.message);
+            setOpenSnackbar(true);
             actualizarVista();
             handleClose();
         });
@@ -100,7 +114,8 @@ const Tabla = ({ datos, isAdmin, tab, setDatos }) => {
             "fuentes_idfuentes": "0"
         };
         postData('/documento/update.php',aux).then(data => {
-            alert(data.message);
+            setMensaje(data.message);
+            setOpenSnackbar(true);
             actualizarVista();
             handleClose();
         });
@@ -111,7 +126,8 @@ const Tabla = ({ datos, isAdmin, tab, setDatos }) => {
             "iddocumentos":idPublicacion
         };
         postData('/documento/delete.php',aux).then(data => {
-            alert(data.message);
+            setMensaje(data.message);
+            setOpenSnackbar(true);
             actualizarVista();
             handleClose();
         });
@@ -295,6 +311,23 @@ const Tabla = ({ datos, isAdmin, tab, setDatos }) => {
                     </Button>
                 </DialogActions>
             </Dialog>
+            <Snackbar
+                    anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'center',
+                    }}
+                    open={openSnackbar}
+                    autoHideDuration={4000}
+                    onClose={() => {setOpenSnackbar(false)}}
+                    message={mensaje}
+                    action={
+                        <React.Fragment>
+                        <IconButton size="small" aria-label="close" color="inherit" onClick={() => {setOpenSnackbar(false)}}>
+                            <CloseIcon fontSize="small" />
+                        </IconButton>
+                        </React.Fragment>
+                    }
+                />
         </div>
     )
 };
