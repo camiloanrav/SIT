@@ -113,17 +113,24 @@ const FormularioIndicadorOrdenSuperior = ({indicadores, niveles, categorias, set
 
             if(nivelSeleccionado.value === "0"){
                 indicadorFinalAux = categoriaSeleccionada.value + indicadorFinalAux;
-                setIndicadorSeleccionado({value: "0", label: "Cero"});
+                //setIndicadorSeleccionado({value: "0", label: "Cero"});
                 indicadorSuperiorAux={"value": "0"};
             }else{
                 indicadorFinalAux = indicadorSeleccionado.value + indicadorFinalAux;
-                setCategoriaSeleccionada({value:indicadorFinalAux.substr(0,5)},{name:"categoria"});
+                //setCategoriaSeleccionada({value:indicadorFinalAux.substr(0,5)},{name:"categoria"});
                 categoriaAux={"value":indicadorFinalAux.substr(0,5)};
             }
         }else{
-            indicadorFinalAux = indicadorSeleccionado.value + "01";
+            if(nivelSeleccionado.value === "0"){
+                indicadorFinalAux = categoriaSeleccionada.value + "01";
+                indicadorSuperiorAux={"value": "0"};
+                //setCategoriaSeleccionada({value:indicadorFinalAux.substr(0,5)},{name:"categoria"});
+            }else{
+                indicadorFinalAux = indicadorSeleccionado.value + "01";
+                categoriaAux={"value":indicadorFinalAux.substr(0,5)};
+                //setCategoriaSeleccionada({value:indicadorFinalAux.substr(0,5)},{name:"categoria"});
+            }
         }
-        //indi
         console.log(indicadorFinalAux);
         Crear(indicadorFinalAux, categoriaAux, indicadorSuperiorAux);// Modificar
     }
@@ -219,6 +226,7 @@ const FormularioIndicadorOrdenSuperior = ({indicadores, niveles, categorias, set
 
 const FormularioIndicadorOrdenInferior = ({indicador, indicadores, handleChange, niveles, categorias, setOrder, fuentes, periodicidades, tipos, unidades}) => {
     const [nivelSeleccionado, setNivelSeleccionado] = useState(false);
+
     const [indicadorFiltrado, setIndicadorFiltrado] = useState([]);
     const [indicadorSeleccionado, setIndicadorSeleccionado] = useState(null);
     const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(null);
