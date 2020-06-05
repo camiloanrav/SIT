@@ -723,7 +723,7 @@ class EstadisticasContainer extends Component {
 
         const array = [];
         datos = "";
-        axios.get("http://localhost/serpacificows/dimension/all.php").then(response => {
+        axios.get("http://172.16.3.67/serpacificows/dimension/all.php").then(response => {
             let daticos = response.data;
             optionsDims = daticos.map(getParsedDimension);
             this.setState({ opcionesDimensiones: optionsDims });
@@ -732,7 +732,7 @@ class EstadisticasContainer extends Component {
 
     cargarCats() {
         let idSearch = this.state.seleccionadoDimension.value;
-        axios.get("http://localhost/serpacificows/categoria/search.php?id=" + idSearch).then(response => {
+        axios.get("http://172.16.3.67/serpacificows/categoria/search.php?id=" + idSearch).then(response => {
             let daticosCat = response.data;
             optionsCats = daticosCat.map(getParsedCategories);
             this.setState({ seleccionadoTerris:null, seleccionadoPeriodo:null, seleccionadoCategorias:null, opcionesCategorias: optionsCats, estadoCategorias: false, estadoSubcategorias: true, estadoIndicadores: true, estadoSubniv1: true, estadoSubniv2: true, estadoSubniv3: true, estadoSubniv4: true, estadoGrafica:true ,estadoTerris: true, estadoPeriodo: true, informativo: "Las CATEGORIAS son un conjunto de objetos agrupados normalmente con un criterio de máxima homogeneidad. \n Corresponde a la categoría de análisis que contiene subcategorías y los indicadores."});
@@ -741,7 +741,7 @@ class EstadisticasContainer extends Component {
 
     cargarSubcats() {
         let idSearch = this.state.seleccionadoCategorias.value;
-        axios.get("http://localhost/serpacificows/categoria/subcat.php?id=" + idSearch).then(response => {
+        axios.get("http://172.16.3.67/serpacificows/categoria/subcat.php?id=" + idSearch).then(response => {
             let daticosCat = response.data;
             optionsSubcats = daticosCat.map(getParsedCategories);
             this.setState({ seleccionadoTerris:null, seleccionadoPeriodo:null, seleccionadoSubcategorias:null, opcionesSubcategorias: optionsSubcats, estadoSubcategorias: false, estadoIndicadores: true, estadoSubniv1: true, estadoSubniv2: true, estadoSubniv3: true, estadoSubniv4: true, estadoGrafica:true,estadoTerris: true, estadoPeriodo: true, informativo: "Una SUBCATEGORIA es un agrupamiento de objetos en conjuntos homogéneos de acuerdo con criterios preestablecidos y en función del uso que tendrá la subcategoría. \n Corresponde a la desagregación que tiene una categoría de análisis y en las cuales se encontraran los indicadores." });
@@ -750,7 +750,7 @@ class EstadisticasContainer extends Component {
 
     cargarIndicas() {
         let idSearch = this.state.seleccionadoSubcategorias.value;
-        axios.get("http://localhost/serpacificows/indicador/search.php?id=" + idSearch).then(response => {
+        axios.get("http://172.16.3.67/serpacificows/indicador/search.php?id=" + idSearch).then(response => {
             let daticosCat = response.data;
             optionsIndicas = daticosCat.map(getParsedIndicas);
             this.setState({ seleccionadoTerris:null, seleccionadoPeriodo:null, seleccionadoIndicadores:null, opcionesIndicadores: optionsIndicas, estadoIndicadores: false, estadoSubniv1: true, estadoSubniv2: true,estadoGrafica:true,estadoSubniv3: true, estadoSubniv4: true, estadoTerris: true, estadoPeriodo: true, informativo: "Los INDICADORES son datos o información que sirve para conocer o valorar las categorías y subcategorías y la intensidad de un hecho o para determinar su evolución futura. Es decir, aquellos medibles con base en información secundaria. \n \n  Los indicadores son jerárquicos y se presentan indicadores de nivel 1, nivel 2, nivel 3 y hasta nivel 4."});
@@ -765,7 +765,7 @@ class EstadisticasContainer extends Component {
 
     cargarSubniv1() {
         let idSearch = this.state.seleccionadoIndicadores.value;
-        axios.get("http://localhost/serpacificows/indicador/subniv.php?id=" + idSearch).then(response => {
+        axios.get("http://172.16.3.67/serpacificows/indicador/subniv.php?id=" + idSearch).then(response => {
             let daticosCat = response.data;
             optionsSubniv1 = daticosCat.map(getParsedIndicas);
             this.setState({seleccionadoTerris:null, seleccionadoPeriodo:null, opcionesSubniv1: optionsSubniv1, estadoSubniv1: false, estadoSubniv2: true, estadoSubniv3: true, estadoSubniv4: true, estadoTerris: true, estadoPeriodo: true, estadoGrafica:true });
@@ -780,7 +780,7 @@ class EstadisticasContainer extends Component {
 
     cargarSubniv2() {
         let idSearch = this.state.seleccionadoSubniv1.value;
-        axios.get("http://localhost/serpacificows/indicador/subniv.php?id=" + idSearch).then(response => {
+        axios.get("http://172.16.3.67/serpacificows/indicador/subniv.php?id=" + idSearch).then(response => {
             let daticosCat = response.data;
             optionsSubniv2 = daticosCat.map(getParsedIndicas);
             this.setState({seleccionadoTerris:null, seleccionadoPeriodo:null, opcionesSubniv2: optionsSubniv2, estadoSubniv2: false, estadoSubniv3: true, estadoSubniv4: true, estadoTerris: true, estadoPeriodo: true, estadoGrafica:true, estadoFuente:true, estadoGraficaLinea:true });
@@ -795,7 +795,7 @@ class EstadisticasContainer extends Component {
 
     cargarSubniv3() {
         let idSearch = this.state.seleccionadoSubniv2.value;
-        axios.get("http://localhost/serpacificows/indicador/subniv.php?id=" + idSearch).then(response => {
+        axios.get("http://172.16.3.67/serpacificows/indicador/subniv.php?id=" + idSearch).then(response => {
             let daticosCat = response.data;
             optionsSubniv3 = daticosCat.map(getParsedIndicas);
             this.setState({seleccionadoPeriodo:null, opcionesSubniv3: optionsSubniv3, estadoSubniv3: false, estadoSubniv4: true, estadoTerris: true, estadoPeriodo: true, estadoGrafica:true, estadoFuente:true, estadoGraficaLinea:true });
@@ -810,7 +810,7 @@ class EstadisticasContainer extends Component {
 
     cargarSubniv4() {
         let idSearch = this.state.seleccionadoSubniv3.value;
-        axios.get("http://localhost/serpacificows/indicador/subniv.php?id=" + idSearch).then(response => {
+        axios.get("http://172.16.3.67/serpacificows/indicador/subniv.php?id=" + idSearch).then(response => {
             let daticosCat = response.data;
             optionsSubniv4 = daticosCat.map(getParsedIndicas);
              this.buscarUnidad(idSearch);
@@ -821,7 +821,8 @@ class EstadisticasContainer extends Component {
 
     cargarTerris() {
         let idSearch = this.state.idSeleccionada;
-        axios.get("http://localhost/serpacificows/indicaterri/search.php?id=" + idSearch).then(response => {
+        console.log("PRUEBA");
+        axios.get("http://172.16.3.67/serpacificows/indicaterri/search.php?id=" + idSearch).then(response => {
             let daticosCat = response.data;
             optionsTerris = daticosCat.map(getParsedTerris);
             this.setState({ opcionesTerris: optionsTerris, estadoTerris: false, estadoPeriodo: true, estadoGrafica:true, estadoFuente:true, estadoGraficaLinea:true });
@@ -832,7 +833,7 @@ class EstadisticasContainer extends Component {
         console.log(this.state.seleccionadoTerris);
         let idTerritorio = this.state.seleccionadoTerris[0].value;
         let idIndicador = this.state.idSeleccionada;
-        axios.get("http://localhost/serpacificows/periodo/search.php?id=" + idIndicador + "&dane=" + idTerritorio).then(response => {
+        axios.get("http://172.16.3.67/serpacificows/periodo/search.php?id=" + idIndicador + "&dane=" + idTerritorio).then(response => {
             let daticosCat = response.data;
             optionsPeriodo = daticosCat.map(getParsedPeriodo);
             this.setState({ opcionesPeriodo: optionsPeriodo, estadoPeriodo: false, estadoGrafica:true });
@@ -841,7 +842,7 @@ class EstadisticasContainer extends Component {
 
     acumularTerris() {
         let idSearch = this.state.idSeleccionada;
-        axios.get("http://localhost/serpacificows/indicaterri/search.php?id=" + idSearch).then(response => {
+        axios.get("http://172.16.3.67/serpacificows/indicaterri/search.php?id=" + idSearch).then(response => {
             let daticosCat = response.data;
             optionsTerris = daticosCat.map(getParsedTerris);
             this.setState({ opcionesTerris: optionsTerris, estadoTerris: false, estadoGrafica:true, estadoFuente:true, estadoGraficaLinea:true});
@@ -857,7 +858,7 @@ class EstadisticasContainer extends Component {
         let idIndicador = this.state.idSeleccionada;
         console.log(idTerritorio);
         console.log(idIndicador);
-        axios.get("http://localhost/serpacificows/periodo/search.php?id=" + idIndicador + "&dane=" + idTerritorio).then(response => {
+        axios.get("http://172.16.3.67/serpacificows/periodo/search.php?id=" + idIndicador + "&dane=" + idTerritorio).then(response => {
             let daticosCat = response.data;
             console.log(response.data);
             optionsPeriodo = daticosCat.map(getParsedPeriodo);
@@ -872,7 +873,7 @@ class EstadisticasContainer extends Component {
         console.log(periodos);
         console.log("Lo que llega: " + idIndicador);
         //let idIndicador = this.state.idSeleccionada;
-        axios.get("http://localhost/serpacificows/unidad/search.php?id=" + idIndicador).then(response => {
+        axios.get("http://172.16.3.67/serpacificows/unidad/search.php?id=" + idIndicador).then(response => {
             let unidadMedida = response.data[0].nombre; 
             console.log(unidadMedida);      
             this.setState({ unidad: unidadMedida });
@@ -884,7 +885,7 @@ class EstadisticasContainer extends Component {
     buscarFuente(idIndicador) {
         console.log("Lo que llega: " + idIndicador);
         //let idIndicador = this.state.idSeleccionada;
-        axios.get("http://localhost/serpacificows/fuente/search.php?id=" + idIndicador).then(response => {
+        axios.get("http://172.16.3.67/serpacificows/fuente/search.php?id=" + idIndicador).then(response => {
             let fuenteValue = response.data[0].nombre; 
             console.log(fuenteValue);      
             this.setState({ fuente: fuenteValue });
@@ -912,7 +913,7 @@ class EstadisticasContainer extends Component {
         for (var i = 0; i < territorios.length; i++) {
             //De aqui para abajo
             let terreno = territorios[i].label;
-            axios.get("http://localhost/serpacificows/periodo/search.php?id=" + idIndicador + "&dane=" + territorios[i].value).then(response => {
+            axios.get("http://172.16.3.67/serpacificows/periodo/search.php?id=" + idIndicador + "&dane=" + territorios[i].value).then(response => {
                 let daticosCat = response.data;
                 //console.log(response.data);
                 let aux = daticosCat.map(getParsedPeriodo);

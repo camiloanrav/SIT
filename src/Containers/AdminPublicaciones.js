@@ -18,6 +18,7 @@ import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import Footer from '../Components/Footer';
 
+import  { Redirect } from 'react-router-dom';
 
 const AdminPublicaciones = () => {
     let titulo = "Administrador / Publicaciones";
@@ -53,6 +54,15 @@ const AdminPublicaciones = () => {
             setFiltrado(datos)
         }
     }, [buscar,datos] );
+
+    const ProtectedComponent = () => {
+        if (sessionStorage.getItem("login")){
+            return null
+        }else{
+            return <Redirect to='/login'  />
+        }
+    }
+
     return (
         <div style={{minHeight:'28em'}}>
             <NavBarDesktop user={"administrador"}></NavBarDesktop>
@@ -84,6 +94,7 @@ const AdminPublicaciones = () => {
             </div>
             <Tabla tab={indice}  isAdmin={true}  datos={filtrado} setDatos={setDatos}></Tabla>
             <div className="footer-admin"></div>
+            <ProtectedComponent></ProtectedComponent>
             <Footer></Footer>
         </div>
     );

@@ -96,10 +96,12 @@ const Tabla = ({ datos, isAdmin, tab, setDatos }) => {
             "fuentes_idfuentes": "0"
         }; 
         postData('/documento/create.php',aux).then(data => {
-            setMensaje(data.message);
-            setOpenSnackbar(true);
-            actualizarVista();
-            handleClose();
+            if(data!=null){
+                setMensaje(data.message);
+                setOpenSnackbar(true);
+                actualizarVista();
+                handleClose();
+            }
         });
     }
 
@@ -149,7 +151,6 @@ const Tabla = ({ datos, isAdmin, tab, setDatos }) => {
     useEffect(() => {
         if (datos) {
             setPageCount(Math.ceil(datos.length / perPage));
-            setOffset(0 * perPage);
             let elements = datos.slice(offset, offset + perPage);
             setDataPerPage(elements);
             setCurrentPage(0);
@@ -157,18 +158,18 @@ const Tabla = ({ datos, isAdmin, tab, setDatos }) => {
     }, [datos]);
 
     useEffect(() => {
-        const asignData = () => {
             setOffset(currentPage * perPage);
-            let elements = datos.slice(offset, offset + perPage);
+            let elements = datos.slice(currentPage * perPage, currentPage * perPage + perPage);
+            console.log(elements);
             setDataPerPage(elements);
-        }
-        asignData();
     }, [currentPage]);
 
     const handlePageClick = data => {
         let selected = data.selected;
         //asignData(selected);
         setCurrentPage(selected);
+        console.log(selected);
+        
     };
 
     return (

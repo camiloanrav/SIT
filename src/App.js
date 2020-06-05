@@ -1,4 +1,4 @@
-import React, {useState}  from 'react';
+import React, {useState, useEffect}  from 'react';
 import logo from './logo-ser-2.png';
 import './App.css';
 import { Link, BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
@@ -28,20 +28,16 @@ const NoMatchPage = () => {
         <h2><b>Error 404</b></h2>
         <h3>Página no encontrada</h3>
       </div>
-      
       <Footer></Footer>
     </div>
   );
 };
 
-
 function App() {
-  const [administrador,setAdministrador] = useState(true);
+
   return (
     <Router>
       <div className="App">
-        {
-        administrador?
           <Switch>
             <Redirect exact from="/" to="/inicio"/>
             <Redirect exact from="/publicaciones" to="/publicaciones/documentos"/>
@@ -57,28 +53,9 @@ function App() {
             <Route path="/administrador-inicio" component={AdminInicio}/>
             <Route path="/administrador-publicaciones" component={AdminPublicaciones}/>
             <Route path="/administrador-estadisticas" component={AdminEstadisticas}/>
-            <Route component={NoMatchPage} />
+            <Route component={NoMatchPage}/>
           </Switch>
-          :
-          <Switch>
-            <Redirect exact from="/" to="/inicio"/>
-            <Redirect exact from="/publicaciones" to="/publicaciones/documentos"/>
-            <Redirect exact from="/administrador-estadisticas" to="/login"/>
-            <Redirect exact from="/administrador-publicaciones" to="/login"/>
-            <Redirect exact from="/administrador-inicio" to="/login"/>
-            {/* <Redirect exact from="/administrador" to="/administrador/inicio"/> */}
-            <Route exact path="/inicio" component={InicioContainer}/>
-            <Route path="/estadisticas" component={EstadisticasContainer}/>
-            <Route path="/contacto" component={ContactoContainer}/>
-            <Route path="/ayuda" component={AyudaContainer}/>
-            <Route path="/publicaciones" component={PublicacionesContainer}/>
-            <Route path="/login" component={Login}/>
-            <Route path="/administrador-inicio" component={AdminInicio}/>
-            <Route path="/administrador-publicaciones" component={AdminPublicaciones}/>
-            <Route path="/administrador-estadisticas" component={AdminEstadisticas}/>
-            <Route component={NoMatchPage} />
-          </Switch>
-          }
+        
       </div>
     </Router>
   );

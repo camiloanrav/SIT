@@ -1,6 +1,5 @@
-import React, {useState}  from 'react';
-import PropTypes from 'prop-types';
-import { Link, NavLink} from 'react-router-dom';
+import React  from 'react';
+import { NavLink} from 'react-router-dom';
 import logo from '../logo-ser.png';
 //import Select from 'react-select/src/Select';
 
@@ -35,6 +34,13 @@ const NavBarDesktop = ({user}) => {
                 <NavLink to="/administrador-publicaciones" activeClassName="activeNavBar"  className="dropdown">
                     <li className="dd-btn">
                             Publicaciones
+                    </li>
+                </NavLink>
+
+                <NavLink onClick={()=>{sessionStorage.clear(); }} to="/login" activeClassName="activeNavBar"  className="dropdown">
+                    <li className="dd-btn">
+                            Cerrar Sesión
+                            <i style={{margin:'0 0 0 0.5em'}} className="fas fa-sign-out-alt"></i>
                     </li>
                 </NavLink>
             </ul>
@@ -92,11 +98,6 @@ const NavBarDesktop = ({user}) => {
             {nav}
         </div>
     );
-};
-
-NavBarDesktop.propTypes = {
-    header: PropTypes.string.isRequired,
-    body: PropTypes.element.isRequired,
 };
 
 export default NavBarDesktop;

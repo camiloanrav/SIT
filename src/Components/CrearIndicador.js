@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 
 import {postData} from '../utils/api';
 
-const FormularioIndicadorOrdenSuperior = ({indicadores, niveles, categorias, setOrder}) => {
+const FormularioIndicadorOrdenSuperior = ({orden, indicadores, niveles, categorias, setOrder, fuentes, periodicidades, tipos, unidades}) => {
     
     const [indicadorFiltrado, setIndicadorFiltrado] = useState([]);
     const [nombre, setNombre] = useState("");
@@ -13,9 +13,20 @@ const FormularioIndicadorOrdenSuperior = ({indicadores, niveles, categorias, set
     const [indicadorSeleccionado, setIndicadorSeleccionado] = useState(null);
     const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(null);
 
+    const [fuenteSeleccionada, setFuenteSeleccionada] = useState(null);
+    const [periodicidadSeleccionada, setPeriodicidadSeleccionada] = useState(null);
+    const [tipoSeleccionado, setTipoSeleccionado] = useState(null);
+    const [unidadSeleccionada, setUnidadSeleccionada] = useState(null);
+
     useEffect(()=>{
         setIndicadorSeleccionado(null);
         setCategoriaSeleccionada(null);
+
+        setFuenteSeleccionada(null);
+        setPeriodicidadSeleccionada(null);
+        setTipoSeleccionado(null);
+        setUnidadSeleccionada(null);
+
         if(nivelSeleccionado != null){
             if(nivelSeleccionado.value==="1"){
                 setIndicadorFiltrado(indicadores.filter((currentValue,i,array) => { return currentValue.nivel ==="0" && currentValue.unidad==="0"}));
@@ -23,10 +34,28 @@ const FormularioIndicadorOrdenSuperior = ({indicadores, niveles, categorias, set
                 setIndicadorFiltrado(indicadores.filter((currentValue,i,array) => { return currentValue.nivel ==="1" && currentValue.unidad==="0"}));
             }else if(nivelSeleccionado.value==="3"){
                 setIndicadorFiltrado(indicadores.filter((currentValue,i,array) => { return currentValue.nivel ==="2" && currentValue.unidad==="0"}));
+            }else if(nivelSeleccionado.value==="4"){
+                setIndicadorFiltrado(indicadores.filter((currentValue,i,array) => { return currentValue.nivel ==="3" && currentValue.unidad==="0"}));
             }
         }
         
     }, [nivelSeleccionado]);
+
+    useEffect(()=>{
+        setFuenteSeleccionada(null);
+    },[categoriaSeleccionada, indicadorSeleccionado])
+
+    useEffect(()=>{
+        setPeriodicidadSeleccionada(null);
+    },[fuenteSeleccionada]);
+
+    useEffect(()=>{
+        setTipoSeleccionado(null);
+    },[periodicidadSeleccionada]);
+
+    useEffect(()=>{
+        setUnidadSeleccionada(null);
+    },[tipoSeleccionado]);
 
     const handleChangeNivel = (valor,e) => {
         console.log(valor);
@@ -43,92 +72,122 @@ const FormularioIndicadorOrdenSuperior = ({indicadores, niveles, categorias, set
         setCategoriaSeleccionada(valor);
     }
 
+    const handleChangeFuente = (valor,e) => {
+        console.log(valor);
+        setFuenteSeleccionada(valor);
+    }
+
+    const handleChangePeriodicidad = (valor,e) => {
+        console.log(valor);
+        setPeriodicidadSeleccionada(valor);
+    }
+
+    const handleChangeTipo = (valor,e) => {
+        console.log(valor);
+        setTipoSeleccionado(valor);
+    }
+
+    const handleChangeUnidad = (valor,e) => {
+        console.log(valor);
+        setUnidadSeleccionada(valor);
+    }
+
     const CrearIndicador = () => {
-        let indicadoresDeLaCategoria = [];
-        let indicadoresDeLaCategoriaSubst = [];
+        let indicadoresHijos = [];
+        let indicadoresHijosSubst = [];
         let ultimoIndicador = 0;
 
         let indicadorFinalAux = '';
         let categoriaAux = {"value":""};
         let indicadorSuperiorAux = {"value":""};
 
+        let position = parseInt(nivelSeleccionado.value) * 2 + 5;
+
         if(nivelSeleccionado.value === "0"){
-            indicadoresDeLaCategoria = indicadores.filter((i) => {
-                return i.value.substring(0,5) === categoriaSeleccionada.value && i.value.length === 7;
+            indicadoresHijos = indicadores.filter((i) => {
+                return i.value.substring(0,position) === categoriaSeleccionada.value && i.value.length === 7;
             });
-            console.log(indicadoresDeLaCategoria);
-            indicadoresDeLaCategoria.forEach(i => {
-                indicadoresDeLaCategoriaSubst.push(parseInt(i.value.substring(5, i.length)));
+            console.log(indicadoresHijos);
+        }else{
+            /* indicadoresHijos = indicadores.filter(i => {
+                return i.value.substring(0,position) === indicadorSeleccionado.value && i.nivel === nivelSeleccionado.value;
             });
-            console.log(indicadoresDeLaCategoriaSubst);
-        }else if(nivelSeleccionado.value === "1"){
-            console.log("Nivel 1");
-            console.log(indicadores);
-            
-            indicadoresDeLaCategoria = indicadores.filter(i => {
-                return i.value.substring(0,7) === indicadorSeleccionado.value  && i.nivel === nivelSeleccionado.value;
+            console.log(indicadoresHijos); */
+            indicadoresHijos = indicadores.filter(i => {
+                return i.padre === indicadorSeleccionado.value;
             });
-
-            console.log(indicadoresDeLaCategoria);
-            indicadoresDeLaCategoria.forEach(i => {
-                indicadoresDeLaCategoriaSubst.push(parseInt(i.value.substring(7, i.length)));
-            });
-            console.log(indicadoresDeLaCategoriaSubst);
-        }else if(nivelSeleccionado.value === "2"){
-            console.log("Nivel 2");
-            console.log(indicadores);
-            
-            indicadoresDeLaCategoria = indicadores.filter(i => {
-                return i.value.substring(0,9) === indicadorSeleccionado.value  && i.nivel === nivelSeleccionado.value;
-            });
-
-            console.log(indicadoresDeLaCategoria);
-            indicadoresDeLaCategoria.forEach(i => {
-                indicadoresDeLaCategoriaSubst.push(parseInt(i.value.substring(9, i.length)));
-            });
-            console.log(indicadoresDeLaCategoriaSubst);
-        }else if(nivelSeleccionado.value === "3"){
-            console.log("Nivel 3");
-            console.log(indicadores);
-            
-            indicadoresDeLaCategoria = indicadores.filter(i => {
-                return i.value.substring(0,11) === indicadorSeleccionado.value  && i.nivel === nivelSeleccionado.value;
-            });
-
-            console.log(indicadoresDeLaCategoria);
-            indicadoresDeLaCategoria.forEach(i => {
-                indicadoresDeLaCategoriaSubst.push(parseInt(i.value.substring(11, i.length)));
-            });
-            console.log(indicadoresDeLaCategoriaSubst);
+            console.log(indicadoresHijos);
         }
-        
-        if(indicadoresDeLaCategoriaSubst.length !== 0){
-            ultimoIndicador = Math.max(...indicadoresDeLaCategoriaSubst) + 1;
 
-            if(ultimoIndicador > 9){
-                indicadorFinalAux = ultimoIndicador.toString();
+        for(let i = 0; indicadoresHijos.length > i ; i++){
+            indicadoresHijosSubst.push(parseInt(indicadoresHijos[i].value.substring(position, indicadoresHijos[i].length)));
+            
+            let nombreAux = indicadoresHijos[i].label.split("=>");
+            console.log(nombre.toLowerCase().trim() + " - " + nombreAux[nombreAux.length-1].toLowerCase().trim());
+            if(nombre.toLowerCase().trim() === nombreAux[nombreAux.length-1].toLowerCase().trim()){
+                alert("Un indicador de este mismo nivel ya tiene ese nombre. Por favor cambiarlo.");
+                return;
+            }
+        }
+
+        console.log(indicadoresHijosSubst);
+        
+        if(indicadoresHijosSubst.length !== 0){
+            //ultimoIndicador = Math.max(...indicadoresHijosSubst) + 1;
+            indicadoresHijosSubst.sort(function(a, b){return a-b});
+            console.log(indicadoresHijosSubst);
+
+            for(let i = 0; indicadoresHijosSubst.length > i; i++){
+                if(indicadoresHijosSubst[i+1] !== undefined){
+                    let e = indicadoresHijosSubst[i+1] - indicadoresHijosSubst[i];
+                    if(e > 1){
+                        ultimoIndicador = indicadoresHijosSubst[i] + 1;
+                        break;
+                    }
+                }else{
+                    ultimoIndicador = indicadoresHijosSubst[i] + 1;
+                }
+            }
+            console.log(ultimoIndicador);
+
+            if(nivelSeleccionado.value !== "4"){
+                if(ultimoIndicador>99){
+                    alert("A este indicador superior no se le pueden agregar más indicadores.");
+                    return;
+                }else{
+                    if(ultimoIndicador > 9){
+                        indicadorFinalAux = ultimoIndicador.toString();
+                    }else{
+                        indicadorFinalAux = "0" + ultimoIndicador;
+                    }
+                }
             }else{
-                indicadorFinalAux = "0" + ultimoIndicador;
+                if(ultimoIndicador > 9){
+                    alert("A este indicador superior no se le pueden agregar más indicadores.");
+                    return;
+                }else{
+                    indicadorFinalAux = ultimoIndicador.toString();
+                }
             }
 
             if(nivelSeleccionado.value === "0"){
                 indicadorFinalAux = categoriaSeleccionada.value + indicadorFinalAux;
-                //setIndicadorSeleccionado({value: "0", label: "Cero"});
                 indicadorSuperiorAux={"value": "0"};
             }else{
                 indicadorFinalAux = indicadorSeleccionado.value + indicadorFinalAux;
-                //setCategoriaSeleccionada({value:indicadorFinalAux.substr(0,5)},{name:"categoria"});
                 categoriaAux={"value":indicadorFinalAux.substr(0,5)};
             }
         }else{
             if(nivelSeleccionado.value === "0"){
                 indicadorFinalAux = categoriaSeleccionada.value + "01";
                 indicadorSuperiorAux={"value": "0"};
-                //setCategoriaSeleccionada({value:indicadorFinalAux.substr(0,5)},{name:"categoria"});
             }else{
-                indicadorFinalAux = indicadorSeleccionado.value + "01";
+                if(nivelSeleccionado.value !== "4"){
+                    indicadorFinalAux = indicadorSeleccionado.value + "01";
+                }else{
+                    indicadorFinalAux = indicadorSeleccionado.value + "1";
+                }
                 categoriaAux={"value":indicadorFinalAux.substr(0,5)};
-                //setCategoriaSeleccionada({value:indicadorFinalAux.substr(0,5)},{name:"categoria"});
             }
         }
         console.log(indicadorFinalAux);
@@ -136,27 +195,48 @@ const FormularioIndicadorOrdenSuperior = ({indicadores, niveles, categorias, set
     }
 
     const Crear = (indicadorFinal, categoriaAux, indicadorSuperiorAux) => {
-
-        let aux = {
-            "idindicadores": indicadorFinal,
-            "nombre": nombre,
-            "periodicidad": null,
-            "tipo_valor": null,
-            "nivel": nivelSeleccionado.value,
-            "fuentes_idfuentes": null,
-            "unidades_medida_idunidades": null,
-            "indicadores_idindicadores": indicadorSuperiorAux.value===""?indicadorSeleccionado.value:indicadorSuperiorAux.value,
-            "categorias_idcategorias": categoriaAux.value===""?categoriaSeleccionada.value:categoriaAux.value
+        let aux;
+        if(orden==="superior"){
+            aux = {
+                "idindicadores": indicadorFinal,
+                "nombre": nombre,
+                "periodicidad": "null",
+                "tipo_valor": "null",
+                "nivel": nivelSeleccionado.value,
+                "fuentes_idfuentes": null,
+                "unidades_medida_idunidades": null,
+                "indicadores_idindicadores": indicadorSuperiorAux.value===""?indicadorSeleccionado.value:indicadorSuperiorAux.value,
+                "categorias_idcategorias": categoriaAux.value===""?categoriaSeleccionada.value:categoriaAux.value
+            }
+        }else{
+            aux = {
+                "idindicadores": indicadorFinal,
+                "nombre": nombre,
+                "periodicidad": periodicidadSeleccionada.value,
+                "tipo_valor": tipoSeleccionado.value,
+                "nivel": nivelSeleccionado.value,
+                "fuentes_idfuentes": fuenteSeleccionada.value,
+                "unidades_medida_idunidades": unidadSeleccionada.value,
+                "indicadores_idindicadores": indicadorSuperiorAux.value===""?indicadorSeleccionado.value:indicadorSuperiorAux.value,
+                "categorias_idcategorias": categoriaAux.value===""?categoriaSeleccionada.value:categoriaAux.value
+            }
         }
+        
         if(aux.nombre.trim() === ""){
             alert("El nombre no es valido");
         }else{
             console.log(aux);
-            alert("creado");
-            /* postData('/indicador/create.php',i).then(data => {
-                console.log(data.message);
-                alert("Creado");
-            }); */
+            postData('/indicador/create.php',aux).then(data => {
+                if(data){
+                    console.log(data.message!==undefined?data.message:"Error");
+                    try {
+                        alert(data.message!==undefined?data.message:"Error");
+                    } catch (error) {
+                        alert("Error")
+                    }
+                    setOrder('');
+                }
+            });
         }
     }
     
@@ -167,7 +247,12 @@ const FormularioIndicadorOrdenSuperior = ({indicadores, niveles, categorias, set
             <TextField onChange={(event)=>{setNombre(event.target.value)}}/* value={values.newPass} onChange={handleChange('newPass')} */ type="text" fullWidth id="indicador" label="Nombre" />
             <div style={{margin:'1em 0em 1em 0em'}}>
                 <div>Nivel</div>
-                <Select options={niveles.filter((currentValue,i,array) => { return i !== array.length-1 })}
+                <Select options={
+                    orden==="superior"?
+                    niveles.filter((currentValue,i,array) => { return i !== array.length-1 })
+                    :
+                    niveles
+                }
                         /* defaultValue={niveles[0]} */
                         value={nivelSeleccionado}
                         isSearchable={false}
@@ -209,302 +294,9 @@ const FormularioIndicadorOrdenSuperior = ({indicadores, niveles, categorias, set
                 :
                 null
             }
-            {
-                categoriaSeleccionada || indicadorSeleccionado?
-                <div style={{display:'flex', justifyContent:'center', margin:'2em 0 0 0'}}>
-                    <Button color="default" variant="contained" onClick={()=>{setOrder('')}}>Cancelar</Button>
-                    <Button onClick={()=>{CrearIndicador()}} color="secondary" style={{marginLeft:'0.5em',background:'linear-gradient(to right, #c4161c 0%, #9e0b0f  100%)'}} variant="contained">Crear indicador</Button>  
-                </div>
-                :
-                null
-            }
-        </div>
-    );
-}
-
-
-
-const FormularioIndicadorOrdenInferior = ({indicador, indicadores, handleChange, niveles, categorias, setOrder, fuentes, periodicidades, tipos, unidades}) => {
-    const [nivelSeleccionado, setNivelSeleccionado] = useState(false);
-
-    const [indicadorFiltrado, setIndicadorFiltrado] = useState([]);
-    const [indicadorSeleccionado, setIndicadorSeleccionado] = useState(null);
-    const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(null);
-    const [fuenteSeleccionada, setFuenteSeleccionada] = useState(null);
-    const [periodicidadSeleccionada, setPeriodicidadSeleccionada] = useState(null);
-    const [tipoSeleccionado, setTipoSeleccionado] = useState(null);
-    const [unidadSeleccionada, setUnidadSeleccionada] = useState(null);
-    const [acciones, setAcciones] = useState(false);
-
-    useEffect(()=>{
-        handleChange({value:''},{name:"indicadorSuperior"});
-        handleChange({value:''},{name:"categoria"});
-        handleChange({value:''},{name:"idindicador"});
-        handleChange({value:''},{name:"fuentes_idfuentes"});
-        handleChange({value:''},{name:"periodicidad"});
-        handleChange({value:''},{name:"tipo_valor"});
-        handleChange({value:''},{name:"unidades_medida"});
-        setIndicadorSeleccionado(null);
-        setCategoriaSeleccionada(null);
-        setFuenteSeleccionada(null);
-        setPeriodicidadSeleccionada(null);
-        setTipoSeleccionado(null);
-        setUnidadSeleccionada(null);
-
-        if(indicador.nivel==="1"){
-            setIndicadorFiltrado(indicadores.filter((currentValue,i,array) => { return currentValue.nivel ==="0" && currentValue.unidad==="0"}));
-        }else if(indicador.nivel==="2"){
-            setIndicadorFiltrado(indicadores.filter((currentValue,i,array) => { return currentValue.nivel ==="1" && currentValue.unidad==="0"}));
-        }else if(indicador.nivel==="3"){
-            setIndicadorFiltrado(indicadores.filter((currentValue,i,array) => { return currentValue.nivel ==="2" && currentValue.unidad==="0"}));
-        }else if(indicador.nivel==="4"){
-            setIndicadorFiltrado(indicadores.filter((currentValue,i,array) => { return currentValue.nivel ==="3" && currentValue.unidad==="0"}));
-        }
-    }, [indicador.nivel]);
-
-    useEffect(()=>{
-        if(indicadorSeleccionado!=null){
-            setAcciones(true);
-        }else{
-            setAcciones(false);
-        }
-        setFuenteSeleccionada(null);
-    },[indicadorSeleccionado])
-
-    useEffect(()=>{
-        if(categoriaSeleccionada!=null){
-            setAcciones(true);
-        }else{
-            setAcciones(false);
-        }
-        setFuenteSeleccionada(null);
-    },[categoriaSeleccionada])
-
-    useEffect(()=>{
-        setPeriodicidadSeleccionada(null);
-    },[fuenteSeleccionada]);
-
-    useEffect(()=>{
-        setTipoSeleccionado(null);
-    },[periodicidadSeleccionada]);
-
-    useEffect(()=>{
-        setUnidadSeleccionada(null);
-    },[tipoSeleccionado]);
-
-    useEffect(()=>{
-        handleChange({value:''},{name:"idindicador"});
-        handleChange({value:''},{name:"nombre"});
-        handleChange({value:''},{name:"periodicidad"});
-        handleChange({value:''},{name:"tipo_valor"});
-        handleChange({value:''},{name:"nivel"});
-        handleChange({value:''},{name:"fuentes_idfuentes"});
-        handleChange({value:''},{name:"unidades_medida"});
-        handleChange({value:''},{name:"indicadorSuperior"});
-        handleChange({value:''},{name:"categoria"});
-    },[]);
-
-    const handleChangeIndicador = (valor,e) => {
-        handleChange(valor,e);
-        console.log(valor);
-        setIndicadorSeleccionado(valor);
-    }
-
-    const handleChangeCategoria = (valor,e) => {
-        handleChange(valor,e);
-        console.log(valor);
-        setCategoriaSeleccionada(valor);
-    }
-
-    const handleChangeFuente = (valor,e) => {
-        handleChange(valor,e);
-        console.log(valor);
-        setFuenteSeleccionada(valor);
-    }
-
-    const handleChangePeriodicidad = (valor,e) => {
-        handleChange(valor,e);
-        console.log(valor);
-        setPeriodicidadSeleccionada(valor);
-    }
-
-    const handleChangeTipo = (valor,e) => {
-        handleChange(valor,e);
-        console.log(valor);
-        setTipoSeleccionado(valor);
-    }
-
-    const handleChangeUnidad = (valor,e) => {
-        handleChange(valor,e);
-        console.log(valor);
-        setUnidadSeleccionada(valor);
-    }
-
-    const CrearIndicador = () => {
-        handleChange({value:''},{name:"idindicador"});
-        let indicadoresDeLaCategoria = [];
-        let indicadoresDeLaCategoriaSubst = [];
-        let indicadorMaximo = 0;
-        let indicadorFinal = '';
-
-        if(indicador.nivel === "0"){
-            indicadoresDeLaCategoria = indicadores.filter((i) => {
-                return i.value.substring(0,5) === indicador.categoria && i.value.length === 7;
-            });
-            indicadoresDeLaCategoria.forEach(i => {
-                indicadoresDeLaCategoriaSubst.push(parseInt(i.value.substring(5, i.length)));
-            });
-        }else if(indicador.nivel === "1"){
-            console.log("Nivel 1");
-            console.log(indicadores);
-            
-            indicadoresDeLaCategoria = indicadores.filter(i => {
-                return i.value.substring(0,7) === indicador.indicadorSuperior  && i.nivel === indicador.nivel;
-            });
-
-            console.log(indicadoresDeLaCategoria);
-            indicadoresDeLaCategoria.forEach(i => {
-                indicadoresDeLaCategoriaSubst.push(parseInt(i.value.substring(7, i.length)));
-            });
-            console.log(indicadoresDeLaCategoriaSubst);
-        }else if(indicador.nivel === "2"){
-            console.log("Nivel 2");
-            console.log(indicadores);
-            
-            indicadoresDeLaCategoria = indicadores.filter(i => {
-                return i.value.substring(0,9) === indicador.indicadorSuperior  && i.nivel === indicador.nivel;
-            });
-
-            console.log(indicadoresDeLaCategoria);
-            indicadoresDeLaCategoria.forEach(i => {
-                indicadoresDeLaCategoriaSubst.push(parseInt(i.value.substring(9, i.length)));
-            });
-            console.log(indicadoresDeLaCategoriaSubst);
-        }else if(indicador.nivel === "3"){
-            console.log("Nivel 3");
-            console.log(indicadores);
-            
-            indicadoresDeLaCategoria = indicadores.filter(i => {
-                return i.value.substring(0,11) === indicador.indicadorSuperior  && i.nivel === indicador.nivel;
-            });
-
-            console.log(indicadoresDeLaCategoria);
-            indicadoresDeLaCategoria.forEach(i => {
-                indicadoresDeLaCategoriaSubst.push(parseInt(i.value.substring(11, i.length)));
-            });
-            console.log(indicadoresDeLaCategoriaSubst);
-        }else if(indicador.nivel === "4"){
-            console.log("Nivel 4");
-            console.log(indicadores);
-            
-            indicadoresDeLaCategoria = indicadores.filter(i => {
-                return i.value.substring(0,13) === indicador.indicadorSuperior  && i.nivel === indicador.nivel;
-            });
-
-            console.log(indicadoresDeLaCategoria);
-            indicadoresDeLaCategoria.forEach(i => {
-                indicadoresDeLaCategoriaSubst.push(parseInt(i.value.substring(13, i.length)));
-            });
-            console.log(indicadoresDeLaCategoriaSubst);
-        }
-        
-        if(indicadoresDeLaCategoriaSubst.length !== 0){
-            indicadorMaximo = Math.max(...indicadoresDeLaCategoriaSubst) + 1;
-
-            if(indicadorMaximo > 9){
-                indicadorFinal = indicadorMaximo.toString();
-            }else{
-                if(indicador.nivel !== "4"){
-                    indicadorFinal = "0" + indicadorMaximo;
-                }else{
-                    indicadorFinal = indicadorMaximo.toString();
-                }
-            }
-
-            if(indicador.nivel === "0"){
-                indicadorFinal = indicador.categoria + indicadorFinal;
-                handleChange({value:'0'},{name:"indicadorSuperior"});
-            }else{
-                indicadorFinal = indicador.indicadorSuperior + indicadorFinal;
-                handleChange({value:indicadorFinal.substr(0,5)},{name:"categoria"});
-            }
-        }else{
-            if(indicador.nivel !== "4"){
-                indicadorFinal = indicador.indicadorSuperior + "01";
-            }else{
-                indicadorFinal = indicador.indicadorSuperior + "1";
-            }
-            handleChange({value:indicadorFinal.substr(0,5)},{name:"categoria"});
-        }
-        //indi
-        console.log(indicadorFinal);
-        handleChange({value:indicadorFinal},{name:"idindicador"});
-        console.log(indicador);
-        Crear(indicador);
-    }
-
-    const Crear = (i) => {
-        if(i.nombre.trim() === ""){
-            alert("El nombre no es valido");
-        }else{
-            console.log(i);
-            
-            /* postData('/indicador/create.php',i).then(data => {
-                console.log(data.message);
-                alert("Creado");
-            }); */
-        }
-    }
-    
-    return(
-        <div style={{minWidth:'15em', width:'50em', margin:'2em 1em 0em 1em', textAlign:'left'}}>
-            <TextField onChange={handleChange}/* value={values.newPass} onChange={handleChange('newPass')} */ type="text" fullWidth id="indicador" label="Nombre" />
-            <div style={{margin:'1em 0em 1em 0em'}}>
-                <div>Nivel</div>
-                <Select options={niveles}
-                        /* defaultValue={niveles[0]} */
-                        isSearchable={false}
-                        onChange={(e,name)=>{setNivelSeleccionado(true); handleChange(e,{name:'nivel'});}}
-                        name="nivel"
-                        placeholder="Selecciona el nivel"
-                />
-            </div>
-            {
-                indicador.nivel==="0" && nivelSeleccionado ?
-                <div style={{margin:'1em 0em 1em 0em'}}>
-                    <div>Categoría</div>
-                    <Select options={categorias}
-                            isSearchable={true}
-                            value={categoriaSeleccionada}
-                            /* defaultValue={categorias[0]} */
-                            onChange={handleChangeCategoria}
-                            name="categoria"
-                            placeholder="Selecciona la categoría"
-                    />
-                </div>
-                :
-                null
-            }
-            
-            {
-                indicador.nivel!=="0" && nivelSeleccionado ?
-                <div style={{margin:'1em 0em 1em 0em'}}>
-                    <div>Indicador de orden superior</div>
-                    <Select options={indicadorFiltrado}
-                            value={indicadorSeleccionado}
-                            isSearchable={true}
-                            /* defaultValue={indicadores[0]} */
-                            onChange={handleChangeIndicador}
-                            name="indicadorSuperior"
-                            placeholder="Selecciona el indicador"
-                    />
-                </div>
-                :
-                null
-            }
 
             {
-                indicadorSeleccionado != null || categoriaSeleccionada!= null ?
+                (indicadorSeleccionado != null || categoriaSeleccionada!= null) && orden!=="superior" ?
                 <div style={{margin:'1em 0em 1em 0em'}}>
                     <div>Fuentes</div>
                     <Select options={fuentes}
@@ -567,28 +359,28 @@ const FormularioIndicadorOrdenInferior = ({indicador, indicadores, handleChange,
                 null
             }
 
-            {
-                acciones && fuenteSeleccionada && periodicidadSeleccionada && tipoSeleccionado && unidadSeleccionada ?
-                <div style={{display:'flex', justifyContent:'center', margin:'2em 0 0 0'}}>
-                    <Button color="default" variant="contained" onClick={()=>{setOrder('')}}>Cancelar</Button>
-                    <Button onClick={()=>{CrearIndicador()}} color="secondary" style={{marginLeft:'0.5em',background:'linear-gradient(to right, #c4161c 0%, #9e0b0f  100%)'}} variant="contained">Crear indicador</Button>  
-                </div>
+            <div style={{display:'flex', justifyContent:'center', margin:'2em 0 0 0'}}>
+                <Button color="default" variant="contained" onClick={()=>{setOrder('')}}>Cancelar</Button>
+                {
+                ((categoriaSeleccionada || indicadorSeleccionado) && orden==="superior") || (fuenteSeleccionada && periodicidadSeleccionada && tipoSeleccionado && unidadSeleccionada)?
+                <Button onClick={()=>{CrearIndicador()}} color="secondary" style={{marginLeft:'0.5em',background:'linear-gradient(to right, #c4161c 0%, #9e0b0f  100%)'}} variant="contained">Crear indicador</Button>  
                 :
                 null
-            }
+                }
+            </div>
         </div>
     );
 }
 
-const CrearIndicador = ({indicador,handleChange,orden,setOrder,indicadores,fuentes,periodicidades,categorias,niveles,tipos,unidades}) => {
+const CrearIndicador = ({orden,setOrder,indicadores,fuentes,periodicidades,categorias,niveles,tipos,unidades}) => {
     
     return(
         <div style={{display:'flex', justifyContent:'center'}}>
             {
-                orden === "superior"?<FormularioIndicadorOrdenSuperior  indicadores={indicadores} setOrder={setOrder} niveles={niveles} categorias={categorias}/>:null
-            }
-            {
-                orden === "inferior"?<FormularioIndicadorOrdenInferior indicador={indicador} indicadores={indicadores} handleChange={handleChange} setOrder={setOrder} niveles={niveles} categorias={categorias} fuentes={fuentes} periodicidades={periodicidades} tipos={tipos} unidades={unidades}/>:null
+                orden === ""?
+                null
+                :
+                <FormularioIndicadorOrdenSuperior orden={orden}  indicadores={indicadores} setOrder={setOrder} niveles={niveles} categorias={categorias} fuentes={fuentes} periodicidades={periodicidades} tipos={tipos} unidades={unidades}/>
             }
         </div>
     );

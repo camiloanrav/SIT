@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Link} from 'react-router-dom';
 
 import Button from '@material-ui/core/Button';
@@ -23,19 +23,47 @@ import CloseIcon from '@material-ui/icons/Close';
 import logo from '../logo-ser-2.png';
 import background from '../background.png';
 
+import {postData} from '../utils/api';
 
+import  { Redirect } from 'react-router-dom';
 
 const Login = (props) => {
     const [open, setOpen] = React.useState(false);
+
     const [openSnackbar, setOpenSnackbar] = React.useState(false);
 
     const [message, setMessage] = React.useState("");
 
     const [login, setLogin] = React.useState(true);
 
+    const [values, setValues] = useState({
+        user: '',
+        password: '',
+        newPass: '',
+        validateNewPass: '',
+        showPassword: false,
+    });
+
     const handleLogin = () =>{
-        alert("Logueado, usuario: " + values.user + ", contraseña: " + values.password);
+        let usuarioAux = {"usuario":values.user,"clave":values.password};
+        postData('/usuario/enter.php',usuarioAux).then(data => {
+            if(data===undefined){
+                sessionStorage.setItem("login", values.user);
+                window.location.reload(false);
+            }else{
+                alert(data.message);
+            }
+        });
     }
+
+    const ProtectedComponent = () => {
+        if (sessionStorage.getItem("login")){
+            return <Redirect to='/administrador-inicio'  />
+        }else{
+            return null
+        }
+    }
+
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -45,6 +73,7 @@ const Login = (props) => {
         setOpen(false);
         setOpenSnackbar(false);
     };
+
     const handleSend = () => {
         //Enviar contraseña al correo
         setMessage("Correo enviado de forma correcta.");
@@ -73,18 +102,6 @@ const Login = (props) => {
         setOpenSnackbar(true);
     };
 
-    const [values, setValues] = useState({
-        user: '',
-        amount: '',
-        password: '',
-        newPass:'',
-        validateNewPass:'',
-        weight: '',
-        weightRange: '',
-        showPassword: false,
-    });
-
-    
     return (
         <div style={{position:'absolute', height:'100vh', width:'100%',  backgroundImage:`url(${background})`, backgroundPosition:'center', backgroundRepeat:'no-repeat', backgroundSize:'cover'}}>
             <div style={{display:'flex', justifyContent:'center'}}>
@@ -149,6 +166,7 @@ const Login = (props) => {
                     
                 </div>
             </div>
+            <ProtectedComponent></ProtectedComponent>
             <Dialog
                 open={open}
                 onClose={handleClose}

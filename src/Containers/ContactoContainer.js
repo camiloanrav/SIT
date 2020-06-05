@@ -38,6 +38,7 @@ const ContactoContainer = () => {
     const [mailSent, setMailSent] = useState(false);
     const [error, setError] = useState(null);
     const [politicas, setPoliticas] = useState(false);
+    const [enviando, setEnviando] = useState(false);
 
     const [openSnackbar, setOpenSnackbar] = React.useState(false);
     const [openDialog, setOpenDialog] = useState(false);
@@ -67,16 +68,28 @@ const ContactoContainer = () => {
     } */
 
     const handleFormSubmit = e => {
+        e.preventDefault();
+        let aux = {
+            "correo":correo,
+            "nombres":nombres,
+            "mensaje":mensaje
+        }
         if(politicas){
-            e.preventDefault();
-            postEmail('/enviarcorreo/index.php',this.state).then(data => {
+            setEnviando(true);
+            postEmail('/enviarcorreo/index.php',aux).then(data => {
                 console.log(data);
                 if (data === 200) {
                     setMailSent(true);
+                }else{
+                    setError(true);
                 }
-            }).catch(error => setError(error.message));
+                setEnviando(false);
+            }).catch(error =>{
+                setEnviando(false);
+                console.log(error.message);
+                setError(true);
+            });
         }else{
-            //alert("Primero debe aceptar las políticas de privacidad");
             handleOpenSnackbar("Primero debe aceptar las políticas de privacidad");
         }
     }
@@ -200,12 +213,34 @@ const ContactoContainer = () => {
                                         <i class="fas fa-chevron-right" style={{marginLeft:'1em'}}></i>
                                     </button>
                                     <div>
-                                        {mailSent && <div class="text">
-                                            <blockquote class="feature-text" >
-                                                <div>Mensaje enviado exitosamente. Gracias por contactarnos</div>
+                                        { mailSent &&
+                                            <div className="text">
+                                                <blockquote class="feature-text" >
+                                                    <div>Mensaje enviado exitosamente. Gracias por contactarnos.</div>
 
-                                            </blockquote>
-                                        </div>}
+                                                </blockquote>
+                                            </div>
+                                        }
+                                        {
+                                            error != null ? 
+                                            <div className="text">
+                                                <blockquote class="feature-text" >
+                                                    <div>Error al enviar el mensaje.</div>
+
+                                                </blockquote>
+                                            </div>
+                                            :
+                                            null
+                                        }
+                                        {
+                                            enviando &&
+                                            <div className="text">
+                                                <blockquote class="feature-text" >
+                                                    <div>Enviando...</div>
+
+                                                </blockquote>
+                                            </div>
+                                        }
                                     </div>
                                 </form>
                             </div>

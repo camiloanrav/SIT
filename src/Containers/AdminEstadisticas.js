@@ -2,7 +2,7 @@ import React, {useState,useEffect} from 'react';
 
 import CargarExcel from '../Components/CargarExcel';
 import Tabs from '../Components/Tabs';
-import Buscador from '../Components/Buscador';
+
 import Titulo from '../Components/Titulo';
 import Footer from '../Components/Footer';
 import NavBarDesktop from '../Components/NavBarDesktop';
@@ -10,12 +10,11 @@ import NavBarMovil from '../Components/NavBarMovil';
 import CrearIndicador from '../Components/CrearIndicador';
 import ModificarIndicador from '../Components/ModificarIndicador';
 
-import TextField from '@material-ui/core/TextField';
+import Excel2 from '../Components/Excel2';
+
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 import Select from "react-select";
@@ -23,29 +22,16 @@ import Select from "react-select";
 import {postData} from '../utils/api';
 import {getData} from '../utils/api';
 
+import  { Redirect } from 'react-router-dom';
 
-import {
-    BrowserRouter as Router,
-    useParams
-  } from "react-router-dom";
 
-const ModificarIndicadores = () =>{
-    const [buscar, setBuscar] = useState('');
-    const [filtrado, setFiltrado] = useState([]);
-    const [indicadorExistente, setIndicadorExistente] = useState(null);
-    /* const [open, setOpen] = useState(false);
-    const [open2, setOpen2] = useState(false);
-    const [tipoDeAccion, setTipoDeAccion] = useState(0);
-    const [message, setMessage] = useState('');
-    const [title, setTitle] = useState('');
-    const [nombreIndicador, setNombreIndicador] = useState('NOMBRE_INDICADOR'); */
-
+const AdministrarIndicadores = ({indicadores, getIndicadores}) =>{
     const [unidades, setUnidades] = useState('');
     const [fuentes, setFuentes] = useState('');
     const [categorias, setCategorias] = useState([]);
-    const [indicadores, setindIndicadores] = useState([]);
+    
     const [niveles] = useState([{value:"0",label:'Cero'},{value:"1",label:'Uno'}, {value:"2",label:'Dos'}, {value:"3",label:'Tres'}, {value:"4",label:'Cuatro'}]);
-    const [tipos] = useState([{value:'Númerico',label:'Númerico'},{value:'Texto',label:'Texto'}]);
+    const [tipos] = useState([{value:'Numérico',label:'Numérico'},{value:'Texto',label:'Texto'}]);
     const [periodicidades] = useState([{value:'Anual',label:'Anual'}, {value:'Trimestral',label:'Trimestral'}]);
 
     const [creando, setCreando] = useState(false);
@@ -55,18 +41,6 @@ const ModificarIndicadores = () =>{
     const [modificando, setModificando] = useState(false);
 
     const [indicadorSeleccionado, setIndicadorSeleccionado] = useState(null);
-
-    const [indicador, setIndicador] = useState({
-        idindicador: '',
-        nombre: '',
-        periodicidad: 'null',
-        tipo_valor:'null',
-        nivel:'0',
-        fuentes_idfuentes: '',
-        unidades_medida: '',
-        indicadorSuperior: '',
-        categoria: '',
-    });
 
     useEffect(() => {
         getData('/unidad/all.php').then(data => {
@@ -92,142 +66,65 @@ const ModificarIndicadores = () =>{
                     temp.push({value: dato.idcategorias , label:dato.nombre});
                 }
             });
-
-            //handleChange({value:temp[0].value},{name:"categoria"});
             setCategorias(temp);
         }).catch(error => console.log(error.data));
-
-        getIndicadores();
     }, [] );
 
     useEffect(()=>{
         getIndicadores();
-    },[modificando]);
-
-    const getIndicadores = () => {
-        getData('/indicador/all.php').then(data => {
-            console.log(data);
-            var tempIDMalo = [];
-            var tempNivelMalo = [];
-            var nombres = [];
-            var periodicidades = [];
-
-            data.forEach(dato => {
-                let hijo = 1;
-
-                if(dato.nivel === "1"){
-                    hijo = dato.idindicadores.substring(0,7);
-                }else if(dato.nivel === "2"){
-                    hijo = dato.idindicadores.substring(0,9);
-                }else if(dato.nivel === "3"){
-                    hijo = dato.idindicadores.substring(0,11);
-                }else if(dato.nivel === "4"){
-                    hijo = dato.idindicadores.substring(0,13);
-                }
-
-                if(dato.nivel === "1" && dato.idindicadores.length !== 9){
-                    tempNivelMalo.push({hijo: dato.idindicadores , padre:dato.indicadores_idindicadores, nivel:dato.nivel});
-                }else if(dato.nivel === "2" && dato.idindicadores.length !== 11){
-                    tempNivelMalo.push({hijo: dato.idindicadores , padre:dato.indicadores_idindicadores, nivel:dato.nivel});
-                }else if(dato.nivel === "3" && dato.idindicadores.length !== 13){
-                    tempNivelMalo.push({hijo: dato.idindicadores , padre:dato.indicadores_idindicadores, nivel:dato.nivel});
-                }else if(dato.nivel === "4" && dato.idindicadores.length !== 14){
-                    tempNivelMalo.push({hijo: dato.idindicadores , padre:dato.indicadores_idindicadores, nivel:dato.nivel});
-                }
-                
-                nombres.push(dato.nombre);
-                periodicidades.push(dato.periodicidad);
-
-                if(hijo !== dato.indicadores_idindicadores && dato.nivel !== "0"){
-                    tempIDMalo.push({hijo: dato.idindicadores , padre:dato.indicadores_idindicadores, nivel:dato.nivel});            
-                }
-            });
-            
-            let findDuplicates = arr => arr.filter((item, index) => arr.indexOf(item) != index);
-            let findUnique = arr => arr.filter((value,index,self) => self.indexOf(value) === index );
-
-            console.log(findDuplicates(nombres)) // All duplicates
-            console.log([...new Set(findDuplicates(nombres))]) // Unique duplicates
-
-            console.log(findUnique(periodicidades)) // All duplicates
-            
-            console.log(tempIDMalo);
-            console.log(tempNivelMalo);
-
-            let temp = [];
-
-            /* for(let i = 0; data.length > i; i++){
-                if(data[i].unidades_medida_idunidades !== "0"){
-                    let p = "";
-                    p = data.find(padre => padre.idindicadores === data[i].indicadores_idindicadores);
-                    if(p !== undefined){
-                        data[i].nombre = p.nombre + " => " + data[i].nombre.toLowerCase();
-                    }
-                }
-                temp.push({value: data[i].idindicadores , label:data[i].nombre.charAt(0).toUpperCase() + data[i].nombre.slice(1), unidad:data[i].unidades_medida_idunidades, periodicidad:data[i].periodicidad, tipo_valor:data[i].tipo_valor, nivel: data[i].nivel, padre: data[i].indicadores_idindicadores, fuente:data[i].fuentes_idfuentes, categoria:data[i].categorias_idcategorias});
-            }
-
-            console.log(temp);
-            
-            setindIndicadores(temp); */
-
-            for(/* data[i].unidades_medida_idunidades !== "0" && */let i = 0; data.length > i; i++){
-                if(data[i].nivel !== "0"){
-                    let p = "";
-                    p = data.find(padre => padre.idindicadores === data[i].indicadores_idindicadores);
-                    if(p !== undefined){
-                        data[i].nombre = p.nombre + " => " + data[i].nombre.toLowerCase();
-                    }
-                }
-                temp.push({value: data[i].idindicadores , label:data[i].nombre.charAt(0).toUpperCase() + data[i].nombre.slice(1), unidad:data[i].unidades_medida_idunidades, periodicidad:data[i].periodicidad, tipo_valor:data[i].tipo_valor, nivel: data[i].nivel, padre: data[i].indicadores_idindicadores, fuente:data[i].fuentes_idfuentes, categoria:data[i].categorias_idcategorias});
-            }
-            console.log(temp);
-            //handleChange({value:temp[0].value},{name:"indicadorSuperior"});
-            setindIndicadores(temp);
-
-        }).catch(error => console.log(error.data));
-    }
+    },[modificando,eliminando,creando,gestionando]);
 
     const handleClose = () => {
         setCreando(false);
         setEliminando(false);
     };
 
-    const Eliminar = (i) => {
-        let aux = {"idindicadores":i.value};
-        
-        postData('/indicador/delete.php',aux).then(data => {
-            console.log(data.message);
-            
-            alert("Eliminado");
-            setEliminando(false);
-        });
-    }
+    const Eliminar = (indicadorAEliminar) => {
 
-    const handleChange = (selectedOption,e) => {
-        /* console.log(selectedOption);
-        console.log(e); */
-        e!==undefined?
-        setIndicador({ ...indicador, [e.name]: selectedOption.value })
-        :
-        setIndicador({ ...indicador, "nombre": selectedOption.target.value })
-    };
+        let indicadoresHijos = indicadores.filter(i => {
+            return i.padre === indicadorAEliminar.value;
+        });
+
+        console.log(indicadoresHijos);
+        
+        if(indicadoresHijos.length!==0){
+            alert("El indicador tiene otros indicadores que dependen de él, borre primero esos indicadores.");
+            setEliminando(false);
+            setGestionando(false);
+            setIndicadorSeleccionado(null);
+        }else{
+            let aux = {"idindicadores":indicadorAEliminar.value};
+
+            postData('/indicaterri/deletegroup.php',aux).then(data => {
+                if(data!==undefined){
+                    console.log(data.message);
+                }
+                
+                postData('/indicador/delete.php',aux).then(data => {
+                    if(data!==undefined){
+                        console.log(data.message);
+                    }
+                    
+                    alert("Eliminado");
+                    setEliminando(false);
+                    setGestionando(false);
+                    setIndicadorSeleccionado(null);
+                });
+            });
+            
+            
+        }
+    }
 
     const handleChangeIndicadorSeleccionado = (valor,e) => {
         console.log(valor);
         setIndicadorSeleccionado(valor);
     }
 
-    const handleCreate = () => {
-
-    }
-
     return(
         <div>
             <div style={{minHeight:'14em'}}>
                 <CrearIndicador
-                    indicador={indicador}
-                    handleChange={handleChange} 
                     orden={ordenIndicadorACrear}
                     setOrder={setOrdenIndicadorACrear} 
                     indicadores={indicadores} 
@@ -246,6 +143,7 @@ const ModificarIndicadores = () =>{
                     <div style={{marginTop:'6em'}}>
                         <Button onClick={()=>{setCreando(true);}} color="default" style={{marginLeft:'0.5em'}} variant="contained">Crear un nuevo Indicador</Button>
                         <Button onClick={()=>{setGestionando(true)}} color="secondary" style={{marginLeft:'0.5em', background:'linear-gradient(to right, #c4161c 0%, #9e0b0f  100%)'}} variant="contained">Gestionar un Indicador</Button>  
+                        <Excel2></Excel2>
                     </div>
                 }
                 
@@ -303,7 +201,7 @@ const ModificarIndicadores = () =>{
                 </Button>
             </Dialog>
             <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={eliminando}>
-                <DialogTitle id="simple-dialog-title">¿Desea eliminar el indicador {indicadorSeleccionado?indicadorSeleccionado.label:null} ?</DialogTitle>
+                <DialogTitle id="simple-dialog-title">¿Desea eliminar el indicador {indicadorSeleccionado?indicadorSeleccionado.label:null}? Tenga en cuenta que también se eliminarán todos los datos relacionados a este indicador.</DialogTitle>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">
                         Cancelar
@@ -320,6 +218,90 @@ const ModificarIndicadores = () =>{
 const AdminEstadisticas = () => {
     let titulo = "Administrador / Estadísticas";
     const [indice, setindice] = useState(1);
+    const [indicadores, setindIndicadores] = useState([]);
+
+    useEffect(()=>{
+        //getIndicadores();
+    },[]);
+
+    const ProtectedComponent = () => {
+        if (sessionStorage.getItem("login")){
+            return null
+        }else{
+            return <Redirect to='/login'  />
+        }
+    }
+
+    const getIndicadores = () => {
+        getData('/indicador/all.php').then(data => {
+            /* console.log(data); */
+            var tempIDMalo = [];
+            var tempNivelMalo = [];
+            var nombres = [];
+            var periodicidades = [];
+
+            data.sort((a,b) => (a.idindicadores > b.idindicadores) ? 1 : ((b.idindicadores > a.idindicadores) ? -1 : 0));
+
+            /* data.forEach(dato => {
+                let hijo = 1;
+
+                if(dato.nivel === "1"){
+                    hijo = dato.idindicadores.substring(0,7);
+                }else if(dato.nivel === "2"){
+                    hijo = dato.idindicadores.substring(0,9);
+                }else if(dato.nivel === "3"){
+                    hijo = dato.idindicadores.substring(0,11);
+                }else if(dato.nivel === "4"){
+                    hijo = dato.idindicadores.substring(0,13);
+                }
+
+                if(dato.nivel === "1" && dato.idindicadores.length !== 9){
+                    tempNivelMalo.push({hijo: dato.idindicadores , padre:dato.indicadores_idindicadores, nivel:dato.nivel});
+                }else if(dato.nivel === "2" && dato.idindicadores.length !== 11){
+                    tempNivelMalo.push({hijo: dato.idindicadores , padre:dato.indicadores_idindicadores, nivel:dato.nivel});
+                }else if(dato.nivel === "3" && dato.idindicadores.length !== 13){
+                    tempNivelMalo.push({hijo: dato.idindicadores , padre:dato.indicadores_idindicadores, nivel:dato.nivel});
+                }else if(dato.nivel === "4" && dato.idindicadores.length !== 14){
+                    tempNivelMalo.push({hijo: dato.idindicadores , padre:dato.indicadores_idindicadores, nivel:dato.nivel});
+                }
+                
+                nombres.push(dato.nombre);
+                periodicidades.push(dato.periodicidad);
+
+                if(hijo !== dato.indicadores_idindicadores && dato.nivel !== "0"){
+                    tempIDMalo.push({hijo: dato.idindicadores , padre:dato.indicadores_idindicadores, nivel:dato.nivel});            
+                }
+            });
+            
+            let findDuplicates = arr => arr.filter((item, index) => arr.indexOf(item) != index);
+            let findUnique = arr => arr.filter((value,index,self) => self.indexOf(value) === index );
+
+            console.log(findDuplicates(nombres)) // All duplicates
+            console.log([...new Set(findDuplicates(nombres))]) // Unique duplicates
+
+            console.log(findUnique(periodicidades)) // All duplicates
+            
+            console.log(tempIDMalo);
+            console.log(tempNivelMalo);*/
+
+            let temp = []; 
+
+            for(/* data[i].unidades_medida_idunidades !== "0" && */let i = 0; data.length > i; i++){
+                if(data[i].nivel !== "0"){
+                    let p = "";
+                    p = data.find(padre => padre.idindicadores === data[i].indicadores_idindicadores);
+                    if(p !== undefined){
+                        data[i].nombre = p.nombre + " => " + data[i].nombre.toLowerCase();
+                    }
+                }
+                temp.push({value: data[i].idindicadores , label:data[i].nombre.charAt(0).toUpperCase() + data[i].nombre.slice(1), unidad:data[i].unidades_medida_idunidades, periodicidad:data[i].periodicidad, tipo_valor:data[i].tipo_valor, nivel: data[i].nivel, padre: data[i].indicadores_idindicadores, fuente:data[i].fuentes_idfuentes, categoria:data[i].categorias_idcategorias});
+            }
+            console.log(temp);
+            //handleChange({value:temp[0].value},{name:"indicadorSuperior"});
+            setindIndicadores(temp);
+
+        }).catch(error => console.log(error.data));
+    }
 
     return (
         <div style={{minHeight:'26em'}}>
@@ -327,8 +309,9 @@ const AdminEstadisticas = () => {
             <NavBarMovil user={"administrador"}></NavBarMovil>
             <Titulo titulo={titulo}></Titulo>
             <Tabs setindice={setindice} tab1="Gestionar Indicadores" tab2="Cargar Excel"></Tabs>
-            {indice === 1 ? <ModificarIndicadores/> : <CargarExcel/> }
+            {indice === 1 ? <AdministrarIndicadores indicadores={indicadores} getIndicadores={getIndicadores}/> : <CargarExcel indicadores={indicadores}/> }
             <div className="footer-admin"></div>
+            <ProtectedComponent></ProtectedComponent>
             <Footer></Footer>
         </div>
     );

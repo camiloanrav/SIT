@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import PropTypes from 'prop-types';
 
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -190,11 +189,6 @@ const Footer = () => {
                 </Dialog>
         </div>
     );
-};
-
-Footer.propTypes = {
-    header: PropTypes.string.isRequired,
-    body: PropTypes.element.isRequired,
 };
 
 export default Footer;

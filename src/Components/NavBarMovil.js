@@ -9,7 +9,7 @@ const NavBarMovil = ({user}) => {
 
             <header id="header-menu-mobile">
                 <div id="hmm-top" onClick={()=> setOpen(true)}>
-                    <span class="hmmt-line"></span>
+                    <span className="hmmt-line"></span>
                     <a href="#" id="hmmt-menu-icon">
                         <span className="icon fas fa-bars"></span>
                         <p>Menú</p>
@@ -17,26 +17,26 @@ const NavBarMovil = ({user}) => {
                     <div id="hmdb-logo-container">
                         <a id="hmdb-logo" href="" ></a>
                     </div>
-                    <a href="#" class="hmmt-logo">
-                        <figure class="gf-figure-logo">
+                    <a href="/#" className="hmmt-logo">
+                        <figure className="gf-figure-logo">
                             <img src={logo} alt="UAO"></img>
                         </figure>
                     </a>
-                    <span class="scroll-indicator"></span>
+                    <span className="scroll-indicator"></span>
                 </div>
  
                 <div id="hmm-bottom" className={"".concat(`${open===true?"hmm-open":""}`)}>
-                    <div class="hmmb-icons">
+                    <div className="hmmb-icons">
                         <a href="#" id="hmmb-menu-icon-close" onClick={()=> setOpen(false)}>
-                            <div class="circle-icon">
-                                <span class="icon fas fa-times"></span>
+                            <div className="circle-icon">
+                                <span className="icon fas fa-times"></span>
                             </div>
                             <p>Cerrar</p>
                         </a>
                         <div id="hmmb-profile-dropdown">
                             <a href="#" id="hmmbpd-close">
-                                <div class="circle-icon">
-                                    <span class="icon fas fa-times"></span>
+                                <div className="circle-icon">
+                                    <span className="icon fas fa-times"></span>
                                 </div>
                                 <p>Cerrar</p>
                             </a>
@@ -44,13 +44,17 @@ const NavBarMovil = ({user}) => {
                     </div>
                     {
                         user === "administrador" ?
-                        <ul class="hmmb-sections">
+                        <ul className="hmmb-sections">
                             <li><NavLink to="/administrador-inicio">Admin Inicio</NavLink></li>
                             <li><NavLink to="/administrador-estadisticas"> Admin Estadísticas</NavLink></li>
                             <li><NavLink to="/administrador-publicaciones/documentos">Admin Publicaciones</NavLink></li>
+                            <li><NavLink onClick={()=>{sessionStorage.clear(); }} to="/login">
+                                Cerrar Sesión   <i style={{margin:'0 0 0 0.5em'}} className="fas fa-sign-out-alt"></i>
+                                </NavLink>
+                            </li>
                         </ul>
                         :
-                        <ul class="hmmb-sections">
+                        <ul className="hmmb-sections">
                             <li><NavLink to="/inicio">Inicio</NavLink></li>
                             <li><NavLink to="/estadisticas">Estadísticas Municipales</NavLink></li>
                             <li><NavLink to="/publicaciones/documentos">Publicaciones</NavLink></li>
@@ -58,7 +62,7 @@ const NavBarMovil = ({user}) => {
                             <li><NavLink to="/ayuda">Ayuda</NavLink></li>
                         </ul>
                     }
-                    <div class="hmmb-footer">
+                    <div className="hmmb-footer">
                         {/* <ul class="hmmbf-legal">
                             <li><a href="">Política de Tratamiento de Datos Personales</a></li>
                             <li><a href="">Reglamento Estudiantil</a></li>
@@ -67,21 +71,21 @@ const NavBarMovil = ({user}) => {
                         </ul> */}
                         <div id="hmmbf-contact">
                             <h5>Contacto</h5>
-                            <ul class="social-links">
-                                <li><a href="" class="icon fab fa-facebook-square"></a></li>
-                                <li><a href="" class="icon fab fa-twitter"></a></li>
-                                <li><a href="" class="icon fab fa-instagram"></a></li>
-                                <li><a href="" class="icon fab fa-youtube"></a></li>
-                                <li><a href="" class="icon fab fa-linkedin"></a></li>
+                            <ul className="social-links">
+                                <li><a href="" className="icon fab fa-facebook-square"></a></li>
+                                <li><a href="" className="icon fab fa-twitter"></a></li>
+                                <li><a href="" className="icon fab fa-instagram"></a></li>
+                                <li><a href="" className="icon fab fa-youtube"></a></li>
+                                <li><a href="" className="icon fab fa-linkedin"></a></li>
                             </ul>
-                            <ul class="contact-list">
+                            <ul className="contact-list">
                                 <li>
-                                    <div class="contact-title">Teléfono</div>
-                                    <div class="contact-info">
-                                        <div class="circle-icon">
-                                            <span class="icon fas fa-phone"></span>
+                                    <div className="contact-title">Teléfono</div>
+                                    <div className="contact-info">
+                                        <div className="circle-icon">
+                                            <span className="icon fas fa-phone"></span>
                                         </div>
-                                        <div class="ci-text">
+                                        <div className="ci-text">
                                             PBX:+ 2 318 8000
                                             <br></br>
                                             Línea gratuita:
@@ -89,28 +93,28 @@ const NavBarMovil = ({user}) => {
                                             01 8000 91 34 35
                                         </div>
                                     </div>
-                                    <div class="contact-directory">
+                                    <div className="contact-directory">
                                         <a href="">Ver Directorio General &gt;</a>
                                     </div>
                                 </li>
                                 <li>
-                                    <div class="contact-title">Correo Electrónico</div>
-                                    <div class="contact-info">
-                                        <div class="circle-icon">
-                                            <span class="icon fas fa-envelope"></span>
+                                    <div className="contact-title">Correo Electrónico</div>
+                                    <div className="contact-info">
+                                        <div className="circle-icon">
+                                            <span className="icon fas fa-envelope"></span>
                                         </div>
-                                        <div class="ci-text">
+                                        <div className="ci-text">
                                             <a href="">buzon@uao.edu.co</a>
                                         </div>
                                     </div>
                                 </li>
                                 <li>
-                                    <div class="contact-title">Dirección de Campus principal</div>
-                                    <div class="contact-info">
-                                        <div class="circle-icon">
-                                            <span class="icon fas fa-university"></span>
+                                    <div className="contact-title">Dirección de Campus principal</div>
+                                    <div className="contact-info">
+                                        <div className="circle-icon">
+                                            <span className="icon fas fa-university"></span>
                                         </div>
-                                        <div class="ci-text">
+                                        <div className="ci-text">
                                             Cll 25#115-85
                                         <br></br>
                                             Km 2 Vía Cali-Jamundi
@@ -118,12 +122,12 @@ const NavBarMovil = ({user}) => {
                                     </div>
                                 </li>
                                 <li>
-                                    <div class="contact-title">Ciudad</div>
-                                    <div class="contact-info">
-                                        <div class="circle-icon">
-                                            <span class="icon fas fa-map-marker-alt"></span>
+                                    <div className="contact-title">Ciudad</div>
+                                    <div className="contact-info">
+                                        <div className="circle-icon">
+                                            <span className="icon fas fa-map-marker-alt"></span>
                                         </div>
-                                        <div class="ci-text">
+                                        <div className="ci-text">
                                             Cali, Colombia
                                             <br></br>
                                             Código Postal: 760030

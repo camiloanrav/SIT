@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 class Card extends React.Component {
     render() {
@@ -35,11 +34,6 @@ class Card extends React.Component {
             </div>
         );
     };
-};
-
-Card.propTypes = {
-    header: PropTypes.string.isRequired,
-    body: PropTypes.element.isRequired,
 };
 
 export default Card;
