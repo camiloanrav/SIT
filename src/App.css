@@ -41,6 +41,10 @@
   .contactoMenu{
     padding-top: 1em;
     padding-bottom: 2em;
+    background: linear-gradient(rgba(255,255,255,0.4), rgba(255,255,255,0.9)), url(../src/background.png);
+    background-position:center;
+    background-repeat:no-repeat;
+    background-size:cover;
   }
 
   .card{
@@ -95,7 +99,7 @@
   }
   
   .tabs{
-    margin-top: 1.5em;
+    margin-top: 0em;
   }
 
   .lista{

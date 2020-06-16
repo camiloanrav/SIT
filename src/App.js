@@ -39,20 +39,21 @@ function App() {
     <Router>
       <div className="App">
           <Switch>
-            <Redirect exact from="/" to="/inicio"/>
-            <Redirect exact from="/publicaciones" to="/publicaciones/documentos"/>
-            <Redirect exact from="/administrador-estadisticas" to="/administrador-estadisticas/modificar-indicadores"/>
-            <Redirect exact from="/administrador-publicaciones" to="/administrador-publicaciones/documentos"/>
+            <Redirect exact from="/" to="/ser/inicio"/>
+            <Redirect exact from="/ser" to="/ser/inicio"/>
+            <Redirect exact from="/ser/publicaciones" to="/ser/publicaciones/documentos"/>
+            <Redirect exact from="/ser/administrador-estadisticas" to="/ser/administrador-estadisticas/modificar-indicadores"/>
+            <Redirect exact from="/ser/administrador-publicaciones" to="/ser/administrador-publicaciones/documentos"/>
             {/* <Redirect exact from="/administrador" to="/administrador/inicio"/> */}
-            <Route exact path="/inicio" component={InicioContainer}/>
-            <Route path="/estadisticas" component={EstadisticasContainer}/>
-            <Route path="/contacto" component={ContactoContainer}/>
-            <Route path="/ayuda" component={AyudaContainer}/>
-            <Route path="/publicaciones" component={PublicacionesContainer}/>
-            <Route path="/login" component={Login}/>
-            <Route path="/administrador-inicio" component={AdminInicio}/>
-            <Route path="/administrador-publicaciones" component={AdminPublicaciones}/>
-            <Route path="/administrador-estadisticas" component={AdminEstadisticas}/>
+            <Route exact path="/ser/inicio" component={InicioContainer}/>
+            <Route path="/ser/estadisticas" component={EstadisticasContainer}/>
+            <Route path="/ser/contacto" component={ContactoContainer}/>
+            <Route path="/ser/ayuda" component={AyudaContainer}/>
+            <Route path="/ser/publicaciones" component={PublicacionesContainer}/>
+            <Route path="/ser/login" component={Login}/>
+            <Route path="/ser/administrador-inicio" component={AdminInicio}/>
+            <Route path="/ser/administrador-publicaciones" component={AdminPublicaciones}/>
+            <Route path="/ser/administrador-estadisticas" component={AdminEstadisticas}/>
             <Route component={NoMatchPage}/>
           </Switch>
         

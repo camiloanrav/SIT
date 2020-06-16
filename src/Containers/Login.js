@@ -58,7 +58,7 @@ const Login = (props) => {
 
     const ProtectedComponent = () => {
         if (sessionStorage.getItem("login")){
-            return <Redirect to='/administrador-inicio'  />
+            return <Redirect to='/ser/administrador-inicio'  />
         }else{
             return null
         }

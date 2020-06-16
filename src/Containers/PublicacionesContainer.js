@@ -16,6 +16,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 
+import background from '../background.png';
+
 
 const PublicacionesContainer = () => {
 
@@ -58,32 +60,35 @@ const PublicacionesContainer = () => {
             <NavBarMovil></NavBarMovil>
 
             <Titulo titulo="Publicaciones"></Titulo>
-            <Tabs setindice={setindice} tab1="Documentos" tab2="Cuentas Económicas del Valle"></Tabs>
-            <div style={{margin:'2em 0em 0.5em 2.5em', display:'flex', flexWrap:'wrap'}} >
-                <FormControl style={{marginBottom:'1.2em'}} component="fieldset">
-                    <FormLabel component="legend">Tipo de busqueda:</FormLabel>
-                        <RadioGroup aria-label="position" name="position" value={tipoBusqueda} onChange={e => setTipoBusqueda(e.target.value)} row>
-                            
-                        <FormControlLabel
-                        value="Titulo"
-                        control={<Radio color="primary" />}
-                        label="Titulo"
-                        labelPlacement="Titulo"
-                        />
+            <div style={{minHeight:'24.2em', padding:'1em 0 0 0', background: `linear-gradient(rgba(255,255,255,0.4), rgba(255,255,255,0.9)), url(${background})`, backgroundPosition:'center', backgroundRepeat:'repeat', backgroundSize:'cover'}}>
+                <Tabs setindice={setindice} tab1="Documentos" tab2="Cuentas Económicas del Valle"></Tabs>
+                <div style={{margin:'2em 0em 0.5em 2.5em', display:'flex', flexWrap:'wrap'}} >
+                    <FormControl style={{marginBottom:'1.2em'}} component="fieldset">
+                        <FormLabel component="legend">Tipo de busqueda:</FormLabel>
+                            <RadioGroup aria-label="position" name="position" value={tipoBusqueda} onChange={e => setTipoBusqueda(e.target.value)} row>
+                                
+                            <FormControlLabel
+                            value="Titulo"
+                            control={<Radio color="primary" />}
+                            label="Titulo"
+                            labelPlacement="Titulo"
+                            />
 
-                        <FormControlLabel
-                        value="Autor"
-                        control={<Radio color="primary" />}
-                        label="Autor"
-                        labelPlacement="Autor"
-                        />
-                    </RadioGroup>
-                </FormControl>
-                <Buscador tipoBusqueda={tipoBusqueda} setBuscar={setBuscar}></Buscador>
-                
+                            <FormControlLabel
+                            value="Autor"
+                            control={<Radio color="primary" />}
+                            label="Autor"
+                            labelPlacement="Autor"
+                            />
+                        </RadioGroup>
+                    </FormControl>
+                    <Buscador tipoBusqueda={tipoBusqueda} setBuscar={setBuscar}></Buscador>
+                    
+                </div>
+                <div style={{backgroundColor:'white'}}>
+                    <Tabla isAdmin={false} /* contenido={cargando ? 'Cargando...' : renderInfo(datos)} */ datos={filtrado/* ===[]?filtrado:datos */} /* datos={datos} */></Tabla>
+                </div>
             </div>
-            
-            <Tabla isAdmin={false} /* contenido={cargando ? 'Cargando...' : renderInfo(datos)} */ datos={filtrado/* ===[]?filtrado:datos */} /* datos={datos} */></Tabla>
             <Footer></Footer>
         </div>
     );

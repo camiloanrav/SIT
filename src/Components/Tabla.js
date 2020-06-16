@@ -195,7 +195,13 @@ const Tabla = ({ datos, isAdmin, tab, setDatos }) => {
                                 <th scope="col">Acciones</th>
                             </tr>
                         </thead>
-                        <FilasTabla admin={isAdmin} dataPerPage={dataPerPage} handleClickOpen={handleClickOpen}></FilasTabla>
+                        {
+                            dataPerPage.length !== 0 ?
+                            <FilasTabla admin={isAdmin} dataPerPage={dataPerPage} handleClickOpen={handleClickOpen}></FilasTabla>
+                            :
+                            <div>Cargando datos...</div>
+                        }
+                        
                     </table>
                     {
                         pageCount !== 1 ?

@@ -45,21 +45,21 @@ const NavBarMovil = ({user}) => {
                     {
                         user === "administrador" ?
                         <ul className="hmmb-sections">
-                            <li><NavLink to="/administrador-inicio">Admin Inicio</NavLink></li>
-                            <li><NavLink to="/administrador-estadisticas"> Admin Estadísticas</NavLink></li>
-                            <li><NavLink to="/administrador-publicaciones/documentos">Admin Publicaciones</NavLink></li>
-                            <li><NavLink onClick={()=>{sessionStorage.clear(); }} to="/login">
+                            <li><NavLink to="/ser/administrador-inicio">Admin Inicio</NavLink></li>
+                            <li><NavLink to="/ser/administrador-estadisticas"> Admin Estadísticas</NavLink></li>
+                            <li><NavLink to="/ser/administrador-publicaciones/documentos">Admin Publicaciones</NavLink></li>
+                            <li><NavLink onClick={()=>{sessionStorage.clear(); }} to="/ser/login">
                                 Cerrar Sesión   <i style={{margin:'0 0 0 0.5em'}} className="fas fa-sign-out-alt"></i>
                                 </NavLink>
                             </li>
                         </ul>
                         :
                         <ul className="hmmb-sections">
-                            <li><NavLink to="/inicio">Inicio</NavLink></li>
-                            <li><NavLink to="/estadisticas">Estadísticas Municipales</NavLink></li>
-                            <li><NavLink to="/publicaciones/documentos">Publicaciones</NavLink></li>
-                            <li><NavLink to="/contacto">Contacto</NavLink></li>
-                            <li><NavLink to="/ayuda">Ayuda</NavLink></li>
+                            <li><NavLink to="/ser/inicio">Inicio</NavLink></li>
+                            <li><NavLink to="/ser/estadisticas">Estadísticas Municipales</NavLink></li>
+                            <li><NavLink to="/ser/publicaciones/documentos">Publicaciones</NavLink></li>
+                            <li><NavLink to="/ser/contacto">Contacto</NavLink></li>
+                            <li><NavLink to="/ser/ayuda">Ayuda</NavLink></li>
                         </ul>
                     }
                     <div className="hmmb-footer">

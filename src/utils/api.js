@@ -2,8 +2,12 @@ import axios from 'axios';
 
 /* const URL_base = 'http://localhost/serpacificows';
 const URL_base_correo = 'http://localhost'; */
-const URL_base = 'http://172.16.3.67/serpacificows';
-const URL_base_correo = 'http://172.16.3.67';
+
+const URL_base = 'http://45.5.188.65/serpacificows';
+const URL_base_correo = 'http://45.5.188.65';
+
+/* const URL_base = 'http://127.0.0.1/serpacificows';
+const URL_base_correo = 'http://127.0.0.1'; */
 
 export function getData(path) {
   return axios.get(URL_base + path).then(response => {

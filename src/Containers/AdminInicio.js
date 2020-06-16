@@ -15,7 +15,7 @@ const AdminInicio = () => {
         if (sessionStorage.getItem("login")){
             return null
         }else{
-            return <Redirect to='/login'  />
+            return <Redirect to='/ser/login'  />
         }
     }
 

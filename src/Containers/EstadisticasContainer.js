@@ -1,1069 +1,434 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import axios from "axios";
+import React, {useState, useEffect} from 'react';
 
-import Footer from "../Components/Footer";
 import NavBarDesktop from "../Components/NavBarDesktop";
 import NavBarMovil from "../Components/NavBarMovil";
-import Excel from "../Components/Excel";
+import Footer from "../Components/Footer";
 
+import { Bar } from "react-chartjs-2";
+import { Line } from "react-chartjs-2";
 import Select from "react-select";
 
-import { Line } from "react-chartjs-2";
-import { Doughnut } from "react-chartjs-2";
-import { Bar } from "react-chartjs-2";
+import Button from '@material-ui/core/Button';
+import { makeStyles } from '@material-ui/core/styles';
+import LinearProgress from '@material-ui/core/LinearProgress';
+
+import {getData} from '../utils/api';
+
+import background from '../background.png';
+
+import EqualizerIcon from '@material-ui/icons/Equalizer';
+import ShowChartIcon from '@material-ui/icons/ShowChart';
+import CreateIcon from '@material-ui/icons/Create';
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        marginTop: theme.spacing(5),
+        marginLeft: theme.spacing(10),
+        marginRight: theme.spacing(10),
+    },
+}));
+
+const EstadisticasContainer = () => {
+    const [indicadores, setIndicadores] = useState([]);
+    const [indicadorSeleccionado, setIndicadorSeleccionado] = useState(null);
+    const [territorios, setTerritorios] = useState([]);
+    const [territorioSeleccionado, setTerritorioSeleccionado] = useState(null);
+    const [periodos, setPeriodos] = useState([]);
+    const [periodoSeleccionado, setPeriodoSeleccionado] = useState(null);
+    const [graficar, setGraficar] = useState(false);
+    const [datosGrafica, setDatosGrafica] = useState(null);
+    const [botonIndicador, setBotonIndicador] = useState(false);
+    const [botonTerritorio, setBotonTerritorio] = useState(false);
+    const [botonPeriodo, setBotonPeriodo] = useState(false);
+
+    const [graficaBarras, setGraficaBarras] = useState(true);
+    const [graficaLineas, setGraficaLineas] = useState(false);
 
 
-var optionsDims = [];
-var optionsCats = [];
-var optionsSubcats = [];
-var optionsIndicas = [];
-var optionsSubniv1 = [];
-var optionsSubniv2 = [];
-var optionsSubniv3 = [];
-var optionsSubniv4 = [];
-var optionsTerris = [];
-var optionsPeriodo = [];
-var arrEjes = ['January'];
-var arrDatos = [95];
-var arrPrueba = ["Nada"];
-var territorios = [];
-var periodos = [];
-var arrPeriodos = ['2010'];
-var datosPruebas = [];
-var promises = [];
-var jsonFinal = {};
-var acumulador = [];
+    const [unidad, setUnidad] = useState(null);
 
-var datos = {
-    labels: arrEjes,
-    datasets: [
-        {      
-            label: 'Rainfall',
-            backgroundColor: 'rgba(75,192,192,1)',
-            borderColor: 'rgba(0,0,0,1)',
-            borderWidth: 2,
-            data: arrDatos
-        }
-    ]
-}
+    const[cargando, setCargando] = useState(false);
 
-var wepaje = {
-    labels: arrEjes,
-    datasets: [
-        {             
-            label: 'Rainfall',
-            backgroundColor: 'rgba(75,192,192,1)',
-            borderColor: 'rgba(0,0,0,1)',
-            borderWidth: 2,
-            data: arrDatos
-        }
-    ]
-}
+    const classes = useStyles();
 
-var datosMultiples = {
-    labels: arrEjes,
-    datasets: arrPrueba
-}
+    useEffect(()=>{
+        getIndicadores();
+    },[]);
 
-class EstadisticasContainer extends Component {
+    useEffect(()=>{
+        getIndicadores();
+    },[]);
 
-
-    // Declara una nueva variable de estado, la cual llamaremos “count”
-    // const [gradient, setGradient] = useState("");
-    constructor(props) {
-        super(props);
-        this.myRef = React.createRef();
-        this.state = {
-            espera: true,
-            descripcion: null,
-            nombre: null,
-            valor: null,
-            dimensiones: [],
-            selectedOption: null,
-            selectedOption2: null,
-            seleccionadoDimension: null,
-            opcionesDimensiones: optionsDims,
-            estadoCategorias: true,
-            seleccionadoCategorias: null,
-            opcionesCategorias: optionsCats,
-            estadoSubcategorias: true,
-            seleccionadoSubcategorias: null,
-            opcionesSubcategorias: optionsSubcats,
-            estadoIndicadores: true,
-            seleccionadoIndicadores: null,
-            opcionesIndicadores: optionsIndicas,
-            estadoSubniv1: true,
-            seleccionadoSubniv1: null,
-            opcionesSubniv1: optionsSubniv1,
-            estadoSubniv2: true,
-            seleccionadoSubniv2: null,
-            opcionesSubniv2: optionsSubniv2,
-            estadoSubniv3: true,
-            seleccionadoSubniv3: null,
-            opcionesSubniv3: optionsSubniv3,
-            estadoSubniv4: true,
-            seleccionadoSubniv4: null,
-            opcionesSubniv4: optionsSubniv4,
-            estadoTerris: true,
-            seleccionadoTerris: null,
-            opcionesTerris: optionsTerris,
-            estadoPeriodo: true,
-            seleccionadoPeriodo: null,
-            opcionesPeriodo: optionsPeriodo,
-            idSeleccionada: null,
-            indicadorSeleccionado: null,
-            estadoGrafica: true,
-            multiTerri: null,
-            multiPeriodo: null,
-            estadoBoton: true,
-            pintar: null,
-            informativo: "Una DIMENSIÓN es el componente macro en donde se agrupan las diferentes categorias.", 
-            estadoInformativo: false,
-            unidad: null,
-            fuente: null,
-            estadoLimpiar:true,
-            estadoGraficaLinea:true,
-            estadoFuente: true,
-            estadoTextoNo: true
-        };
-
-        this.cambioDimensiones = seleccionadoDimension => {
-            this.setState({
-                seleccionadoDimension
-            }, () => {
-                console.log(`Dimension Seleccionada:`, this.state.seleccionadoDimension.value);
-                this.cargarCats();
-            });
-        };
-
-        this.cambioCategorias = seleccionadoCategorias => {
-            this.setState({
-                seleccionadoCategorias
-            }, () => {
-                console.log(`Categoria seleccionada:`, this.state.seleccionadoCategorias.value)
-                this.cargarSubcats();
-            });
-
-        };
-
-        this.cambioSubcategorias = seleccionadoSubcategorias => {
-            this.setState({
-                seleccionadoSubcategorias
-            }, () => {
-                console.log(`Subcategoria seleccionada:`, this.state.seleccionadoSubcategorias.value);
-                this.cargarIndicas();
-            });
-        };
-
-        this.cambioIndicadores = seleccionadoIndicadores => {
-            this.setState({
-                seleccionadoIndicadores
-            }, () => {
-                console.log(`Indicador seleccionado:`, this.state.seleccionadoIndicadores.value)
-                this.cargarSubniv1();
-            });
-        };
-
-        this.cambioSubniv1 = seleccionadoSubniv1 => {
-            this.setState({
-                seleccionadoSubniv1
-            }, () => {
-                console.log(`Subnivel 1 seleccionado:`, this.state.seleccionadoSubniv1.value);
-                this.cargarSubniv2();
-            });
-        };
-
-        this.cambioSubniv2 = seleccionadoSubniv2 => {
-            this.setState({
-                seleccionadoSubniv2
-            }, () => {
-                console.log(`Subnivel 2 seleccionado:`, this.state.seleccionadoSubniv2.value);
-                this.cargarSubniv3();
-            });
-        };
-
-        this.cambioSubniv3 = seleccionadoSubniv3 => {
-            this.setState({
-                seleccionadoSubniv3
-            }, () => {
-                console.log(`Subnivel 3 seleccionado:`, this.state.seleccionadoSubniv3.value);
-                this.cargarSubniv4();
-            });
-        };
-
-        this.cambioSubniv4 = seleccionadoSubniv4 => {
-            this.setState({
-                seleccionadoSubniv4
-            }, () => {
-                console.log(`Subnivel 4 seleccionado:`, this.state.seleccionadoSubniv4.value);
-                this.acumularTerris();
-            });
-        };
-
-        this.cambioTerris = seleccionadoTerris => {
-            this.setState({
-                seleccionadoTerris
-            }, () => {
-                console.log(`Territorio seleccionado:`, this.state.seleccionadoTerris.value);
-                this.cargarPeriodo();
-            });
-        };
-
-        this.cambioPeriodo = seleccionadoPeriodo => {
-            this.setState({
-                seleccionadoPeriodo
-            }, () => {
-                console.log(`Valor del periodo:`, this.state.seleccionadoPeriodo.value);
-                this.pintarGrafico();
-            });
-        };
-
-        this.acumularTerritorios = seleccionadoTerris => {
-            this.setState({
-                seleccionadoTerris
-            }, () => {
-                console.log(`Territorios acumulados:`, territorios);
-                //this.acumularTerris();
-                this.acumularTerris();
-                this.cargarPeriodo();
-            });
-        };
-
-        this.acumularPeriodos = seleccionadoPeriodo => {
-            this.setState({
-                seleccionadoPeriodo
-            }, () => {
-                console.log(`Periodos acumulados:`, periodos);
-                this.acumularPeris();
-                this.buscarUnidad();
-                this.mostrarBoton();
-            });
-            //this.pintarGrafico();
-        };
-
-        this.showButton = estadoBoton => {
-            this.setState({
-                estadoBoton: false
-            }, () => {
-                console.log("Prueba");
-                this.pintarGrafico();
-            });
-            //this.pintarGrafico();
-        };
-
-        this.cambiarGrafico = estadoBoton => {
-            this.setState({
-                estadoGrafica: true,
-                estadoGraficaLinea: false
-            }, () => {
-                console.log("Cambiando Grafico");
-                 });
-       
-        };
-
-        this.cambiarGraficoBarras = estadoBoton => {
-            this.setState({
-                estadoGrafica: false,
-                estadoGraficaLinea: true
-            }, () => {
-                console.log("Cambiando Grafico");
-                 });
-       
-        };
-
-        this.limpiar = estadoLimpiar => {
-            this.setState({
-                estadoLimpiar: true
-            }, () => {              
-                this.limpiarTodo();
-            });
-            //this.pintarGrafico();
-        };
-
-        this.graficar = multiTerri => {
-            this.setState({
-                estadoGrafica: false,
-                estadoFuente: false
-            }, () => {
-                console.log("Final");
-            });
-        };
-
-        this.cambioCategorias = this.cambioCategorias.bind(this);
-        this.cambioSubcategorias = this.cambioSubcategorias.bind(this);
-        this.cambioIndicadores = this.cambioIndicadores.bind(this);
-        this.cambioSubniv1 = this.cambioSubniv1.bind(this);
-        this.cambioSubniv2 = this.cambioSubniv2.bind(this);
-        this.cambioSubniv3 = this.cambioSubniv3.bind(this);
-        this.graficar = this.graficar.bind(this);
-
+    const getUnidad = () => {
+        getData('/unidad/search.php?id='+indicadorSeleccionado.value).then(data => {
+            setUnidad(data[0].nombre);
+        }).catch(error => console.log(error.data));
     }
 
-    render() {
-        const {
-            espera,
-            opcionesDimensiones,
-            seleccionadoDimension,
-            estadoCategorias,
-            opcionesCategorias,
-            seleccionadoCategorias,
-            estadoSubcategorias,
-            opcionesSubcategorias,
-            seleccionadoSubcategorias,
-            estadoIndicadores,
-            opcionesIndicadores,
-            seleccionadoIndicadores,
-            estadoSubniv1,
-            opcionesSubniv1,
-            seleccionadoSubniv1,
-            estadoSubniv2,
-            opcionesSubniv2,
-            seleccionadoSubniv2,
-            estadoSubniv3,
-            opcionesSubniv3,
-            seleccionadoSubniv3,
-            estadoSubniv4,
-            opcionesSubniv4,
-            seleccionadoSubniv4,
-            estadoTerris,
-            opcionesTerris,
-            seleccionadoTerris,
-            estadoPeriodo,
-            opcionesPeriodo,
-            seleccionadoPeriodo,
-            idSeleccionada,
-            indicadorSeleccionado,
-            estadoGrafica,
-            territorios,
-            multiTerri,
-            multiPeriodo,
-            estadoBoton,
-            pintar,
-            informativo,
-            estadoInformativo, 
-            unidad,
-            fuente,
-            estadoLimpiar,
-            estadoGraficaLinea,
-            estadoFuente, 
-            estadoTextoNo
+    const getIndicadores = () => {
+        setCargando(true);
+        getData('/indicador/all.php').then(data => {
+            /* console.log(data); */
 
-        } = this.state;
-
-        return (
-            <div>
-                <NavBarDesktop></NavBarDesktop>
-                <NavBarMovil></NavBarMovil>
-                <div style={{ display: "flex" , marginBottom:"20em "}}>
-
-                    {/*-----------Dropdown de dimensiones------------*/}
-                    <div style={{
-                        border: "1px solid gray", padding: "2px", boxShadow: "2px 2px 5px 1px rgba(0,0,0,0.3)", width: "35em",
-                        textAlign: "left", borderRadius: "5px", margin: "2em"
-                    }}>
-                        <div style={
-                            {
-                                width: "25em",
-                                textAlign: "left",
-                                margin: "2em"
-                            }
-                        }>
-                            <Select value={seleccionadoDimension}
-                                onChange={
-                                    this.cambioDimensiones
-                                }
-                                options={opcionesDimensiones}
-                                isSearchable={true}
-                                placeholder={"Dimension"}
-                                captureMenuScroll={true} />
-                        </div>
-
-                        {/*-----------Dropdown de categorias------------*/}
-                        <div style={
-                            {
-                                width: "25em",
-                                textAlign: "left",
-                                margin: "2em"
-                            }
-                        }> {estadoCategorias ? '' :
-                            <Select value={seleccionadoCategorias}
-                                onChange={
-                                    this.cambioCategorias
-                                }
-                                options={opcionesCategorias}
-                                isSearchable={true}
-                                placeholder={"Categoria"}
-                                captureMenuScroll={true} />}
-                        </div>
-                        {/*-----------Dropdown de subcategorias------------*/}
-                        <div style={
-                            {
-                                width: "25em",
-                                textAlign: "left",
-                                margin: "2em"
-                            }
-                        }> {estadoSubcategorias ? '' :
-                            <Select value={seleccionadoSubcategorias}
-                                onChange={
-                                    this.cambioSubcategorias
-                                }
-                                options={opcionesSubcategorias}
-                                isSearchable={true}
-                                placeholder={"Subcategoria"}
-                                captureMenuScroll={true} />}
-                        </div>
-
-                        {/*-----------Dropdown de indicadores------------*/}
-                        <div style={
-                            {
-                                width: "25em",
-                                textAlign: "left",
-                                margin: "2em"
-                            }
-                        }> {estadoIndicadores ? '' :
-                            <Select value={seleccionadoIndicadores}
-                                onChange={
-                                    this.cambioIndicadores
-                                }
-                                options={opcionesIndicadores}
-                                isSearchable={true}
-                                placeholder={"Indicador"}
-                                captureMenuScroll={true} />}
-                        </div>
-
-                        {/*-----------Dropdown de indicadores nivel 1------------*/}
-                        <div style={
-                            {
-                                width: "25em",
-                                textAlign: "left",
-                                margin: "2em"
-                            }
-                        }> {estadoSubniv1 ? '' :
-                            <Select value={seleccionadoSubniv1}
-                                onChange={
-                                    this.cambioSubniv1
-                                }
-                                options={opcionesSubniv1}
-                                isSearchable={true}
-                                placeholder={"Indicador primer nivel"}
-                                captureMenuScroll={true} />}
-                        </div>
-
-                        {/*-----------Dropdown de indicadores nivel 2------------*/}
-                        <div style={
-                            {
-                                width: "25em",
-                                textAlign: "left",
-                                margin: "2em"
-                            }
-                        }> {estadoSubniv2 ? '' :
-                            <Select value={seleccionadoSubniv2}
-                                onChange={
-                                    this.cambioSubniv2
-                                }
-                                options={opcionesSubniv2}
-                                isSearchable={true}
-                                placeholder={"Indicador segundo nivel"}
-                                captureMenuScroll={true} />}
-                        </div>
-                        {/*-----------Dropdown de indicadores nivel 3------------*/}
-                        <div style={
-                            {
-                                width: "25em",
-                                textAlign: "left",
-                                margin: "2em"
-                            }
-                        }> {estadoSubniv3 ? '' :
-                            <Select value={seleccionadoSubniv3}
-                                onChange={
-                                    this.cambioSubniv3
-                                }
-                                options={opcionesSubniv3}
-                                isSearchable={true}
-                                placeholder={"Indicador tercer nivel"}
-                                captureMenuScroll={true} />}
-                        </div>
-
-                        {/*-----------Dropdown de indicadores nivel 4------------*/}
-                        <div style={
-                            {
-                                width: "25em",
-                                textAlign: "left",
-                                margin: "2em"
-                            }
-                        }> {estadoSubniv4 ? '' :
-                            <Select value={seleccionadoSubniv4}
-                                onChange={
-                                    this.cambioSubniv4
-                                }
-                                options={opcionesSubniv4}
-                                isSearchable={true}
-                                placeholder={"Indicador cuarto nivel"}
-                                captureMenuScroll={true} />}
-                        </div>
-
-                        {/*-----------Dropdown multiple de territorios------------*/}
-                        <div style={
-                            {
-                                width: "25em",
-                                textAlign: "left",
-                                margin: "2em"
-                            }
-                        }>{estadoTerris ? '' :
-                            <Select
-                                value={seleccionadoTerris}
-                                options={opcionesTerris}
-                                isSearchable={true}
-                                isMulti
-                                onChange={
-                                    this.acumularTerritorios
-                                }
-                                placeholder={"Escoja territorios"}
-                                captureMenuScroll={true} />}
-                        </div>
-
-                        {/*-----------Dropdown multiple de periodos------------*/}
-                        <div style={
-                            {
-                                width: "25em",
-                                textAlign: "left",
-                                margin: "2em"
-                            }
-                        }>{estadoPeriodo ? '' :
-                            <Select
-                                value={seleccionadoPeriodo}
-                                options={opcionesPeriodo}
-                                isSearchable={true}
-                                isMulti
-                                onChange={
-                                    this.acumularPeriodos
-                                }
-                                placeholder={"Escoja periodos"}
-                                captureMenuScroll={true} />}
-                        </div>
-                        {/*-----------Botón Graficar------------*/}
-                        <div style={
-                            {
-                                width: "25em",
-                                textAlign: "left",
-                                margin: "2em"
-                            }
-                        }>{estadoBoton ? '' :
-                            <button className="button-card-uao " onClick={this.showButton} >
-                                Graficar
-                          </button>}
-                          {estadoLimpiar ? '':
-                            <button style={{marginLeft:"2em", marginRight:"2em"}}className="button-card-uao " onClick={this.limpiar}>
-                            Limpiar
-                            </button>
-                          }</div>
-                    </div>
-                    {/* Caja izquierda hasta aquí */}
-
-                    {/*-----------Información------------*/}
-                    {estadoInformativo ? '' : <div style={
-                        {   
-                            whiteSpace:"pre-wrap",
-                            borderRadius:"5px",
-                            width:"200%",
-                            backgroundColor:"#CCD8E8",
-                            /*background: "#ada996", 
-                            background: "-webkit-linear-gradient(to right, #ada996, #f2f2f2, #dbdbdb, #eaeaea)", 
-                            background: "linear-gradient(to right, #ada996, #f2f2f2, #dbdbdb, #eaeaea)", */
-                            textAlign: "right",
-                            margin: "auto auto",
-                            marginLeft: "5em",                
-                            padding:"2em",
-                            fontSize:"1.2em",
-                            textAlign:"left"                            
-                        }
-                    }> {informativo}
-                       </div> }
-
-                    {/*----Texto de cuando no se puede graficar*/}               
-
-                  
-                    {estadoTextoNo ? '' :  
-                    <blockquote class="feature-text" >
-                    <div>Estos datos son cualitativos, solo estan disponibles para descarga</div>
-
-                </blockquote>}  
-
-
-                    {/*-----------Grafica que se genera------------*/}
-                    <div style={
-                        {
-                            //display: "flex",
-                            width: "50em",
-                            textAlign: "left",
-                            margin:"auto auto",
-                            marginLeft: "2em",
-                            textAlign:"center"
-                        }
-                    }>
-                    {estadoGrafica ? '' :
-                            <div style={
-                                {
-                                    textAlign: "left",
-                                    margin: "0em",
-                                    marginLeft: "1em"
-                                }
-                            }>
-                    
-                    <button className="button-card-uao " onClick={this.cambiarGrafico} >
-                        Ver Como Lineas
-                    </button> </div>}
-                    {estadoGraficaLinea ? '' :
-                            <div style={
-                                {
-                                    textAlign: "left",
-                                    margin: "0em",
-                                    marginLeft: "1em"
-                                }
-                            }>
-                    
-                    <button className="button-card-uao " onClick={this.cambiarGraficoBarras} >
-                        Ver Como Barras
-                    </button> </div>}
-                        {estadoGrafica ? '' : <Bar
-                        data={jsonFinal}
-                        options={{
-                            title: {
-                                display: true,
-                                text: indicadorSeleccionado,
-                                fontSize: 20
-                            },
-                            scales: {
-                                yAxes: [{                            
-                                    ticks: {
-                                        beginAtZero: true                                   
-                                    },
-                                    scaleLabel:{
-                                        display: true,
-                                        labelString: unidad
-                                    }
-                                }],
-                                xAxes: [{
-                                    scaleLabel:{
-                                        display: true,
-                                        labelString: "Años"
-                                    }
-                                }]
-                            },
-                            animation: {
-                                duration: 1000
-                            },
-                            legend: {
-                                display: true,                                
-                                position: 'right'
-                            }
-                        }}                     
-                        
-                    /> 
-                        }
-
-                        {/*----------------Grafica de Lineas-----*/}
-
-                        {estadoGraficaLinea ? '' : <Line
-                        data={jsonFinal}
-                        options={{
-                            title: {
-                                display: true,
-                                text: indicadorSeleccionado,
-                                fontSize: 20
-                            },
-                            scales: {
-                                yAxes: [{                            
-                                    ticks: {
-                                        beginAtZero: true                                   
-                                    },
-                                    scaleLabel:{
-                                        display: true,
-                                        labelString: unidad
-                                    }
-                                }],
-                                xAxes: [{
-                                    scaleLabel:{
-                                        display: true,
-                                        labelString: "Años"
-                                    }
-                                }]
-                            },
-                            animation: {
-                                duration: 1000
-                            },
-                            legend: {
-                                display: true,                                
-                                position: 'right'
-                            }
-                        }}                     
-                        
-                    /> 
-                        }
-                        {/*----Fuente datos----*/}
-
-                        {estadoFuente ? '':  <div style={
-                        {
-                            textAlign: "left",
-                            margin: "0em",
-                            marginLeft: "1em"
-                        }
-                    }><i><b>Fuente: </b>{fuente}</i></div>}
-                        {estadoFuente ? '' : <Excel datos={arrPrueba} years={jsonFinal.labels}></Excel>}
-                    </div>                   
-                </div>
-                <Footer ></Footer>
-            </div>
-
-        );
-    }
-
-    async componentDidMount() {
-
-        const array = [];
-        datos = "";
-        axios.get("http://172.16.3.67/serpacificows/dimension/all.php").then(response => {
-            let daticos = response.data;
-            optionsDims = daticos.map(getParsedDimension);
-            this.setState({ opcionesDimensiones: optionsDims });
-        }).catch(error => console.log(error.response));
-    }
-
-    cargarCats() {
-        let idSearch = this.state.seleccionadoDimension.value;
-        axios.get("http://172.16.3.67/serpacificows/categoria/search.php?id=" + idSearch).then(response => {
-            let daticosCat = response.data;
-            optionsCats = daticosCat.map(getParsedCategories);
-            this.setState({ seleccionadoTerris:null, seleccionadoPeriodo:null, seleccionadoCategorias:null, opcionesCategorias: optionsCats, estadoCategorias: false, estadoSubcategorias: true, estadoIndicadores: true, estadoSubniv1: true, estadoSubniv2: true, estadoSubniv3: true, estadoSubniv4: true, estadoGrafica:true ,estadoTerris: true, estadoPeriodo: true, informativo: "Las CATEGORIAS son un conjunto de objetos agrupados normalmente con un criterio de máxima homogeneidad. \n Corresponde a la categoría de análisis que contiene subcategorías y los indicadores."});
-        }).catch(error => console.log(error.response));
-    }
-
-    cargarSubcats() {
-        let idSearch = this.state.seleccionadoCategorias.value;
-        axios.get("http://172.16.3.67/serpacificows/categoria/subcat.php?id=" + idSearch).then(response => {
-            let daticosCat = response.data;
-            optionsSubcats = daticosCat.map(getParsedCategories);
-            this.setState({ seleccionadoTerris:null, seleccionadoPeriodo:null, seleccionadoSubcategorias:null, opcionesSubcategorias: optionsSubcats, estadoSubcategorias: false, estadoIndicadores: true, estadoSubniv1: true, estadoSubniv2: true, estadoSubniv3: true, estadoSubniv4: true, estadoGrafica:true,estadoTerris: true, estadoPeriodo: true, informativo: "Una SUBCATEGORIA es un agrupamiento de objetos en conjuntos homogéneos de acuerdo con criterios preestablecidos y en función del uso que tendrá la subcategoría. \n Corresponde a la desagregación que tiene una categoría de análisis y en las cuales se encontraran los indicadores." });
-        }).catch(error => console.log(error.response));
-    }
-
-    cargarIndicas() {
-        let idSearch = this.state.seleccionadoSubcategorias.value;
-        axios.get("http://172.16.3.67/serpacificows/indicador/search.php?id=" + idSearch).then(response => {
-            let daticosCat = response.data;
-            optionsIndicas = daticosCat.map(getParsedIndicas);
-            this.setState({ seleccionadoTerris:null, seleccionadoPeriodo:null, seleccionadoIndicadores:null, opcionesIndicadores: optionsIndicas, estadoIndicadores: false, estadoSubniv1: true, estadoSubniv2: true,estadoGrafica:true,estadoSubniv3: true, estadoSubniv4: true, estadoTerris: true, estadoPeriodo: true, informativo: "Los INDICADORES son datos o información que sirve para conocer o valorar las categorías y subcategorías y la intensidad de un hecho o para determinar su evolución futura. Es decir, aquellos medibles con base en información secundaria. \n \n  Los indicadores son jerárquicos y se presentan indicadores de nivel 1, nivel 2, nivel 3 y hasta nivel 4."});
-        }).catch(error => {
-            console.log(error.response)
-            this.setState({ idSeleccionada: idSearch });
-            this.buscarUnidad(idSearch);
-            this.buscarFuente(idSearch);
-            this.acumularTerris();
-        });
-    }
-
-    cargarSubniv1() {
-        let idSearch = this.state.seleccionadoIndicadores.value;
-        axios.get("http://172.16.3.67/serpacificows/indicador/subniv.php?id=" + idSearch).then(response => {
-            let daticosCat = response.data;
-            optionsSubniv1 = daticosCat.map(getParsedIndicas);
-            this.setState({seleccionadoTerris:null, seleccionadoPeriodo:null, opcionesSubniv1: optionsSubniv1, estadoSubniv1: false, estadoSubniv2: true, estadoSubniv3: true, estadoSubniv4: true, estadoTerris: true, estadoPeriodo: true, estadoGrafica:true });
-        }).catch(error => {
-            console.log(error.response);
-            this.setState({seleccionadoTerris:null, seleccionadoPeriodo:null, idSeleccionada: idSearch, indicadorSeleccionado: this.state.seleccionadoIndicadores.label, estadoGrafica:true });
-            this.buscarUnidad(idSearch);
-            this.buscarFuente(idSearch);
-            this.acumularTerris();
-        });
-    }
-
-    cargarSubniv2() {
-        let idSearch = this.state.seleccionadoSubniv1.value;
-        axios.get("http://172.16.3.67/serpacificows/indicador/subniv.php?id=" + idSearch).then(response => {
-            let daticosCat = response.data;
-            optionsSubniv2 = daticosCat.map(getParsedIndicas);
-            this.setState({seleccionadoTerris:null, seleccionadoPeriodo:null, opcionesSubniv2: optionsSubniv2, estadoSubniv2: false, estadoSubniv3: true, estadoSubniv4: true, estadoTerris: true, estadoPeriodo: true, estadoGrafica:true, estadoFuente:true, estadoGraficaLinea:true });
-        }).catch(error => {
-            console.log(error.response);
-            this.setState({seleccionadoTerris:null, seleccionadoPeriodo:null, idSeleccionada: idSearch, indicadorSeleccionado: this.state.seleccionadoSubniv1.label, estadoGrafica:true, estadoFuente:true, estadoGraficaLinea:true });
-            this.buscarUnidad(idSearch);
-            this.buscarFuente(idSearch);
-            this.acumularTerris();           
-        });
-    }
-
-    cargarSubniv3() {
-        let idSearch = this.state.seleccionadoSubniv2.value;
-        axios.get("http://172.16.3.67/serpacificows/indicador/subniv.php?id=" + idSearch).then(response => {
-            let daticosCat = response.data;
-            optionsSubniv3 = daticosCat.map(getParsedIndicas);
-            this.setState({seleccionadoPeriodo:null, opcionesSubniv3: optionsSubniv3, estadoSubniv3: false, estadoSubniv4: true, estadoTerris: true, estadoPeriodo: true, estadoGrafica:true, estadoFuente:true, estadoGraficaLinea:true });
-        }).catch(error => {
-            console.log(error.response)
-            this.setState({seleccionadoPeriodo:null, idSeleccionada: idSearch, indicadorSeleccionado: this.state.seleccionadoSubniv2.label, estadoGrafica:true, estadoFuente:true, estadoGraficaLinea:true });
-            this.buscarUnidad(idSearch);
-            this.buscarFuente(idSearch);
-            this.acumularTerris();           
-        });
-    }
-
-    cargarSubniv4() {
-        let idSearch = this.state.seleccionadoSubniv3.value;
-        axios.get("http://172.16.3.67/serpacificows/indicador/subniv.php?id=" + idSearch).then(response => {
-            let daticosCat = response.data;
-            optionsSubniv4 = daticosCat.map(getParsedIndicas);
-             this.buscarUnidad(idSearch);
-             this.buscarFuente(idSearch);
-            this.setState({seleccionadoPeriodo:null, opcionesSubniv4: optionsSubniv4, estadoSubniv4: false, estadoTerris: true, estadoPeriodo: true, indicadorSeleccionado: this.state.seleccionadoSubniv3.label, estadoGrafica:true, estadoFuente:true, estadoGraficaLinea:true });
-        }).catch(error => console.log(error.response));
-    }
-
-    cargarTerris() {
-        let idSearch = this.state.idSeleccionada;
-        console.log("PRUEBA");
-        axios.get("http://172.16.3.67/serpacificows/indicaterri/search.php?id=" + idSearch).then(response => {
-            let daticosCat = response.data;
-            optionsTerris = daticosCat.map(getParsedTerris);
-            this.setState({ opcionesTerris: optionsTerris, estadoTerris: false, estadoPeriodo: true, estadoGrafica:true, estadoFuente:true, estadoGraficaLinea:true });
-        }).catch(error => console.log(error.response));
-    }
-
-    cargarPeriodo() {
-        console.log(this.state.seleccionadoTerris);
-        let idTerritorio = this.state.seleccionadoTerris[0].value;
-        let idIndicador = this.state.idSeleccionada;
-        axios.get("http://172.16.3.67/serpacificows/periodo/search.php?id=" + idIndicador + "&dane=" + idTerritorio).then(response => {
-            let daticosCat = response.data;
-            optionsPeriodo = daticosCat.map(getParsedPeriodo);
-            this.setState({ opcionesPeriodo: optionsPeriodo, estadoPeriodo: false, estadoGrafica:true });
-        }).catch(error => console.log(error.response));
-    }
-
-    acumularTerris() {
-        let idSearch = this.state.idSeleccionada;
-        axios.get("http://172.16.3.67/serpacificows/indicaterri/search.php?id=" + idSearch).then(response => {
-            let daticosCat = response.data;
-            optionsTerris = daticosCat.map(getParsedTerris);
-            this.setState({ opcionesTerris: optionsTerris, estadoTerris: false, estadoGrafica:true, estadoFuente:true, estadoGraficaLinea:true});
-        }).catch(error => console.log(error.response));
-        let daticosMulti = this.state.multiTerri;
-        territorios = daticosMulti;
-
-    }
-
-    acumularPeris() {
-        //console.log(this.state.seleccionadoTerris);
-        let idTerritorio = this.state.seleccionadoTerris[0].value;
-        let idIndicador = this.state.idSeleccionada;
-        console.log(idTerritorio);
-        console.log(idIndicador);
-        axios.get("http://172.16.3.67/serpacificows/periodo/search.php?id=" + idIndicador + "&dane=" + idTerritorio).then(response => {
-            let daticosCat = response.data;
-            console.log(response.data);
-            optionsPeriodo = daticosCat.map(getParsedPeriodo);
-            console.log(optionsPeriodo);
-            this.setState({ opcionesPeriodo: optionsPeriodo, estadoPeriodo: false, estadoGrafica:true });
-        }).catch(error => console.log(error.response));
-        let periodosMulti = this.state.multiPeriodo;    
-        periodos = periodosMulti;        
-    }
-
-    buscarUnidad(idIndicador) {
-        console.log(periodos);
-        console.log("Lo que llega: " + idIndicador);
-        //let idIndicador = this.state.idSeleccionada;
-        axios.get("http://172.16.3.67/serpacificows/unidad/search.php?id=" + idIndicador).then(response => {
-            let unidadMedida = response.data[0].nombre; 
-            console.log(unidadMedida);      
-            this.setState({ unidad: unidadMedida });
-        }).catch(error => console.log(error.response));
-        //let periodosMulti = this.state.multiPeriodo;
-        //periodos = periodosMulti;
-    }
-  
-    buscarFuente(idIndicador) {
-        console.log("Lo que llega: " + idIndicador);
-        //let idIndicador = this.state.idSeleccionada;
-        axios.get("http://172.16.3.67/serpacificows/fuente/search.php?id=" + idIndicador).then(response => {
-            let fuenteValue = response.data[0].nombre; 
-            console.log(fuenteValue);      
-            this.setState({ fuente: fuenteValue });
-        }).catch(error => console.log(error.response));
-    }
-
-    mostrarBoton() {
-        this.setState({ estadoBoton: false });
-    }
-
-    limpiarTodo(){
-        this.setState({ estadoGraficaLinea:true, estadoFuente:true, estadoLimpiar:true, seleccionadoTerris:null, seleccionadoPeriodo:null, seleccionadoCategorias:null, opcionesCategorias: optionsCats, estadoCategorias: false, estadoSubcategorias: true, estadoIndicadores: true, estadoSubniv1: true, estadoSubniv2: true, estadoSubniv3: true, estadoSubniv4: true, estadoGrafica:true ,estadoTerris: true, estadoPeriodo: true, informativo: "Las CATEGORIAS son un conjunto de objetos agrupados normalmente con un criterio de máxima homogeneidad. \n Corresponde a la categoría de análisis que contiene subcategorías y los indicadores." });
-    }
-
-    pintarGrafico() {
-        arrEjes.length = 0;
-        arrDatos.length = 0;
-        arrPrueba.length = 0;
-        promises.length = 0;
-        this.setState({ estadoInformativo: true, estadoLimpiar: false, estadoFuente: false});
-        let idIndicador = this.state.idSeleccionada;
-        territorios = this.state.seleccionadoTerris;
-        periodos = this.state.seleccionadoPeriodo;
-
-        for (var i = 0; i < territorios.length; i++) {
-            //De aqui para abajo
-            let terreno = territorios[i].label;
-            axios.get("http://172.16.3.67/serpacificows/periodo/search.php?id=" + idIndicador + "&dane=" + territorios[i].value).then(response => {
-                let daticosCat = response.data;
-                //console.log(response.data);
-                let aux = daticosCat.map(getParsedPeriodo);
-                let arreglito = [];
-                for (var j = 0; j < periodos.length; j++) {
-                    for (var k = 0; k < aux.length; k++) {
-                        if (periodos[j].label == aux[k].label) {
-                            // acumulador.push(aux[k].label); 
-                            let tt = aux[k].value;
-                            tt = tt.replace(/,/g, '.');
-                            if(isNaN(tt)){this.setState({ estadoTextoNo: false})};
-                            arreglito.push(tt);                            
-                        }
+            data.sort((a,b) => (a.idindicadores > b.idindicadores) ? 1 : ((b.idindicadores > a.idindicadores) ? -1 : 0));
+            let temp = []; 
+            for(let i = 0; data.length > i; i++){
+                if(data[i].nivel !== "0"){
+                    let p = "";
+                    p = data.find(padre => padre.idindicadores === data[i].indicadores_idindicadores);
+                    if(p !== undefined){
+                        data[i].nombre = p.nombre + " => " + data[i].nombre.toLowerCase();
                     }
                 }
-                //console.log(acumulador);
-                //arreglito.push(parseFloat(aux[i].value)); 
-                let colorTemporal =  getRandomColor();            
-                let jsonPrueba = { label: terreno, backgroundColor: colorTemporal, borderColor: colorTemporal, fill:false, data: arreglito };
-                datosMultiples.datasets.push(jsonPrueba);
-                promises.push(jsonPrueba);
-            }).catch(error => console.log(error.response));
-            if (i == (territorios.length - 1)) {
-                axios.all(promises).then(this.finish());
+                if(data[i].unidades_medida_idunidades !== "0"){
+                    temp.push({value: data[i].idindicadores , label:data[i].nombre.charAt(0).toUpperCase() + data[i].nombre.slice(1), unidad:data[i].unidades_medida_idunidades, periodicidad:data[i].periodicidad, tipo_valor:data[i].tipo_valor, nivel: data[i].nivel, padre: data[i].indicadores_idindicadores, fuente:data[i].fuentes_idfuentes, categoria:data[i].categorias_idcategorias});
+                }
             }
-        }
+            console.log(temp);
+            setIndicadores(temp);
+            setCargando(false);
+        }).catch(error => console.log(error.data));
+    }
 
-        //Función para dar diferentes colores a las graficas
-        function getRandomColor() {
-            var letters = '0123456789ABCDEF';
-            var color = '#';
-            for (var i = 0; i < 6; i++) {
-                color += letters[Math.floor(Math.random() * 16)];
+    const getTerritorios = () => {
+        setCargando(true);
+        getData('/indicaterri/search.php?id=' + indicadorSeleccionado.value).then(data => {
+            let temp = []; 
+            for(let i = 0; data.length > i; i++){
+                temp.push({value: data[i].codigo_dane , label:data[i].nombre});
             }
-            //Devuelve un hexadecimal diferente
-            return color;
+            setTerritorios(temp);
+            setCargando(false);
+        }).catch(error => console.log(error.data));
+    }
+
+    const getPeriodos = () => {
+        setCargando(true);
+        let tempPeriodos = [];
+        for(let i = 0; i < territorioSeleccionado.length; i++){
+            getData('/periodo/search.php?id=' + indicadorSeleccionado.value + "&dane=" + territorioSeleccionado[i].value).then((data) => {
+                console.log(data);
+                
+                let aux = []; 
+                for(let j = 0; data.length > j; j++){
+                    aux.push({value: data[j].valor , label: data[j].periodo, municipio: territorioSeleccionado[i].label});
+                }
+                tempPeriodos.push(aux);
+                console.log(aux);
+                if(tempPeriodos.length === territorioSeleccionado.length){
+                    console.log(tempPeriodos);
+                    setPeriodos(tempPeriodos);
+                    setCargando(false);
+                }
+            }).catch(error => console.log(error));
         }
     }
 
-    finish() {
-        arrEjes.push(this.state.seleccionadoPeriodo.label);
-        console.log("arraPrueba: ", arrPrueba);
-        console.log(promises);
-        console.log(datosMultiples);
+    const PintarGrafica = () => {
+        console.log(periodos);
 
-        three().then(response => {
-            console.log(jsonFinal);
-            this.setState({
-                estadoGrafica: false
-            });
+        console.log(periodoSeleccionado);
+        console.log(periodoSeleccionado[0].label);
+        console.log(parseInt( periodoSeleccionado[0].value));
+        let anios = [];
+        let datasets = [];
+
+        let auxPeriodos = periodoSeleccionado;
+
+        auxPeriodos.forEach(element => {
+            anios.push(parseInt(element.label));
         });
-
-        function one() {
-            return new Promise(resolve => {
-                setTimeout(() => {
-                    jsonFinal = {
-                        //labels: arrEjes,
-                        labels: periodos,
-                        datasets: arrPrueba
-                    }
-                    console.log(jsonFinal);
-                    resolve();
-                }, 800);
-            });
+        console.log(anios);
+        anios.sort(function(a, b){return a-b});
+        console.log(anios);
+        for(let i = 0; i < anios.length; i ++){
+            anios[i] = anios[i].toString();
         }
 
-        function two() {
-            return new Promise(resolve => {
-                setTimeout(() => {
-                    console.log(jsonFinal);
-                    //this.setState({pintar:jsonFinal});
+        console.log(anios);
 
-                    resolve();
-                }, 800);
-            });
+        for(let i = 0; i < periodos.length; i++){
+            let valores = [];
+            let dataset = null;
+            let municipio = periodos[i][0].municipio;
+            console.log(municipio);
+            for(let j = 0; j < anios.length; j++){
+                let valor = null;
+                console.log(anios[j]);
+                valor = periodos[i].find((valorActual) => {
+                    return valorActual.label === anios[j];
+                });
+                console.log(valor);
+                valores.push(parseFloat(valor.value.split(",").join(".")));
+            }
+            console.log(valores);
+            
+            let r = Math.floor(Math.random() * 256);
+            let g = Math.floor(Math.random() * 256);
+            let b = Math.floor(Math.random() * 256);
+            let rgba = `rgba(${r},${g},${b},1)`;
+            let rgbaHover = `rgba(${r},${g},${b},0.8)`;
+
+            dataset = {
+                label: municipio,
+                backgroundColor: rgba,
+                borderColor: rgba,
+                fill: false,
+                borderWidth: 1,
+                hoverBackgroundColor: rgbaHover,
+                hoverBorderColor: rgbaHover,
+                data: valores
+            }
+            datasets.push(dataset);
         }
 
-        function three() {
-            return new Promise(resolve => {
-                setTimeout(() => {
-                    let periodoFilter = [];
-                    for (var i = 0; i < periodos.length; i++) {
-                        periodoFilter.push(periodos[i].label);
-                    }
-                    jsonFinal = {
-                        labels: periodoFilter,
-                        datasets: arrPrueba
-                    }
-                    console.log("Console de prueba");
-
-                    resolve();
-                }, 1000);
-
-            });
-        }
-        one().then(two).then(three);
+        setDatosGrafica({
+            labels: anios,
+            datasets: datasets
+        });
     }
 
-    fin() {
-        jsonFinal = {
-            labels: arrEjes,
-            datasets: arrPrueba
-        }
-        console.log("imprime tercero");
-        var devolver = 5;
-        //this.setState({estadoGrafica:false}); 
-        return devolver;
-    }
-}
+    return (
+        <div>
+            <NavBarDesktop></NavBarDesktop>
+            <NavBarMovil></NavBarMovil>
+            <div style={{minHeight:'28em', padding:'1.5em 1.5em 3em 1.5em', textAlign:'left', width:'100%', background: `linear-gradient(rgba(255,255,255,0.4), rgba(255,255,255,0.9)), url(${background})`/* ,  backgroundImage:`url(${background})` */, backgroundPosition:'center', backgroundRepeat:'repeat', backgroundSize:'cover'}}>
+                {
+                    (!graficar && datosGrafica==null) ?
+                    <div style={{backgroundColor:'rgba(255,255,255,0.97)', padding:'1em 1em 1em 1em', borderRadius:'0.5em', minHeight:'16em', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}>
+                    Indicadores:
+                    <Select options={indicadores} 
+                            isSearchable={true}
+                            value={indicadorSeleccionado}
+                            isDisabled={cargando}
+                            onChange={(i)=>{
+                                setIndicadorSeleccionado(i); 
+                                setBotonIndicador(true); 
 
-function getParsedDimension(item) {
-    var opcionTemp = {
-        value: item.iddimensiones,
-        label: item.nombre
-    };
-    return opcionTemp;
-}
+                                setTerritorios([]);
+                                setTerritorioSeleccionado(null); 
+                                setBotonTerritorio(false);
 
-function getParsedCategories(item) {
-    var opcionTemp = {
-        value: item.idcategorias,
-        label: item.nombre
-    };
-    return opcionTemp;
-}
+                                setPeriodos([]);
+                                setPeriodoSeleccionado(null);
+                                setBotonPeriodo(false);
 
-function getParsedIndicas(item) {
-    var opcionTemp = {
-        value: item.idindicadores,
-        label: item.nombre
-    };
-    return opcionTemp;
-}
+                                setGraficar(false);
+                                setDatosGrafica(null);
+                            }}
+                            name="indicador"
+                            placeholder='Seleccionar Indicador...'
+                    />
+                    {
+                        botonIndicador && indicadorSeleccionado!=null &&
+                        <div style={{display:'flex', justifyContent:'center'}}>
+                            <Button onClick={()=>{getTerritorios(); setBotonIndicador(false); getUnidad();}} color="secondary" style={{margin:'1.5em 1em 1em 1em', background:'linear-gradient(to right, #c4161c 0%, #9e0b0f  100%)'}} variant="contained">Seleccionar Indicador</Button>  
+                        </div>
+                    }
+                    {
+                        territorios.length !== 0 &&
+                        <div style={{margin:'1em 0 0 0'}}>
+                            Territorios:
+                            <Select options={territorios} 
+                            isSearchable={true}
+                            isMulti
+                            isDisabled={cargando}
+                            value={territorioSeleccionado}
+                            onChange={(t)=>{
+                                setTerritorioSeleccionado(t);
+                                setBotonTerritorio(true);
 
-function getParsedTerris(item) {
-    var opcionTemp = {
-        value: item.codigo_dane,
-        label: item.nombre
-    };
-    return opcionTemp;
-}
+                                setPeriodos([]);
+                                setPeriodoSeleccionado(null);
+                                setBotonPeriodo(false);
+                                
+                                setGraficar(false);
+                                setDatosGrafica(null);
+                            }}
+                            name="indicador"
+                            placeholder='Seleccionar Territorios...'
+                            />
+                        </div>
+                        
+                    }
+                    {
+                        botonTerritorio && territorioSeleccionado!= null &&
+                        <div style={{display:'flex', justifyContent:'center'}}>
+                            <Button onClick={()=>{getPeriodos(); setBotonTerritorio(false);}} color="secondary" style={{margin:'1.5em 1em 1em 1em', background:'linear-gradient(to right, #c4161c 0%, #9e0b0f  100%)'}} variant="contained">Seleccionar Territorio</Button>  
+                        </div>
+                    }
+                    {
+                        periodos.length !== 0 &&
+                        <div style={{margin:'1em 0 0 0'}}>
+                            Periodos:
+                            <Select options={periodos[0]} 
+                            isSearchable={true}
+                            isMulti
+                            isDisabled={cargando}
+                            value={periodoSeleccionado}
+                            onChange={(p)=>{
+                                setPeriodoSeleccionado(p);
+                                setBotonPeriodo(true);
+                                
+                                setGraficar(false);
+                                setDatosGrafica(null);
+                            }}
+                            name="indicador"
+                            placeholder='Seleccionar Periodos...'
+                            />
+                        </div>
+                    }
+                    {
+                        /* botonPeriodo && */ periodoSeleccionado!= null  &&
+                        <div style={{display:'flex', justifyContent:'center'}}>
+                            <Button startIcon={<EqualizerIcon />} onClick={()=>{setGraficar(true); /* setBotonPeriodo(false); */ PintarGrafica();}} color="secondary" style={{margin:'1.5em 1em 1em 1em', background:'linear-gradient(to right, #c4161c 0%, #9e0b0f  100%)'}} variant="contained">Graficar</Button>  
+                        </div>
+                    }
+                    
+                    {
+                        cargando &&
+                        <div className={classes.root} style={{textAlign:'center'}}>
+                            Procesando...
+                            <LinearProgress color="secondary" />
+                        </div>
+                    }
+                    </div>
+                    :
+                    
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        className={classes.button}
+                        style={{width:'100%', margin:'0em 0 1em 0', background:'linear-gradient(to right, #c4161c 0%, #9e0b0f  100%)'}}
+                        onClick={()=>{setGraficar(false); setDatosGrafica(null)}}
+                        startIcon={<CreateIcon />}
+                    >
+                        Editar Datos de la gráfica
+                    </Button>
+                }
+                
+                {
+                    (datosGrafica != null && graficar!==false && graficaBarras) &&
+                    <div style={{position:'relative', margin:'0em 0 0 0', backgroundColor:'rgba(255,255,255,0.97)', padding:'0.5em 0.5em 0.5em 0.5em', borderRadius:'0.5em', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}>
+                        <div style={{margin:'0.5em 0.5em 0 0.5em', position:'absolute', top:'0', right:'0'}}>
+                            <Button
+                                variant="contained"
+                                color="default"
+                                className={classes.button}
+                                startIcon={<EqualizerIcon />}
+                                style={{margin:'0.5em'}}
+                                onClick={()=>{setGraficaBarras(true); setGraficaLineas(false);}}
+                            >
+                                Barras
+                            </Button>
+                            <Button
+                                variant="outlined"
+                                color="default"
+                                className={classes.button}
+                                startIcon={<ShowChartIcon />}
+                                style={{margin:'0.5em'}}
+                                onClick={()=>{setGraficaBarras(false); setGraficaLineas(true);}}
+                            >
+                                Lineas
+                            </Button>
+                        </div>
+                        <Bar data={datosGrafica}
+                        width={70}
+                        height={32}
+                        options={{
+                            title: {
+                                display: true,
+                                text: indicadorSeleccionado.label,
+                                fontSize: 20
+                            },
+                            scales: {
+                                yAxes: [{                            
+                                    ticks: {
+                                        beginAtZero: true                                   
+                                    },
+                                    scaleLabel:{
+                                        display: true,
+                                        labelString: unidad
+                                    }
+                                }],
+                                xAxes: [{
+                                    scaleLabel:{
+                                        display: true,
+                                        labelString: "Años"
+                                    }
+                                }]
+                            },
+                            animation: {
+                                duration: 1000
+                            }
+                        }}   
+                        />
+                    </div>
+                }
+                {
+                    (datosGrafica != null && graficar!==false && graficaLineas) &&
+                    <div style={{position:'relative',margin:'0em 0 0 0', backgroundColor:'rgba(255,255,255,0.97)', padding:'0.5em 0.5em 0.5em 0.5em', borderRadius:'0.5em', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}>
+                        
+                        <div style={{margin:'0.5em 0.5em 0 0.5em', position:'absolute', top:'0', right:'0'}}>
+                            <Button
+                                variant="outlined"
+                                color="default"
+                                className={classes.button}
+                                startIcon={<EqualizerIcon />}
+                                style={{margin:'0.5em'}}
+                                onClick={()=>{setGraficaBarras(true); setGraficaLineas(false);}}
+                            >
+                                Barras
+                            </Button>
+                            <Button
+                                variant="contained"
+                                color="default"
+                                className={classes.button}
+                                startIcon={<ShowChartIcon />}
+                                style={{margin:'0.5em'}}
+                                onClick={()=>{setGraficaBarras(false); setGraficaLineas(true);}}
+                            >
+                                Lineas
+                            </Button>
+                        </div>
 
-function getParsedPeriodo(item) {
-    var opcionTemp = {
-        value: item.valor,
-        label: item.periodo
-    };
-    return opcionTemp;
-}
-
-EstadisticasContainer.propTypes = {};
+                        <Line data={datosGrafica}
+                        width={70}
+                        height={32}
+                        options={{
+                            title: {
+                                display: true,
+                                text: indicadorSeleccionado.label,
+                                fontSize: 20
+                            },
+                            scales: {
+                                yAxes: [{                            
+                                    ticks: {
+                                        beginAtZero: true                                   
+                                    },
+                                    scaleLabel:{
+                                        display: true,
+                                        labelString: unidad
+                                    }
+                                }],
+                                xAxes: [{
+                                    scaleLabel:{
+                                        display: true,
+                                        labelString: "Años"
+                                    }
+                                }]
+                            },
+                            animation: {
+                                duration: 1000
+                            }
+                        }}   
+                        />
+                    </div>
+                }
+            </div>
+            <Footer></Footer>
+        </div>
+    );
+};
 
 export default EstadisticasContainer;
