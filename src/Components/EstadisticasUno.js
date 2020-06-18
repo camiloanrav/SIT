@@ -45,6 +45,7 @@ const EstadisticasUno = () => {
     const [unidad, setUnidad] = useState(null);
 
     const[cargando, setCargando] = useState(false);
+    const[noGrafica, setNoGrafica] = useState(false);
 
     const classes = useStyles();
 
@@ -165,7 +166,13 @@ const EstadisticasUno = () => {
                     return valorActual.label === aniosAux[j];
                 });
                 console.log(valor);
-                valores.push(parseFloat(valor.value.split(",").join(".")));
+
+                if(isNaN(valor.value.split(",").join("."))){
+                    setNoGrafica(true);
+                    valores.push(valor.value);
+                }else{
+                    valores.push(parseFloat(valor.value.split(",").join(".")));
+                }
             }
             console.log(valores);
             
@@ -280,18 +287,18 @@ const EstadisticasUno = () => {
                                 console.log(opcionesPeriodos);
                                 
                                 
-                                if(p && p[0].label === "TODOS"){
+                                if(p && p.length > 0 && p[0].label !== undefined && p[0].label === "TODOS"){
                                     let aux = opcionesPeriodos;
                                     for(let i = 1; i < aux.length; i++){
                                         aux[i].isDisabled = true;
                                     }
                                     setOpcionesPeriodos(aux);
-                                }else if(p && p[0].label !== "TODOS"){
+                                }else if(p && p.length > 0 && p[0].label !== undefined && p[0].label !== "TODOS"){
                                     let aux = opcionesPeriodos;
                                     aux[0].isDisabled = true;
                                     setOpcionesPeriodos(aux);
                                 }
-                                else if(p==null){
+                                else if(p==null || p.length === 0){
                                     let aux = opcionesPeriodos;
                                     for(let i = 0; i < aux.length; i++){
                                         aux[i].isDisabled = false;
@@ -326,7 +333,7 @@ const EstadisticasUno = () => {
                         color="secondary"
                         className={classes.button}
                         style={{width:'100%', margin:'0em 0 1em 0', background:'linear-gradient(to right, #c4161c 0%, #9e0b0f  100%)'}}
-                        onClick={()=>{setGraficar(false); setDatosGrafica(null)}}
+                        onClick={()=>{setNoGrafica(false); setGraficar(false); setDatosGrafica(null)}}
                         startIcon={<CreateIcon />}
                     >
                         Editar Datos de la gráfica
@@ -334,7 +341,7 @@ const EstadisticasUno = () => {
                 }
                 
                 {
-                    (datosGrafica != null && graficar!==false && graficaBarras) &&
+                    (datosGrafica != null && graficar!==false && graficaBarras && !noGrafica) &&
                     <div style={{position:'relative', margin:'0em 0 0 0', backgroundColor:'rgba(255,255,255,0.97)', padding:'0.5em 0.5em 0.5em 0.5em', borderRadius:'0.5em', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}>
                         <div style={{margin:'0.5em 0.5em 0 0.5em', position:'absolute', top:'0', right:'0'}}>
                             <Button
@@ -393,7 +400,7 @@ const EstadisticasUno = () => {
                     </div>
                 }
                 {
-                    (datosGrafica != null && graficar!==false && graficaLineas) &&
+                    (datosGrafica != null && graficar!==false && graficaLineas && !noGrafica) &&
                     <div style={{position:'relative',margin:'0em 0 0 0', backgroundColor:'rgba(255,255,255,0.97)', padding:'0.5em 0.5em 0.5em 0.5em', borderRadius:'0.5em', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}>
                         
                         <div style={{margin:'0.5em 0.5em 0 0.5em', position:'absolute', top:'0', right:'0'}}>
@@ -450,6 +457,13 @@ const EstadisticasUno = () => {
                             }
                         }}   
                         />
+                    </div>
+                }
+                {
+                    noGrafica &&
+                    <div style={{textAlign:'center', margin:'1em 0 0 0'}}>
+                        <h3>Estos datos son de caracter cualitativo y no se pueden graficar.</h3>
+                        <Excel datosExcel={datosGrafica.datasets} aniosExcel={datosGrafica.labels}></Excel>
                     </div>
                 }
             </div>
