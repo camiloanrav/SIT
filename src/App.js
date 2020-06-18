@@ -42,6 +42,7 @@ function App() {
             <Redirect exact from="/" to="/ser/inicio"/>
             <Redirect exact from="/ser" to="/ser/inicio"/>
             <Redirect exact from="/ser/publicaciones" to="/ser/publicaciones/documentos"/>
+            <Redirect exact from="/ser/estadisticas" to="/ser/estadisticas/busqueda-por-dimensiones"/>
             <Redirect exact from="/ser/administrador-estadisticas" to="/ser/administrador-estadisticas/modificar-indicadores"/>
             <Redirect exact from="/ser/administrador-publicaciones" to="/ser/administrador-publicaciones/documentos"/>
             {/* <Redirect exact from="/administrador" to="/administrador/inicio"/> */}

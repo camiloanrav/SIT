@@ -18,7 +18,6 @@ import FormLabel from '@material-ui/core/FormLabel';
 
 import background from '../background.png';
 
-
 const PublicacionesContainer = () => {
 
     const [datos, setDatos] = useState([]);
@@ -58,9 +57,9 @@ const PublicacionesContainer = () => {
         <div>
             <NavBarDesktop></NavBarDesktop>
             <NavBarMovil></NavBarMovil>
-
             <Titulo titulo="Publicaciones"></Titulo>
             <div style={{minHeight:'24.2em', padding:'1em 0 0 0', background: `linear-gradient(rgba(255,255,255,0.4), rgba(255,255,255,0.9)), url(${background})`, backgroundPosition:'center', backgroundRepeat:'repeat', backgroundSize:'cover'}}>
+                
                 <Tabs setindice={setindice} tab1="Documentos" tab2="Cuentas Económicas del Valle"></Tabs>
                 <div style={{margin:'2em 0em 0.5em 2.5em', display:'flex', flexWrap:'wrap'}} >
                     <FormControl style={{marginBottom:'1.2em'}} component="fieldset">
