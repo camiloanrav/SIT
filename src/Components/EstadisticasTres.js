@@ -1,9 +1,5 @@
 import React, {useState, useEffect} from 'react';
 
-import NavBarDesktop from "../Components/NavBarDesktop";
-import NavBarMovil from "../Components/NavBarMovil";
-import Footer from "../Components/Footer";
-
 import { Bar } from "react-chartjs-2";
 import { Line } from "react-chartjs-2";
 import Select from "react-select";
@@ -14,11 +10,11 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 
 import {getData} from '../utils/api';
 
-import background from '../background.png';
-
 import EqualizerIcon from '@material-ui/icons/Equalizer';
 import ShowChartIcon from '@material-ui/icons/ShowChart';
 import CreateIcon from '@material-ui/icons/Create';
+
+import Excel from "../Components/Excel";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -365,43 +361,40 @@ const EstadisticasTres = () => {
         console.log(periodoSeleccionado);
         console.log(periodoSeleccionado[0].label);
         console.log(parseInt( periodoSeleccionado[0].value));
-        let anios = [];
+        let aniosAux = [];
         let datasets = [];
 
-        let auxPeriodos = periodoSeleccionado;
+        let auxPeriodos = [...periodoSeleccionado];
 
         if(auxPeriodos[0].label === "TODOS"){
             for(let i = 1; i < opcionesPeriodos.length; i++){
-                anios.push(parseInt(opcionesPeriodos[i].label));
+                aniosAux.push(parseInt(opcionesPeriodos[i].label));
             }
         }else{
             auxPeriodos.forEach(element => {
-                anios.push(parseInt(element.label));
+                aniosAux.push(parseInt(element.label));
             });
         }
 
-        
-
-        
-        console.log(anios);
-        anios.sort(function(a, b){return a-b});
-        console.log(anios);
-        for(let i = 0; i < anios.length; i ++){
-            anios[i] = anios[i].toString();
+        console.log(aniosAux);
+        aniosAux.sort(function(a, b){return a-b});
+        console.log(aniosAux);
+        for(let i = 0; i < aniosAux.length; i ++){
+            aniosAux[i] = aniosAux[i].toString();
         }
 
-        console.log(anios);
+        console.log(aniosAux);
 
         for(let i = 0; i < periodos.length; i++){
             let valores = [];
             let dataset = null;
             let municipio = periodos[i][0].municipio;
             console.log(municipio);
-            for(let j = 0; j < anios.length; j++){
+            for(let j = 0; j < aniosAux.length; j++){
                 let valor = null;
-                console.log(anios[j]);
+                console.log(aniosAux[j]);
                 valor = periodos[i].find((valorActual) => {
-                    return valorActual.label === anios[j];
+                    return valorActual.label === aniosAux[j];
                 });
                 console.log(valor);
                 valores.push(parseFloat(valor.value.split(",").join(".")));
@@ -427,8 +420,12 @@ const EstadisticasTres = () => {
             datasets.push(dataset);
         }
 
+        console.log(datasets);
+        console.log(aniosAux);
+        
+
         setDatosGrafica({
-            labels: anios,
+            labels: aniosAux,
             datasets: datasets
         });
     }
@@ -452,7 +449,7 @@ const EstadisticasTres = () => {
                     {
                         dimensionSeleccionada!=null &&
                         <div>
-                            Categorias:
+                            Categorías:
                             <Select options={
                                 categorias.length !== 0 ?
                                 categorias.filter((datoActual,i,arreglo)=>{
@@ -474,7 +471,7 @@ const EstadisticasTres = () => {
                     {
                         categoriaSeleccionada!=null &&
                         <div>
-                            Subcategorias:
+                            Subcategorías:
                             <Select options={
                                 //subcategorias.length !== 0 ?
                                 subcategorias.filter((datoActual,i,arreglo)=>{
@@ -603,30 +600,6 @@ const EstadisticasTres = () => {
                             />
                         </div>
                     }
-                    
-                    {/* Indicadores:
-                    <Select options={indicadores} 
-                            isSearchable={true}
-                            value={indicadorSeleccionado}
-                            isDisabled={cargando}
-                            onChange={(i)=>{
-                                setIndicadorSeleccionado(i); 
-                                setBotonIndicador(true); 
-
-                                setTerritorios([]);
-                                setTerritorioSeleccionado(null); 
-                                setBotonTerritorio(false);
-
-                                setPeriodos([]);
-                                setPeriodoSeleccionado(null);
-                                setBotonPeriodo(false);
-
-                                setGraficar(false);
-                                setDatosGrafica(null);
-                            }}
-                            name="indicador"
-                            placeholder='Seleccionar Indicador...'
-                    /> */}
                     {
                         botonIndicador &&
                         <div style={{display:'flex', justifyContent:'center'}}>
@@ -794,6 +767,7 @@ const EstadisticasTres = () => {
                             }
                         }}   
                         />
+                        <Excel datosExcel={datosGrafica.datasets} aniosExcel={datosGrafica.labels}></Excel>
                     </div>
                 }
                 {

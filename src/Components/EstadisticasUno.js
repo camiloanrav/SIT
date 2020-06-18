@@ -1,9 +1,5 @@
 import React, {useState, useEffect} from 'react';
 
-import NavBarDesktop from "../Components/NavBarDesktop";
-import NavBarMovil from "../Components/NavBarMovil";
-import Footer from "../Components/Footer";
-
 import { Bar } from "react-chartjs-2";
 import { Line } from "react-chartjs-2";
 import Select from "react-select";
@@ -14,11 +10,11 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 
 import {getData} from '../utils/api';
 
-import background from '../background.png';
-
 import EqualizerIcon from '@material-ui/icons/Equalizer';
 import ShowChartIcon from '@material-ui/icons/ShowChart';
 import CreateIcon from '@material-ui/icons/Create';
+
+import Excel from "../Components/Excel";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -44,6 +40,7 @@ const EstadisticasUno = () => {
     const [graficaBarras, setGraficaBarras] = useState(true);
     const [graficaLineas, setGraficaLineas] = useState(false);
 
+    const [opcionesPeriodos, setOpcionesPeriodos] = useState([]);
 
     const [unidad, setUnidad] = useState(null);
 
@@ -114,6 +111,12 @@ const EstadisticasUno = () => {
                 if(tempPeriodos.length === territorioSeleccionado.length){
                     console.log(tempPeriodos);
                     setPeriodos(tempPeriodos);
+                    let opcionesPeriodosAux = [];
+                    opcionesPeriodosAux.push({value:"0",label:"TODOS", isDisabled: false})
+                    for(let i = 0; i < aux.length; i++){
+                        opcionesPeriodosAux.push({value:(i+1).toString(),label:aux[i].label, isDisabled: false})
+                    }
+                    setOpcionesPeriodos(opcionesPeriodosAux);
                     setCargando(false);
                 }
             }).catch(error => console.log(error));
@@ -126,33 +129,40 @@ const EstadisticasUno = () => {
         console.log(periodoSeleccionado);
         console.log(periodoSeleccionado[0].label);
         console.log(parseInt( periodoSeleccionado[0].value));
-        let anios = [];
+        let aniosAux = [];
         let datasets = [];
 
-        let auxPeriodos = periodoSeleccionado;
+        let auxPeriodos = [...periodoSeleccionado];
 
-        auxPeriodos.forEach(element => {
-            anios.push(parseInt(element.label));
-        });
-        console.log(anios);
-        anios.sort(function(a, b){return a-b});
-        console.log(anios);
-        for(let i = 0; i < anios.length; i ++){
-            anios[i] = anios[i].toString();
+        if(auxPeriodos[0].label === "TODOS"){
+            for(let i = 1; i < opcionesPeriodos.length; i++){
+                aniosAux.push(parseInt(opcionesPeriodos[i].label));
+            }
+        }else{
+            auxPeriodos.forEach(element => {
+                aniosAux.push(parseInt(element.label));
+            });
         }
 
-        console.log(anios);
+        console.log(aniosAux);
+        aniosAux.sort(function(a, b){return a-b});
+        console.log(aniosAux);
+        for(let i = 0; i < aniosAux.length; i ++){
+            aniosAux[i] = aniosAux[i].toString();
+        }
+
+        console.log(aniosAux);
 
         for(let i = 0; i < periodos.length; i++){
             let valores = [];
             let dataset = null;
             let municipio = periodos[i][0].municipio;
             console.log(municipio);
-            for(let j = 0; j < anios.length; j++){
+            for(let j = 0; j < aniosAux.length; j++){
                 let valor = null;
-                console.log(anios[j]);
+                console.log(aniosAux[j]);
                 valor = periodos[i].find((valorActual) => {
-                    return valorActual.label === anios[j];
+                    return valorActual.label === aniosAux[j];
                 });
                 console.log(valor);
                 valores.push(parseFloat(valor.value.split(",").join(".")));
@@ -179,7 +189,7 @@ const EstadisticasUno = () => {
         }
 
         setDatosGrafica({
-            labels: anios,
+            labels: aniosAux,
             datasets: datasets
         });
     }
@@ -255,7 +265,7 @@ const EstadisticasUno = () => {
                         periodos.length !== 0 &&
                         <div style={{margin:'1em 0 0 0'}}>
                             Periodos:
-                            <Select options={periodos[0]} 
+                            <Select options={opcionesPeriodos} 
                             isSearchable={true}
                             isMulti
                             isDisabled={cargando}
@@ -266,6 +276,28 @@ const EstadisticasUno = () => {
                                 
                                 setGraficar(false);
                                 setDatosGrafica(null);
+
+                                console.log(opcionesPeriodos);
+                                
+                                
+                                if(p && p[0].label === "TODOS"){
+                                    let aux = opcionesPeriodos;
+                                    for(let i = 1; i < aux.length; i++){
+                                        aux[i].isDisabled = true;
+                                    }
+                                    setOpcionesPeriodos(aux);
+                                }else if(p && p[0].label !== "TODOS"){
+                                    let aux = opcionesPeriodos;
+                                    aux[0].isDisabled = true;
+                                    setOpcionesPeriodos(aux);
+                                }
+                                else if(p==null){
+                                    let aux = opcionesPeriodos;
+                                    for(let i = 0; i < aux.length; i++){
+                                        aux[i].isDisabled = false;
+                                    }
+                                    setOpcionesPeriodos(aux);
+                                }
                             }}
                             name="indicador"
                             placeholder='Seleccionar Periodos...'
@@ -357,6 +389,7 @@ const EstadisticasUno = () => {
                             }
                         }}   
                         />
+                        <Excel datosExcel={datosGrafica.datasets} aniosExcel={datosGrafica.labels}></Excel>
                     </div>
                 }
                 {
