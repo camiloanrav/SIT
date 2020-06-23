@@ -129,6 +129,14 @@
     padding-left: 1em;
   }
 
+  .excel-der{
+    text-align: rigth;
+  }
+
+  .excel-cen{
+    text-align: center;
+  }
+
   .aws-btn {
 
     --slider-height-percentage: 30%;

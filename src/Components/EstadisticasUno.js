@@ -43,6 +43,7 @@ const EstadisticasUno = () => {
     const [opcionesPeriodos, setOpcionesPeriodos] = useState([]);
 
     const [unidad, setUnidad] = useState(null);
+    const [fuente, setFuente] = useState(null);
 
     const[cargando, setCargando] = useState(false);
     const[noGrafica, setNoGrafica] = useState(false);
@@ -56,6 +57,12 @@ const EstadisticasUno = () => {
     const getUnidad = () => {
         getData('/unidad/search.php?id='+indicadorSeleccionado.value).then(data => {
             setUnidad(data[0].nombre);
+        }).catch(error => console.log(error.data));
+    }
+
+    const getFuente = () => {
+        getData('/fuente/search.php?id='+indicadorSeleccionado.value).then(data => {
+            setFuente(data[0].nombre);
         }).catch(error => console.log(error.data));
     }
 
@@ -233,12 +240,12 @@ const EstadisticasUno = () => {
                     {
                         botonIndicador && indicadorSeleccionado!=null &&
                         <div style={{display:'flex', justifyContent:'center'}}>
-                            <Button onClick={()=>{getTerritorios(); setBotonIndicador(false); getUnidad();}} color="secondary" style={{margin:'1.5em 1em 1em 1em', background:'linear-gradient(to right, #c4161c 0%, #9e0b0f  100%)'}} variant="contained">Seleccionar Indicador</Button>  
+                            <Button onClick={()=>{getTerritorios(); setBotonIndicador(false); getUnidad(); getFuente();}} color="secondary" style={{margin:'1.5em 1em 1em 1em', background:'linear-gradient(to right, #c4161c 0%, #9e0b0f  100%)'}} variant="contained">Seleccionar Indicador</Button>  
                         </div>
                     }
                     {
                         territorios.length !== 0 &&
-                        <div style={{margin:'1em 0 0 0'}}>
+                        <div style={{margin:'0.5em 0 0 0'}}>
                             Territorios:
                             <Select options={territorios} 
                             isSearchable={true}
@@ -270,7 +277,7 @@ const EstadisticasUno = () => {
                     }
                     {
                         periodos.length !== 0 &&
-                        <div style={{margin:'1em 0 0 0'}}>
+                        <div style={{margin:'0.5em 0 0 0'}}>
                             Periodos:
                             <Select options={opcionesPeriodos} 
                             isSearchable={true}
@@ -342,7 +349,7 @@ const EstadisticasUno = () => {
                 
                 {
                     (datosGrafica != null && graficar!==false && graficaBarras && !noGrafica) &&
-                    <div style={{position:'relative', margin:'0em 0 0 0', backgroundColor:'rgba(255,255,255,0.97)', padding:'0.5em 0.5em 0.5em 0.5em', borderRadius:'0.5em', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}>
+                    <div style={{position:'relative', margin:'0em 0 0 0', backgroundColor:'rgba(255,255,255,0.97)', padding:'3em 0.5em 0.5em 0.5em', borderRadius:'0.5em', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}>
                         <div style={{margin:'0.5em 0.5em 0 0.5em', position:'absolute', top:'0', right:'0'}}>
                             <Button
                                 variant="contained"
@@ -396,12 +403,15 @@ const EstadisticasUno = () => {
                             }
                         }}   
                         />
-                        <Excel datosExcel={datosGrafica.datasets} aniosExcel={datosGrafica.labels}></Excel>
+                        <div style={{textAlign:'center', fontWeight:'bold', fontSize:'14px', fontFamily:'roboto', margin:'0.5em 1em 0.5em 1em'}}>Fuente: {fuente}</div>
+                        <div style={{textAlign:'right'}}>
+                            <Excel datosExcel={datosGrafica.datasets} aniosExcel={datosGrafica.labels}></Excel>
+                        </div>
                     </div>
                 }
                 {
                     (datosGrafica != null && graficar!==false && graficaLineas && !noGrafica) &&
-                    <div style={{position:'relative',margin:'0em 0 0 0', backgroundColor:'rgba(255,255,255,0.97)', padding:'0.5em 0.5em 0.5em 0.5em', borderRadius:'0.5em', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}>
+                    <div style={{position:'relative',margin:'0em 0 0 0', backgroundColor:'rgba(255,255,255,0.97)', padding:'3em 0.5em 0.5em 0.5em', borderRadius:'0.5em', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}>
                         
                         <div style={{margin:'0.5em 0.5em 0 0.5em', position:'absolute', top:'0', right:'0'}}>
                             <Button
@@ -457,13 +467,17 @@ const EstadisticasUno = () => {
                             }
                         }}   
                         />
+                        <div style={{textAlign:'center', fontWeight:'bold', fontSize:'14px', fontFamily:'roboto', margin:'0.5em 1em 0.5em 1em'}}>Fuente: {fuente}</div>
+                        <div style={{textAlign:'right'}}>
+                            <Excel datosExcel={datosGrafica.datasets} aniosExcel={datosGrafica.labels}></Excel>
+                        </div>
                     </div>
                 }
                 {
                     noGrafica &&
-                    <div style={{textAlign:'center', margin:'1em 0 0 0'}}>
+                    <div style={{textAlign:'center', margin:'5em 0 0 0'}}>
                         <h3>Estos datos son de caracter cualitativo y no se pueden graficar.</h3>
-                        <Excel datosExcel={datosGrafica.datasets} aniosExcel={datosGrafica.labels}></Excel>
+                        <Excel style={{textAlign:'center'}} datosExcel={datosGrafica.datasets} aniosExcel={datosGrafica.labels}></Excel>
                     </div>
                 }
             </div>

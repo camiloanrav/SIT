@@ -8,10 +8,10 @@ const InformacionInicio = () => {
             <div className="informacion">
                     <p>
                         <i class="fas fa-angle-right"></i>
-                        ¿QUIENES SOMOS?
+                        ¿QUIÉNES SOMOS?
                     </p>
                     <div>
-                        SER PACIFICO, una iniciativa de la Universidad Autónoma de Occidente, la Facultad de Comunicación y Ciencias Sociales y el Grupo de Investigación Economía y Desarrollo (GIED), tiene como propósito el fomento del desarrollo económico local y la competitividad territorial suministrando a los actores locales información útil y actualizada sobre las dimensiones Económica, Socio-Cultural, Ambiental e Institucional, con la finalidad de mejorar la planificación, ejecución y evaluación de estrategias municipales y fortalecer la identidad de la Región Pacífico de Colombia.
+                        SER PACÍFICO, una iniciativa de la Universidad Autónoma de Occidente, la Facultad de Comunicación y Ciencias Sociales y el Grupo de Investigación Economía y Desarrollo (GIED), tiene como propósito el fomento del desarrollo económico local y la competitividad territorial suministrando a los actores locales información útil y actualizada sobre las dimensiones Económica, Socio-Cultural, Ambiental e Institucional, con la finalidad de mejorar la planificación, ejecución y evaluación de estrategias municipales y fortalecer la identidad de la Región Pacífico de Colombia.
                     </div>
             </div>
         </div>

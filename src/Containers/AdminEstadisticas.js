@@ -16,6 +16,8 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import { makeStyles } from '@material-ui/core/styles';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 import Select from "react-select";
 
@@ -24,8 +26,17 @@ import {getData} from '../utils/api';
 
 import  { Redirect } from 'react-router-dom';
 
+const useStyles = makeStyles((theme) => ({
+    root: {
+        marginTop: theme.spacing(5),
+        marginLeft: theme.spacing(10),
+        marginRight: theme.spacing(10),
+    },
+}));
+
 
 const AdministrarIndicadores = ({indicadores, getIndicadores}) =>{
+    const classes = useStyles();
     const [unidades, setUnidades] = useState('');
     const [fuentes, setFuentes] = useState('');
     const [categorias, setCategorias] = useState([]);
@@ -39,6 +50,8 @@ const AdministrarIndicadores = ({indicadores, getIndicadores}) =>{
     const [ordenIndicadorACrear, setOrdenIndicadorACrear] = useState('');
     const [gestionando, setGestionando] = useState(false);
     const [modificando, setModificando] = useState(false);
+
+    const [postEliminando, setPostEliminando] = useState(false);
 
     const [indicadorSeleccionado, setIndicadorSeleccionado] = useState(null);
 
@@ -94,8 +107,9 @@ const AdministrarIndicadores = ({indicadores, getIndicadores}) =>{
             setIndicadorSeleccionado(null);
         }else{
             let aux = {"idindicadores":indicadorAEliminar.value};
-
-            postData('/indicaterri/deletegroup.php',aux).then(data => {
+            let aux2 = {"indicadores_idindicadores":indicadorAEliminar.value};
+            setPostEliminando(true);
+            postData('/indicaterri/deletegroup.php',aux2).then(data => {
                 if(data!==undefined){
                     console.log(data.message);
                 }
@@ -106,6 +120,7 @@ const AdministrarIndicadores = ({indicadores, getIndicadores}) =>{
                     }
                     
                     alert("Eliminado");
+                    setPostEliminando(false);
                     setEliminando(false);
                     setGestionando(false);
                     setIndicadorSeleccionado(null);
@@ -156,6 +171,7 @@ const AdministrarIndicadores = ({indicadores, getIndicadores}) =>{
                             </div>
                             <Select options={indicadores} 
                                     isSearchable={true}
+                                    isDisabled={postEliminando}
                                     value={indicadorSeleccionado}
                                     onChange={handleChangeIndicadorSeleccionado}
                                     name="indicador"
@@ -163,7 +179,7 @@ const AdministrarIndicadores = ({indicadores, getIndicadores}) =>{
                             />
                         </div>
                         {
-                            indicadorSeleccionado != null ?
+                            indicadorSeleccionado != null && !postEliminando ?
                             <div>
                                 <div style={{margin:'0 0 1em 0'}}>
                                     Indicador con ID: {indicadorSeleccionado.value}
@@ -174,6 +190,13 @@ const AdministrarIndicadores = ({indicadores, getIndicadores}) =>{
                             </div>
                             :
                             null
+                        }
+                        {
+                            indicadorSeleccionado != null && postEliminando &&
+                            <div className={classes.root}>
+                                Eliminando Indicador: {indicadorSeleccionado.label}...
+                                <LinearProgress color="secondary"/>
+                            </div>
                         }
                     </div>
                     :

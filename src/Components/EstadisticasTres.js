@@ -438,11 +438,9 @@ const EstadisticasTres = () => {
 
     return (
         <div>
-            <div style={{minHeight:'28em', padding:'1.5em 2.1em 3em 2.1em', textAlign:'left', width:'100%'}}>
-                {
-                    
-                    (!graficar && datosGrafica==null) ?
-                    <div style={{backgroundColor:'rgba(255,255,255,1)', padding:'1em 1em 1em 1em', borderRadius:'0.5em', minHeight:'16em', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}>
+            <div style={{display:'flex', flexWrap:'wrap', justifyContent:'space-between', minHeight:'28em', padding:'1.5em 2.1em 3em 2.1em', textAlign:'left', width:'100%'}}>
+                
+                    <div style={{minWidth:'18em', width:'25em', backgroundColor:'rgba(255,255,255,1)', padding:'1em 1em 1em 1em', borderRadius:'0.5em', minHeight:'16em', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}>
                         Dimensiones:
                         <Select options={dimensiones} 
                             isSearchable={true}
@@ -454,7 +452,7 @@ const EstadisticasTres = () => {
                         />
                     {
                         dimensionSeleccionada!=null &&
-                        <div>
+                        <div style={{margin:'0.5em 0 0 0'}}>
                             Categorías:
                             <Select options={
                                 categorias.length !== 0 ?
@@ -476,7 +474,7 @@ const EstadisticasTres = () => {
                     }
                     {
                         categoriaSeleccionada!=null &&
-                        <div>
+                        <div style={{margin:'0.5em 0 0 0'}}>
                             Subcategorías:
                             <Select options={
                                 //subcategorias.length !== 0 ?
@@ -498,7 +496,7 @@ const EstadisticasTres = () => {
                     }
                     {
                         subcategoriaSeleccionada!=null &&
-                        <div>
+                        <div style={{margin:'0.5em 0 0 0'}}>
                             Indicadores de Nivel 0:
                             <Select options={
                                 //indicadoresN0.length !== 0 ?
@@ -520,7 +518,7 @@ const EstadisticasTres = () => {
                     }
                     {
                         indicadorN0Seleccionado!=null && indicadorN0Seleccionado.unidad ==="0" &&
-                        <div>
+                        <div style={{margin:'0.5em 0 0 0'}}>
                             Indicadores de Nivel 1:
                             <Select options={
                                 indicadoresN1.length !== 0 ?
@@ -542,7 +540,7 @@ const EstadisticasTres = () => {
                     }
                     {
                         indicadorN1Seleccionado!=null && indicadorN1Seleccionado.unidad ==="0" &&
-                        <div>
+                        <div style={{margin:'0.5em 0 0 0'}}>
                             Indicadores de Nivel 2:
                             <Select options={
                                 indicadoresN2.length !== 0 ?
@@ -564,7 +562,7 @@ const EstadisticasTres = () => {
                     }
                     {
                         indicadorN2Seleccionado!=null && indicadorN2Seleccionado.unidad ==="0" &&
-                        <div>
+                        <div style={{margin:'0.5em 0 0 0'}}>
                             Indicadores de Nivel 3:
                             <Select options={
                                 indicadoresN3.length !== 0 ?
@@ -586,7 +584,7 @@ const EstadisticasTres = () => {
                     }
                     {
                         indicadorN3Seleccionado!=null && indicadorN3Seleccionado.unidad ==="0" &&
-                        <div>
+                        <div style={{margin:'0.5em 0 0 0'}}>
                             Indicadores de Nivel 4:
                             <Select options={
                                 indicadoresN4.length !== 0 ?
@@ -614,7 +612,7 @@ const EstadisticasTres = () => {
                     }
                     {
                         territorios.length !== 0 &&
-                        <div style={{margin:'1em 0 0 0'}}>
+                        <div style={{margin:'0.5em 0 0 0'}}>
                             Territorios:
                             <Select options={territorios} 
                             isSearchable={true}
@@ -646,7 +644,7 @@ const EstadisticasTres = () => {
                     }
                     {
                         periodos.length !== 0 &&
-                        <div style={{margin:'1em 0 0 0'}}>
+                        <div style={{margin:'0.5em 0 0 0'}}>
                             Periodos:
                             <Select options={opcionesPeriodos} 
                             isSearchable={true}
@@ -703,9 +701,8 @@ const EstadisticasTres = () => {
                         </div>
                     }
                     </div>
-                    :
                     
-                    <Button
+                    {/* <Button
                         variant="contained"
                         color="secondary"
                         className={classes.button}
@@ -714,12 +711,36 @@ const EstadisticasTres = () => {
                         startIcon={<CreateIcon />}
                     >
                         Editar Datos de la gráfica
-                    </Button>
-                }
+                    </Button> */}
+                    {
+                        datosGrafica == null &&
+                        <div style={{minWidth:'18em', width:'60%', height:'13em', position:'relative', margin:'0em 0 0 0em', backgroundColor:'rgba(200,200,200,0.97)', padding:'2em 2em 2em 2em', borderRadius:'0.5em', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}>
+                            {
+                                dimensionSeleccionada== null &&
+                                <div style={{fontSize:'20px', fontFamily:'roboto'}}>Una DIMENSIÓN es el componente macro en donde se agrupan las diferentes categorias.</div>
+                            }
+                            {
+                                dimensionSeleccionada != null && categoriaSeleccionada == null &&
+                                <div style={{fontSize:'20px', fontFamily:'roboto'}}> Las CATEGORIAS son un conjunto de objetos agrupados normalmente con un criterio de máxima homogeneidad. 
+                                Corresponde a la categoría de análisis que contiene subcategorías y los indicadores.</div>
+                            }
+                            {
+                                categoriaSeleccionada != null && subcategoriaSeleccionada ==null &&
+                                <div style={{fontSize:'20px', fontFamily:'roboto'}}>Una SUBCATEGORIA es un agrupamiento de objetos en conjuntos homogéneos de acuerdo con criterios preestablecidos y en función del uso que tendrá la subcategoría. 
+                                Corresponde a la desagregación que tiene una categoría de análisis y en las cuales se encontraran los indicadores.</div>
+                            }
+                            {
+                                subcategoriaSeleccionada != null&&
+                                <div style={{fontSize:'20px', fontFamily:'roboto'}}>Los INDICADORES son datos o información que sirve para conocer o valorar las categorías y subcategorías y la intensidad de un hecho o para determinar su evolución futura. Es decir, aquellos medibles con base en información secundaria. 
+                                Los indicadores son jerárquicos y se presentan indicadores de nivel 1, nivel 2, nivel 3 y hasta nivel 4.</div>
+                            }
+                            
+                        </div>
+                    }
                 
                 {
-                    (datosGrafica != null && graficar!==false && graficaBarras && !noGrafica) &&
-                    <div style={{position:'relative', margin:'0em 0 0 0', backgroundColor:'rgba(255,255,255,0.97)', padding:'0.5em 0.5em 0.5em 0.5em', borderRadius:'0.5em', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}>
+                    (datosGrafica != null /* && graficar!==false */ && graficaBarras && !noGrafica) &&
+                    <div style={{minWidth:'18em', width:'60%', position:'relative', margin:'0em 0 0 0em', backgroundColor:'rgba(255,255,255,0.97)', padding:'3em 0.5em 0.5em 0.5em', borderRadius:'0.5em', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}>
                         <div style={{margin:'0.5em 0.5em 0 0.5em', position:'absolute', top:'0', right:'0'}}>
                             <Button
                                 variant="contained"
@@ -744,7 +765,7 @@ const EstadisticasTres = () => {
                         </div>
                         <Bar data={datosGrafica}
                         width={70}
-                        height={32}
+                        height={35}
                         options={{
                             title: {
                                 display: true,
@@ -773,12 +794,14 @@ const EstadisticasTres = () => {
                             }
                         }}   
                         />
-                        <Excel datosExcel={datosGrafica.datasets} aniosExcel={datosGrafica.labels}></Excel>
+                        <div style={{textAlign:'right'}}>
+                            <Excel datosExcel={datosGrafica.datasets} aniosExcel={datosGrafica.labels}></Excel>
+                        </div>
                     </div>
                 }
                 {
-                    (datosGrafica != null && graficar!==false && graficaLineas && !noGrafica) &&
-                    <div style={{position:'relative',margin:'0em 0 0 0', backgroundColor:'rgba(255,255,255,0.97)', padding:'0.5em 0.5em 0.5em 0.5em', borderRadius:'0.5em', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}>
+                    (datosGrafica != null /* && graficar!==false */ && graficaLineas && !noGrafica) &&
+                    <div style={{minWidth:'18em', width:'60%', position:'relative',margin:'0em 0 0 0', backgroundColor:'rgba(255,255,255,0.97)', padding:'3em 0.5em 0.5em 0.5em', borderRadius:'0.5em', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}>
                         
                         <div style={{margin:'0.5em 0.5em 0 0.5em', position:'absolute', top:'0', right:'0'}}>
                             <Button
@@ -805,7 +828,7 @@ const EstadisticasTres = () => {
 
                         <Line data={datosGrafica}
                         width={70}
-                        height={32}
+                        height={35}
                         options={{
                             title: {
                                 display: true,
@@ -834,11 +857,14 @@ const EstadisticasTres = () => {
                             }
                         }}   
                         />
+                        <div style={{textAlign:'right'}}>
+                            <Excel datosExcel={datosGrafica.datasets} aniosExcel={datosGrafica.labels}></Excel>
+                        </div>
                     </div>
                 }
                 {
                     noGrafica &&
-                    <div style={{textAlign:'center', margin:'1em 0 0 0'}}>
+                    <div style={{minWidth:'18em', width:'60%',textAlign:'center', margin:'5em 0 0 0'}}>
                         <h3>Estos datos son de caracter cualitativo y no se pueden graficar.</h3>
                         <Excel datosExcel={datosGrafica.datasets} aniosExcel={datosGrafica.labels}></Excel>
                     </div>

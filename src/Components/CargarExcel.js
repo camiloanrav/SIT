@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useRef} from 'react';
 import XLSX from 'xlsx';
 import {postData} from '../utils/api';
+import {postData2} from '../utils/api';
 //import { make_cols } from './MakeColumns';
 //import { SheetJSFT } from './types';
 
@@ -38,6 +39,7 @@ const CargarExcel = ({indicadores}) => {
     const [name, setName] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [erroresEnArchivoExcel, setErroresEnArchivoExcel] = useState([]);
+    const [erroresEnArchivoExcelServer, setErroresEnArchivoExcelServer] = useState([]);
     const [indicadoresErroneos, setIndicadoresErroneos] = useState([]);
 
     const refContainer = useRef(null);
@@ -87,16 +89,24 @@ const CargarExcel = ({indicadores}) => {
                 let ws = wb.Sheets[nombreHojaExcel];
                 let datosHojaExcel = XLSX.utils.sheet_to_json(ws);
                 let problemaArchivoAux = [];
+                console.log(datosHojaExcel);
                 
                 /* col = make_cols(ws['!ref']); */
-
-                let existeIndicador = indicadores.find(e=> e.value === datosHojaExcel[0].indicadores_idindicadores.toString()  && e.unidad !== "0");
-                
-                if(existeIndicador === undefined){
-                    indicadorErroneo.push({"hoja":nombreHojaExcel, "label":"El indicador no existe o no admite datos", "value":datosHojaExcel[0].indicadores_idindicadores});
+                if(datosHojaExcel.length === 0 || datosHojaExcel[0].indicadores_idindicadores === undefined){
+                    setName('El archivo Excel tiene problemas en su estructura o un cabezal es incorrecto.');
+                    setIsLoading(false);
+                    return;
                 }
 
+                
+
                 datosHojaExcel.forEach((element,i) => {
+
+                    let existeIndicador = indicadores.find(e=> e.value === datosHojaExcel[i].indicadores_idindicadores.toString()  && e.unidad !== "0");
+                
+                    if(existeIndicador === undefined &&  indicadorErroneo[indicadorErroneo.length - 1]?.value !== datosHojaExcel[i].indicadores_idindicadores ){
+                        indicadorErroneo.push({"hoja":nombreHojaExcel, "label":"El indicador no existe o no admite datos", "value":datosHojaExcel[i].indicadores_idindicadores});
+                    }
 
                     if(element.valor === undefined){
                         //problemaArchivoAux.push({"hoja":nombreHojaExcel, "label":"valor", "value":i+2});
@@ -132,9 +142,17 @@ const CargarExcel = ({indicadores}) => {
                 console.log(col);
                 
                 if(problemaArchivo.length===0 && indicadorErroneo.length === 0){
-                    postData('/indicaterri/create.php',datos).then((datos) => {
+                    postData2('/indicaterri/create.php',datos).then((resp) => {
                         setIsLoading(false);
-                        setName('El archivo ha sido cargado correctamente.');
+                        console.log(resp);
+                        if(resp != null && resp.data != null &&  resp.data.length !== 0){
+                            //setName("Error al cargar el archivo.");
+                            console.log(resp.data);
+                            //setErroresEnArchivoExcelServer(resp.data);
+                            setName(resp.data);
+                        }else{
+                            setName('El archivo ha sido cargado correctamente.');
+                        }
                         console.timeEnd();
                     });
                     /* setIsLoading(false);
@@ -151,7 +169,7 @@ const CargarExcel = ({indicadores}) => {
                     console.timeEnd();
                 }
             }else{
-                alert("Error en el archivo");
+                setName('El archivo Excel tiene problemas en su estructura.');
             }
         }
 
@@ -248,6 +266,28 @@ const CargarExcel = ({indicadores}) => {
                         </TableBody>
                     </Table>
                 </TableContainer>
+            }
+
+            {
+                erroresEnArchivoExcelServer.length !== 0 &&
+                <TableContainer style={{backgroundColor:'#E8E8E8'}} component={Paper}>
+                <Table className={classes.table} size="small" aria-label="a dense table">
+                    <TableHead style={{backgroundColor:'LightCoral'}}>
+                    <TableRow>
+                        <TableCell>Mensaje de error</TableCell>
+                    </TableRow>
+                    </TableHead>
+                    <TableBody>
+                    {erroresEnArchivoExcelServer.map((row,i) => (
+                        <TableRow key={i}>
+                        <TableCell component="th" scope="row">
+                            {row.message}
+                        </TableCell>
+                        </TableRow>
+                    ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
             }
         </div>
     );

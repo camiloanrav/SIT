@@ -51,8 +51,8 @@ const Excel = ({datosExcel,aniosExcel}) => {
 
     return (
         <div>
-            <div > 
-                <button className="button-card-uao" style={{margin:'0.5em', marginTop:'1em' ,backgroundColor:'lightblue'}} onClick={()=>ConvertJSON()}> Generar Excel </button>
+            <div> 
+                <button className="button-card-uao" style={{margin:'0.5em', marginTop:'0.3em' ,backgroundColor:'lightblue'}} onClick={()=>ConvertJSON()}> Generar Excel </button>
             </div>
         </div>
     );

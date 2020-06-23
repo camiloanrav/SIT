@@ -203,8 +203,8 @@ const FormularioIndicadorOrdenSuperior = ({orden, indicadores, niveles, categori
                 "periodicidad": "null",
                 "tipo_valor": "null",
                 "nivel": nivelSeleccionado.value,
-                "fuentes_idfuentes": null,
-                "unidades_medida_idunidades": null,
+                "fuentes_idfuentes": "0",
+                "unidades_medida_idunidades": "0",
                 "indicadores_idindicadores": indicadorSuperiorAux.value===""?indicadorSeleccionado.value:indicadorSuperiorAux.value,
                 "categorias_idcategorias": categoriaAux.value===""?categoriaSeleccionada.value:categoriaAux.value
             }

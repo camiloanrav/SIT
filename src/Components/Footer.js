@@ -93,7 +93,7 @@ const Footer = () => {
                                 </div>
                                 <span className="separator"></span>
                                 <div className="section">
-                                    <p>Términos de uso SerPácífico</p>
+                                    <p>Términos de uso SER Pácífico</p>
                                     <div className="flex-container">
                                         <div className="circle-icon">
                                             <span className="icon fas fa-bookmark"></span>
@@ -146,7 +146,7 @@ const Footer = () => {
                     aria-labelledby="scroll-dialog-title"
                     aria-describedby="scroll-dialog-description"
                 >
-                    <DialogTitle id="scroll-dialog-title">Términos de uso SerPácífico</DialogTitle>
+                    <DialogTitle id="scroll-dialog-title">Términos de uso SER Pacífico</DialogTitle>
                     <DialogContent dividers='paper'>
                     <DialogContentText
                         id="scroll-dialog-description"

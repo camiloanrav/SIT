@@ -23,7 +23,7 @@ const EstadisticasContainer = () => {
             <NavBarMovil></NavBarMovil>
             <Titulo titulo="Estadísticas"></Titulo>
             <div style={{padding:'1em 0em 0em 0em', background: `linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6)), url(${background})`/* ,  backgroundImage:`url(${background})` */, backgroundPosition:'center', backgroundRepeat:'repeat', backgroundSize:'cover'}}>
-                <Tabs setindice={setindice} tab1="Busqueda por Dimensiones" tab2="Busqueda Avanzada"></Tabs>
+                <Tabs setindice={setindice} tab1="Búsqueda por Dimensiones" tab2="Búsqueda Avanzada"></Tabs>
                 {
                     indice === 1 ? 
                     //<EstadisticasDos></EstadisticasDos>
