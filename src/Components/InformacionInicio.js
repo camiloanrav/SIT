@@ -7,7 +7,7 @@ const InformacionInicio = () => {
             <img style={{marginTop:'4em'}} alt="logo" src={logo} width="380em"></img>
             <div className="informacion">
                     <p>
-                        <i class="fas fa-angle-right"></i>
+                        <i className="fas fa-angle-right"></i>
                         ¿QUIÉNES SOMOS?
                     </p>
                     <div>

@@ -1,13 +1,13 @@
 import React from 'react';
 import XLSX from 'xlsx';
 
-const Excel = ({datosExcel,aniosExcel}) => {
+const Excel = ({titulo,datosExcel,aniosExcel}) => {
 
     const ConvertJSON = () => {
         var new_workbook = XLSX.utils.book_new();
         new_workbook.SheetNames.push("Reporte SER");
         new_workbook.Props = {
-            Title: "Reporte SER Pacífico",
+            Title: "Reporte SER Pacífico - " + titulo,
             Subject: "Reporte",
             Author: "SER Pacífico"
         }
@@ -21,12 +21,16 @@ const Excel = ({datosExcel,aniosExcel}) => {
             let json = [];
             json.Municipio = datosAux[i].label;
             for(let j = 0; j < aniosAux.length; j++){
-                json["Año_"+ aniosAux[j]] = datosAux[i].data[j];
+                if(datosAux[i].data[j].toString() === 'NaN'){
+                    json["Año_"+ aniosAux[j]] = 'No hay Información';
+                }else{
+                    json["Año_"+ aniosAux[j]] = datosAux[i].data[j];
+                }
             }
             informacionExcel.push(json);
         }
 
-        var nombreArchivo = "Reporte SER Pacífico";
+        var nombreArchivo = "Reporte SER Pacífico - " + titulo;
         let headers = aniosAux;
 
         for (let i = 0; i < headers.length; i++) {

@@ -15,6 +15,7 @@ import ShowChartIcon from '@material-ui/icons/ShowChart';
 import CreateIcon from '@material-ui/icons/Create';
 
 import Excel from "../Components/Excel";
+import Login from '../Containers/Login';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -47,6 +48,10 @@ const EstadisticasUno = () => {
 
     const[cargando, setCargando] = useState(false);
     const[noGrafica, setNoGrafica] = useState(false);
+
+    const [departamentos, setDepartamentos] = useState([]);
+    const [porcentajeDeCarga, setPorcentajeDeCarga] = useState(0);
+    const [masDeUnoDepartamento, setMasDeUnoDepartamento] = useState(false);
 
     const classes = useStyles();
 
@@ -94,29 +99,108 @@ const EstadisticasUno = () => {
     const getTerritorios = () => {
         setCargando(true);
         getData('/indicaterri/search.php?id=' + indicadorSeleccionado.value).then(data => {
-            let temp = []; 
+            let temp = [];
+
+            let departamentosAux = [];
+
+            let cauca = [{value:'0', label:'TODOS CAUCA', isDisabled: false}];
+            let choco = [{value:'1', label:'TODOS CHOCÓ', isDisabled: false}];
+            let narino = [{value:'2', label:'TODOS NARIÑO', isDisabled: false}];
+            let valle = [{value:'3', label:'TODOS VALLE', isDisabled: false}];
+
+            data.sort((a,b) => (a.nombre > b.nombre) ? 1 : ((b.nombre > a.nombre) ? -1 : 0)); 
+
+            for(let i = 0; data.length > i; i++){
+                temp.push({value: data[i].codigo_dane , label:data[i].nombre});
+                if(data[i].codigo_dane.substring(0,2) === "19" && data[i].codigo_dane !== "19000"){
+                    cauca.push({value: data[i].codigo_dane , label:data[i].nombre, isDisabled: false});
+                }else if(data[i].codigo_dane.substring(0,2) === "27" && data[i].codigo_dane !== "27000"){
+                    choco.push({value: data[i].codigo_dane , label:data[i].nombre, isDisabled: false});
+                }else if(data[i].codigo_dane.substring(0,2) === "52" && data[i].codigo_dane !== "52000"){
+                    narino.push({value: data[i].codigo_dane , label:data[i].nombre, isDisabled: false});
+                }else if(data[i].codigo_dane.substring(0,2) === "76" && data[i].codigo_dane !== "76000"){
+                    valle.push({value: data[i].codigo_dane , label:data[i].nombre, isDisabled: false});
+                }
+            }
+
+            departamentosAux.push(
+                {
+                    label:'Cauca',
+                    options: cauca,
+                },
+                {
+                    label:'Choco',
+                    options: choco,
+                },
+                {
+                    label:'Nariño',
+                    options: narino,
+                },
+                {
+                    label:'Valle del Cauca',
+                    options: valle,
+                },
+            );
+            
+            cauca.length === 1 || valle.length === 1 || narino.length === 1 || choco.length === 1 ?
+            setTerritorios(temp)
+            :
+            setTerritorios(departamentosAux);
+
+            setDepartamentos(departamentosAux);
+            
+            setCargando(false);
+            /* let temp = []; 
             for(let i = 0; data.length > i; i++){
                 temp.push({value: data[i].codigo_dane , label:data[i].nombre});
             }
             setTerritorios(temp);
-            setCargando(false);
+            setCargando(false); */
         }).catch(error => console.log(error.data));
     }
 
     const getPeriodos = () => {
         setCargando(true);
         let tempPeriodos = [];
-        for(let i = 0; i < territorioSeleccionado.length; i++){
-            getData('/periodo/search.php?id=' + indicadorSeleccionado.value + "&dane=" + territorioSeleccionado[i].value).then((data) => {
-                console.log(data);
+
+        let auxTerritorio = [...territorioSeleccionado];
+
+        if(departamentos.length > 0){
+            let tamanoInicial = departamentos.length;
+            let contieneDepartamento = false;
+            for (let i = 0; i < auxTerritorio.length; i++) {
+                if(auxTerritorio[i].label.substring(0,5) === "TODOS"){
+                    contieneDepartamento = true;
+                    let departamento = [...departamentos[parseInt(auxTerritorio[i].value)].options];
+                    
+                    if(parseInt(departamento[0].value) < 5){
+                        departamento.shift();
+                    }
+                    auxTerritorio = auxTerritorio.concat(departamento);
+                }
+            }
+            if(contieneDepartamento){
+                auxTerritorio.splice(0,tamanoInicial);
+            }
+        }
+        
+        console.log(auxTerritorio);
+        var contadorDeCarga = 0;
+        for(let i = 0; i < auxTerritorio.length; i++){
+            getData('/periodo/search.php?id=' + indicadorSeleccionado.value + "&dane=" + auxTerritorio[i].value).then((data) => {
+                //console.log(data);
                 
-                let aux = []; 
+                let aux = [];
                 for(let j = 0; data.length > j; j++){
-                    aux.push({value: data[j].valor , label: data[j].periodo, municipio: territorioSeleccionado[i].label});
+                    aux.push({value: data[j].valor , label: data[j].periodo, municipio: auxTerritorio[i].label});
                 }
                 tempPeriodos.push(aux);
-                console.log(aux);
-                if(tempPeriodos.length === territorioSeleccionado.length){
+
+                contadorDeCarga ++;
+                setPorcentajeDeCarga((contadorDeCarga/(auxTerritorio.length/100)).toFixed(1));
+                
+                if(tempPeriodos.length === auxTerritorio.length){
+                    
                     console.log(tempPeriodos);
                     setPeriodos(tempPeriodos);
                     let opcionesPeriodosAux = [];
@@ -125,6 +209,7 @@ const EstadisticasUno = () => {
                         opcionesPeriodosAux.push({value:(i+1).toString(),label:aux[i].label, isDisabled: false})
                     }
                     setOpcionesPeriodos(opcionesPeriodosAux);
+                    setPorcentajeDeCarga(0);
                     setCargando(false);
                 }
             }).catch(error => console.log(error));
@@ -177,6 +262,9 @@ const EstadisticasUno = () => {
                 if(isNaN(valor.value.split(",").join("."))){
                     setNoGrafica(true);
                     valores.push(valor.value);
+                }else if(masDeUnoDepartamento){
+                    setNoGrafica(true);
+                    valores.push(parseFloat(valor.value.split(",").join(".")));
                 }else{
                     valores.push(parseFloat(valor.value.split(",").join(".")));
                 }
@@ -255,7 +343,71 @@ const EstadisticasUno = () => {
                             onChange={(t)=>{
                                 setTerritorioSeleccionado(t);
                                 setBotonTerritorio(true);
+                                
+                                let tAux = [];
 
+                                territorios[0].options[0].isDisabled = false;
+                                territorios[1].options[0].isDisabled = false;
+                                territorios[2].options[0].isDisabled = false;
+                                territorios[3].options[0].isDisabled = false;
+                                
+                                tAux = t?.filter((element)=>{
+                                    return parseInt(element.value) < 5;
+                                })
+                                
+                                if(tAux !== undefined && tAux.length>0){
+                                    let auxTerritorios = territorios;
+                                    for (let i = 0; i < auxTerritorios.length; i++) {
+                                        if(!tAux.some((element)=>{return element.value === i.toString()})){
+                                            for(let j = 0; j < auxTerritorios[i].options.length; j++){
+                                                auxTerritorios[i].options[j].isDisabled = false;
+                                            }
+                                        }
+                                    }
+                                    setTerritorios(auxTerritorios);
+                                }
+
+                                if(t === null || t.length=== 0){
+                                        let auxTerritorios = territorios;
+                                        for(let i = 0; i < auxTerritorios.length; i++){
+                                            for(let j = 0; j < auxTerritorios[i].options.length; j++){
+                                                auxTerritorios[i].options[j].isDisabled = false;
+                                            }
+                                        }
+                                        setTerritorios(auxTerritorios);
+                                }else{
+                                    for (let k = 0; k < t.length; k++) {
+                                        if(t && t.length > 0 && t[k].label !== undefined && t[k].label.substring(0,5) === "TODOS"){
+                                            let auxTerritorios = territorios;
+                                            for(let i = 1; i < auxTerritorios[parseInt(t[k].value)].options.length; i++){
+                                                auxTerritorios[parseInt(t[k].value)].options[i].isDisabled = true;
+                                            }
+                                            setTerritorios(auxTerritorios);
+                                        }else if(t && t.length > 0 && t[k].label !== undefined && t[k].label.substring(0,5) !== "TODOS"){
+                                            let auxTerritorios = territorios;
+                                            t.forEach(element => {
+                                                if(element.value.substring(0,2) === "19"){
+                                                    auxTerritorios[0].options[0].isDisabled = true;
+                                                }else if(element.value.substring(0,2) === "27"){
+                                                    auxTerritorios[1].options[0].isDisabled = true;
+                                                }else if(element.value.substring(0,2) === "52"){
+                                                    auxTerritorios[2].options[0].isDisabled = true;
+                                                }else if(element.value.substring(0,2) === "76"){
+                                                    auxTerritorios[3].options[0].isDisabled = true;
+                                                }
+                                            });
+                                        }
+                                    }
+                                }
+
+                                if(tAux.length>1){
+                                    setMasDeUnoDepartamento(true);
+                                }else{
+                                    setMasDeUnoDepartamento(false);
+                                }
+
+
+                                
                                 setPeriodos([]);
                                 setPeriodoSeleccionado(null);
                                 setBotonPeriodo(false);
@@ -329,6 +481,10 @@ const EstadisticasUno = () => {
                         cargando &&
                         <div className={classes.root} style={{textAlign:'center'}}>
                             Procesando...
+                            {
+                                porcentajeDeCarga !== 0 ? " " + porcentajeDeCarga + " %" : null
+                                
+                            }
                             <LinearProgress color="secondary" />
                         </div>
                     }
@@ -405,7 +561,7 @@ const EstadisticasUno = () => {
                         />
                         <div style={{textAlign:'center', fontWeight:'bold', fontSize:'14px', fontFamily:'roboto', margin:'0.5em 1em 0.5em 1em'}}>Fuente: {fuente}</div>
                         <div style={{textAlign:'right'}}>
-                            <Excel datosExcel={datosGrafica.datasets} aniosExcel={datosGrafica.labels}></Excel>
+                            <Excel titulo={indicadorSeleccionado.label} datosExcel={datosGrafica.datasets} aniosExcel={datosGrafica.labels}></Excel>
                         </div>
                     </div>
                 }
@@ -469,15 +625,19 @@ const EstadisticasUno = () => {
                         />
                         <div style={{textAlign:'center', fontWeight:'bold', fontSize:'14px', fontFamily:'roboto', margin:'0.5em 1em 0.5em 1em'}}>Fuente: {fuente}</div>
                         <div style={{textAlign:'right'}}>
-                            <Excel datosExcel={datosGrafica.datasets} aniosExcel={datosGrafica.labels}></Excel>
+                            <Excel titulo={indicadorSeleccionado.label} datosExcel={datosGrafica.datasets} aniosExcel={datosGrafica.labels}></Excel>
                         </div>
                     </div>
                 }
                 {
                     noGrafica &&
                     <div style={{textAlign:'center', margin:'5em 0 0 0'}}>
-                        <h3>Estos datos son de caracter cualitativo y no se pueden graficar.</h3>
-                        <Excel style={{textAlign:'center'}} datosExcel={datosGrafica.datasets} aniosExcel={datosGrafica.labels}></Excel>
+                        {masDeUnoDepartamento?
+                        <h3 style={{margin:'0 0 0.5em 0'}}>Para la consulta de los datos totales de más de un departamento, solo se dispone del Excel. </h3>
+                        :
+                        <h3 style={{margin:'0 0 0.5em 0'}}>Estos datos son de caracter cualitativo y no se pueden graficar.</h3>
+                        }
+                        <Excel titulo={indicadorSeleccionado.label} style={{textAlign:'center'}} datosExcel={datosGrafica.datasets} aniosExcel={datosGrafica.labels}></Excel>
                     </div>
                 }
             </div>

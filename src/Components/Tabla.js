@@ -1,5 +1,4 @@
 import React, { Component, useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { BrowserRouter as Router, useParams } from "react-router-dom";
 import ReactPaginate from 'react-paginate';
 import FilasTabla from './FilasTabla';
@@ -20,27 +19,8 @@ import TextField from '@material-ui/core/TextField';
 import {postData} from '../utils/api';
 import {getData} from '../utils/api';
 
-/* export class CommentList extends React.Component {
-
-    render() {
-        let commentNodes = this.props.dataPerPage.map(function(d, index) {
-            return <tr key={index}>
-                    <td data-table-header="Título">{d.titulo}</td>
-                    <td data-table-header="Autor/es">{d.autor}</td>
-                    <td data-table-header="Acciones"> <Link target="_blank" to={d.urlarchivo}>Descargar</Link></td>
-                </tr>;
-        });
-        return (
-            <tbody> 
-              {commentNodes}
-            </tbody> 
-        );
-    }
-} */
-
 const Tabla = ({ datos, isAdmin, tab, setDatos }) => {
 
-    /* const [data, setData] = useState([]); */
     const [offset, setOffset] = useState(0);
     const [pageCount, setPageCount] = useState(10);
     const [dataPerPage, setDataPerPage] = useState([]);
@@ -61,7 +41,6 @@ const Tabla = ({ datos, isAdmin, tab, setDatos }) => {
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [mensaje, setMensaje] = useState("");
 
-    //const [categoriasPublicaciones] = useState([{value:1,label:'Documentos'},{value:2,label:'Cuentas Ecónomicas'}]);
 
     const handleClickOpen = (option, titulo, autores, fecha, url, idPublicacion, categoriaPublicacion) => {
         setTitulo(titulo);
@@ -169,6 +148,7 @@ const Tabla = ({ datos, isAdmin, tab, setDatos }) => {
         //asignData(selected);
         setCurrentPage(selected);
         console.log(selected);
+        window.scrollTo(0, 0);
         
     };
 
@@ -187,24 +167,25 @@ const Tabla = ({ datos, isAdmin, tab, setDatos }) => {
             
             <div className="lista">
                 <div className="form-table">
-                    <table >
-                        <thead>
-                            <tr>
-                                <th scope="col">Título</th>
-                                <th scope="col">Autor/es</th>
-                                <th scope="col">Acciones</th>
-                            </tr>
-                        </thead>
-                        {
-                            dataPerPage.length !== 0 ?
-                            <FilasTabla admin={isAdmin} dataPerPage={dataPerPage} handleClickOpen={handleClickOpen}></FilasTabla>
-                            :
-                            <div>Cargando datos...</div>
-                        }
-                        
-                    </table>
+                {
+                        dataPerPage.length !== 0 ?
+                        <table >
+                            <thead>
+                                <tr>
+                                    <th scope="col">Título</th>
+                                    <th scope="col">Autor/es</th>
+                                    <th scope="col">Acciones</th>
+                                </tr>
+                            </thead>
+                            
+                                <FilasTabla admin={isAdmin} dataPerPage={dataPerPage} handleClickOpen={handleClickOpen}></FilasTabla>
+                                
+                        </table>
+                    :
+                        null
+                    }
                     {
-                        pageCount !== 1 ?
+                        pageCount !== 1 && dataPerPage.length !== 0 ?
                             <ReactPaginate
                                 previousLabel={'Anterior'}
                                 nextLabel={<div>Siguiente</div>}
@@ -295,14 +276,6 @@ const Tabla = ({ datos, isAdmin, tab, setDatos }) => {
                 </DialogContentText>
                     <div>
                         <TextField  onChange={e => setTitulo(e.target.value)} type="text" fullWidth id="nombre" label="Nombre" />
-                        {/* <div style={{margin:'1em 0em 0em 0em'}}>
-                            <div>Categoría</div>
-                            <Select options={categoriasDocumentos} 
-                                    defaultValue={tab === 1 ? categoriasDocumentos[0]:categoriasDocumentos[1]}
-                                    onChange={e => setCategoriaDocumento(e.target.value)}
-                                    isSearchable={false}
-                            />
-                        </div> */}
                         <TextField  onChange={e => setAutores(e.target.value)} type="text" fullWidth id="autores" label="Autores" />
                         <TextField  onChange={e => setFecha(e.target.value)} type="number" fullWidth id="fecha" label="Año" />
                         <TextField  onChange={e => setUrl(e.target.value)} type="text" fullWidth id="link" label="Link" />
@@ -338,9 +311,5 @@ const Tabla = ({ datos, isAdmin, tab, setDatos }) => {
         </div>
     )
 };
-
-
-
-Tabla.propTypes = {};
 
 export default Tabla;

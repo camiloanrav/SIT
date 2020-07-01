@@ -37,6 +37,7 @@ const CargarExcel = ({indicadores}) => {
     const classes = useStyles();
     const [file, setFile] = useState();
     const [name, setName] = useState('');
+    const [archivoSeleccionado, setArchivoSeleccionado] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [erroresEnArchivoExcel, setErroresEnArchivoExcel] = useState([]);
     const [erroresEnArchivoExcelServer, setErroresEnArchivoExcelServer] = useState([]);
@@ -61,9 +62,15 @@ const CargarExcel = ({indicadores}) => {
         const files = e.target.files;
         if (files && files[0]){
             setFile(files[0]);
-            setName("Archivo seleccionado: " + e.target.value);
+            setName("Archivo seleccionado: ");
             setErroresEnArchivoExcel([]);
             setIndicadoresErroneos([]);
+            let text = "fakepath";
+            if(e.target.value.substring(3,text.length+3) === text){
+                setArchivoSeleccionado(e.target.value.substring(text.length+3));
+            }else{
+                setArchivoSeleccionado(e.target.value);
+            }
         }
     };
 
@@ -93,7 +100,7 @@ const CargarExcel = ({indicadores}) => {
                 
                 /* col = make_cols(ws['!ref']); */
                 if(datosHojaExcel.length === 0 || datosHojaExcel[0].indicadores_idindicadores === undefined){
-                    setName('El archivo Excel tiene problemas en su estructura o un cabezal es incorrecto.');
+                    setName('El archivo Excel tiene problemas en su estructura.');
                     setIsLoading(false);
                     return;
                 }
@@ -105,7 +112,7 @@ const CargarExcel = ({indicadores}) => {
                     let existeIndicador = indicadores.find(e=> e.value === datosHojaExcel[i].indicadores_idindicadores.toString()  && e.unidad !== "0");
                 
                     if(existeIndicador === undefined &&  indicadorErroneo[indicadorErroneo.length - 1]?.value !== datosHojaExcel[i].indicadores_idindicadores ){
-                        indicadorErroneo.push({"hoja":nombreHojaExcel, "label":"El indicador no existe o no admite datos", "value":datosHojaExcel[i].indicadores_idindicadores});
+                        indicadorErroneo.push({"hoja":nombreHojaExcel, "label":"El indicador no existe o no admite datos, fila: " +(i+2), "value":datosHojaExcel[i].indicadores_idindicadores});
                     }
 
                     if(element.valor === undefined){
@@ -121,7 +128,7 @@ const CargarExcel = ({indicadores}) => {
                         problemaArchivoAux.push({"hoja":nombreHojaExcel, "label":"indicadores_idindicadores","value":i+2});
                     }
             
-                    if(element.territorios_codigo_dane === undefined){
+                    if(element.territorios_codigo_dane === undefined || element.territorios_codigo_dane === ""){
                         problemaArchivoAux.push({"hoja":nombreHojaExcel, "label":"territorios_codigo_dane", "value":i+2});
                     }
 
@@ -148,8 +155,10 @@ const CargarExcel = ({indicadores}) => {
                         if(resp != null && resp.data != null &&  resp.data.length !== 0){
                             //setName("Error al cargar el archivo.");
                             console.log(resp.data);
+                            let errores = resp.data.split('"}{"message":"');
                             //setErroresEnArchivoExcelServer(resp.data);
-                            setName(resp.data);
+                            setErroresEnArchivoExcelServer(errores);
+                            setName("Error al cargar el archivo en el servidor.");
                         }else{
                             setName('El archivo ha sido cargado correctamente.');
                         }
@@ -200,10 +209,10 @@ const CargarExcel = ({indicadores}) => {
                 <input style={{ display: 'none' }} ref={refContainer} type="file" className="form-control" id="raised-button-file" accept={SheetJSFT} onChange={handleChange} />
             </Button>
             {
-                name === '' || name ==='El archivo ha sido cargado correctamente.' || name ==='El archivo Excel tiene problemas en su estructura.' ? null : 
+                name === '' || name ==='El archivo ha sido cargado correctamente.' || name ==='El archivo Excel tiene problemas en su estructura.' || name ==='Error al cargar el archivo en el servidor.' ? null : 
                 <Button color="secondary" style={{marginLeft:'0.5em', background:'linear-gradient(to right, #c4161c 0%, #9e0b0f  100%)'}} variant="contained" onClick={handleFile}>CARGAR</Button> 
             }
-            <p style={{marginTop:'1em', fontFamily:'roboto'}}>{name}</p>
+            <p style={{marginTop:'1em', fontFamily:'roboto'}}>{name} {archivoSeleccionado}</p>
             <br />
             {
                 isLoading &&
@@ -281,7 +290,7 @@ const CargarExcel = ({indicadores}) => {
                     {erroresEnArchivoExcelServer.map((row,i) => (
                         <TableRow key={i}>
                         <TableCell component="th" scope="row">
-                            {row.message}
+                            {row}
                         </TableCell>
                         </TableRow>
                     ))}

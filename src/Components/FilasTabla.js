@@ -28,7 +28,7 @@ const FilasTabla = ({admin, dataPerPage, handleClickOpen}) => {
                         <tr key={index}>
                             <td data-table-header="Título">{d.titulo}</td>
                             <td data-table-header="Autor/es">{d.autor}</td>
-                            <td data-table-header="Acciones"> <a target="_blank" rel="noopener noreferrer" href={d.urlarchivo}>Descargar</a></td>
+                            <td data-table-header="Acciones"> <a target="_blank" rel="noopener noreferrer" href={d.urlarchivo}>Descargar Archivo</a></td>
                         </tr>
                     )
                 })

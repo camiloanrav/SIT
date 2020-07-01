@@ -11,7 +11,7 @@ const VideoAyuda = () => {
                     </h1>
                     <div className="vs-wrap">
                     <div className="vs-container">
-                        <iframe src="https://www.youtube.com/embed/dvVOFNpando" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <iframe src="https://www.youtube.com/embed/elOtNZOK9uk" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                     </div>
                     </div>
                 </div>

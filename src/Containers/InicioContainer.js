@@ -35,11 +35,10 @@ const InicioContainer = () => {
 
     function renderPosts(datos) {
 
-        return datos.map((card,index) => {
+        return datos.map((card,i) => {
             const {nombre, descripcion, rutaimagen} = card;
-
             return (
-                <Card key={index} nombreDimension={nombre} descripcion={descripcion} rutaimagen={rutaimagen}/>                    
+                <Card key={i} i={i} nombreDimension={nombre} descripcion={descripcion} rutaimagen={rutaimagen}/>                    
             );
         });
     }

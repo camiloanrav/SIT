@@ -1,7 +1,6 @@
 
-import React, {Component, useState, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 
-import background from '../background.png';
 import Tabs from '../Components/Tabs';
 import Buscador from '../Components/Buscador';
 import Tabla from '../Components/Tabla';
@@ -26,7 +25,7 @@ const AdminPublicaciones = () => {
     const [filtrado, setFiltrado]= useState([]);
     const [indice, setindice] = useState(1);
     const [buscar, setBuscar] = useState("");
-    const [tipoBusqueda,setTipoBusqueda] = useState("Titulo");
+    const [tipoBusqueda,setTipoBusqueda] = useState("Título");
     
     useEffect(() => {
         getData(`/documento/search.php?id=${indice}`).then(data => {
@@ -44,7 +43,7 @@ const AdminPublicaciones = () => {
         if(buscar !== "" && datos){
             setFiltrado(
                 datos.filter(function (i){
-                    if(tipoBusqueda === "Titulo")
+                    if(tipoBusqueda === "Título")
                         return i.titulo.toLowerCase().match(buscar.toLowerCase());
                     else
                         return i.autor.toLowerCase().match(buscar.toLowerCase());
@@ -75,10 +74,10 @@ const AdminPublicaciones = () => {
                         <RadioGroup aria-label="position" name="position" value={tipoBusqueda} onChange={e => setTipoBusqueda(e.target.value)} row>
                             
                         <FormControlLabel
-                        value="Titulo"
+                        value="Título"
                         control={<Radio color="primary" />}
-                        label="Titulo"
-                        labelPlacement="Titulo"
+                        label="Título"
+                        labelPlacement="Título"
                         />
 
                         <FormControlLabel

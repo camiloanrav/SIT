@@ -15,17 +15,17 @@ const RecursosUtiles = ({ header, body }) => {
                     <p>Recursos disponibles:</p>
                     <ul>
                         <li>
-                            <a href="">
+                            <a target="_blank" rel="noopener noreferrer" href="https://drive.google.com/file/d/1BLni3SEb8JfpoX-DOZNVR8Tzy9UeO_YM/view">
                                 <span className="fab fa-google-drive"></span>
                                 <p>Link a manual</p>
                             </a>
                         </li>
-                        <li>
+                        {/* <li>
                             <a href="">
                                 <span className="fas fa-file-download"></span>
                                 <p>Descargar manual</p>
                             </a>
-                        </li>
+                        </li> */}
                     </ul>
                 </div>
             </section>

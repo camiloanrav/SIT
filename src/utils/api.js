@@ -3,8 +3,11 @@ import axios from 'axios';
 /* const URL_base = 'http://localhost/serpacificows';
 const URL_base_correo = 'http://localhost'; */
 
-const URL_base = 'http://45.5.188.65/serpacificows';
-const URL_base_correo = 'https://45.5.188.65';
+const URL_base = 'https://serpacifico.uao.edu.co/serpacificows';
+const URL_base_correo = 'https://serpacifico.uao.edu.co/';
+
+/* const URL_base = 'http://45.5.188.65/serpacificows';
+const URL_base_correo = 'https://45.5.188.65'; */
 
 /* const URL_base = 'http://127.0.0.1/serpacificows';
 const URL_base_correo = 'http://127.0.0.1'; */
@@ -23,6 +26,13 @@ export function postData(path, elements) {
     console.log(response.data);
     return response.data?response.data:null;
   }).catch(error => console.log(error.response));
+}
+
+export function getData2(path) {
+  return axios.get(URL_base + path).then(response => {
+    //console.log(response.data);
+    return response;
+  }).catch(error => {return error.response;});
 }
 
 export function postData2(path, elements) {

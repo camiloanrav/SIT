@@ -37,12 +37,12 @@ import {
                 <section className="tabs-cards-container ">
                     <nav>
                         <ul>
-                            <Link to={`${url + "/" + tab1.toLowerCase().replace(/ /g,"-")}`} onClick={()=> handleClick(1)} className={"tab program-tab"}>
+                            <Link to={`${url + "/" + tab1.toLowerCase().replace(/ /g,"-").normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`} onClick={()=> handleClick(1)} className={"tab program-tab"}>
                                 <li style={{backgroundColor:'white'}} className={"tab program-tab ".concat(`${indicador===1?"active":""}`)} data-box-class="program-box" data-tab-class="program-tab" data-box-id="box-1">
                                     {tab1}
                                 </li>
                             </Link>
-                            <Link to={`${url + "/" + tab2.toLowerCase().replace(/ /g,"-")}`} onClick={()=> handleClick(2)} className={"tab program-tab"}>
+                            <Link to={`${url + "/" + tab2.toLowerCase().replace(/ /g,"-").normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`} onClick={()=> handleClick(2)} className={"tab program-tab"}>
                                 <li style={{backgroundColor:'white'}} className={"tab program-tab ".concat(`${indicador===2?"active":""}`)} data-box-class="program-box" data-tab-class="program-tab" data-box-id="box-2">
                                     {tab2}
                                 </li>
