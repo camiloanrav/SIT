@@ -848,6 +848,36 @@ const EstadisticasTres = () => {
                             },
                             animation: {
                                 duration: 1000
+                            },
+                            tooltips: {
+                                callbacks: {
+                                    label: function(tooltipItem, data) {
+                                        let label = tooltipItem.yLabel;
+                                        if(!Number.isInteger(label)){
+                                            if(label.toString().split('.')[0].length > 1){
+                                                label = label.toFixed(2);
+                                            }else{
+                                                label = label.toFixed(4);
+                                            }
+                                        }
+                                        label += '';
+                                        let x = label.split('.');
+                                        let x1 = x[0];
+                                        let x2 = x.length > 1 ? '.' + x[1] : '';
+                                        let rgx = /(\d+)(\d{3})/;
+                                        while (rgx.test(x1)) {
+                                            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+                                        }
+                                        let nombre = data.datasets[tooltipItem.datasetIndex].label
+                                        
+                                        return nombre + " " + (x1 + x2);
+                                    },
+                                    title:function(tooltipItem, data){
+                                        console.log(data);
+                                        console.log(tooltipItem);
+                                        return "Año: " + tooltipItem[0].xLabel;
+                                    }
+                                }
                             }
                         }}   
                         />
@@ -912,6 +942,36 @@ const EstadisticasTres = () => {
                             },
                             animation: {
                                 duration: 1000
+                            },
+                            tooltips: {
+                                callbacks: {
+                                    label: function(tooltipItem, data) {
+                                        let label = tooltipItem.yLabel;
+                                        if(!Number.isInteger(label)){
+                                            if(label.toString().split('.')[0].length > 1){
+                                                label = label.toFixed(2);
+                                            }else{
+                                                label = label.toFixed(4);
+                                            }
+                                        }
+                                        label += '';
+                                        let x = label.split('.');
+                                        let x1 = x[0];
+                                        let x2 = x.length > 1 ? '.' + x[1] : '';
+                                        let rgx = /(\d+)(\d{3})/;
+                                        while (rgx.test(x1)) {
+                                            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+                                        }
+                                        let nombre = data.datasets[tooltipItem.datasetIndex].label
+                                        
+                                        return nombre + " " + (x1 + x2);
+                                    },
+                                    title:function(tooltipItem, data){
+                                        console.log(data);
+                                        console.log(tooltipItem);
+                                        return "Año: " + tooltipItem[0].xLabel;
+                                    }
+                                }
                             }
                         }}   
                         />

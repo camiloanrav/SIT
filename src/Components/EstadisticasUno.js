@@ -3,6 +3,8 @@ import React, {useState, useEffect} from 'react';
 import { Bar } from "react-chartjs-2";
 import { Line } from "react-chartjs-2";
 import Select from "react-select";
+import { defaults } from 'react-chartjs-2';
+import { Chart } from 'react-chartjs-2';
 
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
@@ -264,9 +266,9 @@ const EstadisticasUno = () => {
                     valores.push(valor.value);
                 }else if(masDeUnoDepartamento){
                     setNoGrafica(true);
-                    valores.push(parseFloat(valor.value.split(",").join(".")));
+                    valores.push(parseFloat(valor.value.split(",").join("."))/* .toFixed(3) */);
                 }else{
-                    valores.push(parseFloat(valor.value.split(",").join(".")));
+                    valores.push(parseFloat(valor.value.split(",").join("."))/* .toFixed(3) */);
                 }
             }
             console.log(valores);
@@ -400,7 +402,7 @@ const EstadisticasUno = () => {
                                     }
                                 }
 
-                                if(tAux.length>1){
+                                if(tAux?.length>1){
                                     setMasDeUnoDepartamento(true);
                                 }else{
                                     setMasDeUnoDepartamento(false);
@@ -540,7 +542,7 @@ const EstadisticasUno = () => {
                             scales: {
                                 yAxes: [{                            
                                     ticks: {
-                                        beginAtZero: true                                   
+                                        beginAtZero: true                        
                                     },
                                     scaleLabel:{
                                         display: true,
@@ -556,6 +558,37 @@ const EstadisticasUno = () => {
                             },
                             animation: {
                                 duration: 1000
+                            },
+                            
+                            tooltips: {
+                                callbacks: {
+                                    label: function(tooltipItem, data) {
+                                        let label = tooltipItem.yLabel;
+                                        if(!Number.isInteger(label)){
+                                            if(label.toString().split('.')[0].length > 1){
+                                                label = label.toFixed(2);
+                                            }else{
+                                                label = label.toFixed(4);
+                                            }
+                                        }
+                                        label += '';
+                                        let x = label.split('.');
+                                        let x1 = x[0];
+                                        let x2 = x.length > 1 ? '.' + x[1] : '';
+                                        let rgx = /(\d+)(\d{3})/;
+                                        while (rgx.test(x1)) {
+                                            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+                                        }
+                                        let nombre = data.datasets[tooltipItem.datasetIndex].label
+                                        
+                                        return nombre + " " + (x1 + x2);
+                                    },
+                                    title:function(tooltipItem, data){
+                                        console.log(data);
+                                        console.log(tooltipItem);
+                                        return "Año: " + tooltipItem[0].xLabel;
+                                    }
+                                }
                             }
                         }}   
                         />
@@ -604,7 +637,7 @@ const EstadisticasUno = () => {
                             scales: {
                                 yAxes: [{                            
                                     ticks: {
-                                        beginAtZero: true                                   
+                                        beginAtZero: true
                                     },
                                     scaleLabel:{
                                         display: true,
@@ -620,6 +653,36 @@ const EstadisticasUno = () => {
                             },
                             animation: {
                                 duration: 1000
+                            },
+                            tooltips: {
+                                callbacks: {
+                                    label: function(tooltipItem, data) {
+                                        let label = tooltipItem.yLabel;
+                                        if(!Number.isInteger(label)){
+                                            if(label.toString().split('.')[0].length > 1){
+                                                label = label.toFixed(2);
+                                            }else{
+                                                label = label.toFixed(4);
+                                            }
+                                        }
+                                        label += '';
+                                        let x = label.split('.');
+                                        let x1 = x[0];
+                                        let x2 = x.length > 1 ? '.' + x[1] : '';
+                                        let rgx = /(\d+)(\d{3})/;
+                                        while (rgx.test(x1)) {
+                                            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+                                        }
+                                        let nombre = data.datasets[tooltipItem.datasetIndex].label
+                                        
+                                        return nombre + " " + (x1 + x2);
+                                    },
+                                    title:function(tooltipItem, data){
+                                        console.log(data);
+                                        console.log(tooltipItem);
+                                        return "Año: " + tooltipItem[0].xLabel;
+                                    }
+                                }
                             }
                         }}   
                         />
