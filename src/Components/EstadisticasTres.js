@@ -9,14 +9,15 @@ import { makeStyles } from '@material-ui/core/styles';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
 import {getData} from '../utils/api';
-import {getData2} from '../utils/api';
 
 import EqualizerIcon from '@material-ui/icons/Equalizer';
 import ShowChartIcon from '@material-ui/icons/ShowChart';
+import Grid from '@material-ui/core/Grid';
 
 import Excel from "../Components/Excel";
+import 'chartjs-plugin-datalabels';
 
-import { useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -67,6 +68,12 @@ const EstadisticasTres = () => {
 
     const[cargando, setCargando] = useState(false);
     const[noGrafica, setNoGrafica] = useState(false);
+
+    const [departamentos, setDepartamentos] = useState([]);
+    const [porcentajeDeCarga, setPorcentajeDeCarga] = useState(0);
+    const [masDeUnoDepartamento, setMasDeUnoDepartamento] = useState(false);
+
+    const [tiempoGrafica, setTiempoGrafica] = useState(1000);
 
     const [location] = useState(useLocation());
 
@@ -216,7 +223,6 @@ const EstadisticasTres = () => {
     const getIndicadores = () => {
         setCargando(true);
         getData('/indicador/all.php').then(data => {
-            console.log(data);
 
             data.sort((a,b) => (a.idindicadores > b.idindicadores) ? 1 : ((b.idindicadores > a.idindicadores) ? -1 : 0));
             let tempN0 = []; 
@@ -323,33 +329,31 @@ const EstadisticasTres = () => {
     const getTerritorios = () => {
         setCargando(true);
         getData('/indicaterri/search.php?id=' + indicadorSeleccionado.value).then(data => {
-            console.log(data);
-            
             let temp = [];
 
-            let departamentos = [];
+            let departamentosAux = [];
 
-            let choco = [];
-            let valle = [];
-            let cauca = [];
-            let narino = [];
+            let cauca = [{value:'0', label:'TODOS CAUCA', isDisabled: false}];
+            let choco = [{value:'1', label:'TODOS CHOCÓ', isDisabled: false}];
+            let narino = [{value:'2', label:'TODOS NARIÑO', isDisabled: false}];
+            let valle = [{value:'3', label:'TODOS VALLE', isDisabled: false}];
 
             data.sort((a,b) => (a.nombre > b.nombre) ? 1 : ((b.nombre > a.nombre) ? -1 : 0)); 
 
             for(let i = 0; data.length > i; i++){
                 temp.push({value: data[i].codigo_dane , label:data[i].nombre});
                 if(data[i].codigo_dane.substring(0,2) === "19" && data[i].codigo_dane !== "19000"){
-                    cauca.push({value: data[i].codigo_dane , label:data[i].nombre});
+                    cauca.push({value: data[i].codigo_dane , label:data[i].nombre, isDisabled: false});
                 }else if(data[i].codigo_dane.substring(0,2) === "27" && data[i].codigo_dane !== "27000"){
-                    choco.push({value: data[i].codigo_dane , label:data[i].nombre});
+                    choco.push({value: data[i].codigo_dane , label:data[i].nombre, isDisabled: false});
                 }else if(data[i].codigo_dane.substring(0,2) === "52" && data[i].codigo_dane !== "52000"){
-                    narino.push({value: data[i].codigo_dane , label:data[i].nombre});
+                    narino.push({value: data[i].codigo_dane , label:data[i].nombre, isDisabled: false});
                 }else if(data[i].codigo_dane.substring(0,2) === "76" && data[i].codigo_dane !== "76000"){
-                    valle.push({value: data[i].codigo_dane , label:data[i].nombre});
+                    valle.push({value: data[i].codigo_dane , label:data[i].nombre, isDisabled: false});
                 }
             }
 
-            departamentos.push(
+            departamentosAux.push(
                 {
                     label:'Cauca',
                     options: cauca,
@@ -371,21 +375,16 @@ const EstadisticasTres = () => {
             cauca.length === 0 || valle.length === 0 || narino.length === 0 || choco.length === 0 ?
             setTerritorios(temp)
             :
-            setTerritorios(departamentos)
+            setTerritorios(departamentosAux);
+
+            setDepartamentos(departamentosAux);
             
             setCargando(false);
 
-            /* data.sort((a,b) => (a.nombre > b.nombre) ? 1 : ((b.nombre > a.nombre) ? -1 : 0)); 
-            for(let i = 0; data.length > i; i++){
-                temp.push({value: data[i].codigo_dane , label:data[i].nombre});
-            }
-
-            setTerritorios(temp);
-            setCargando(false); */
         }).catch(error => console.log(error.data));
     }
 
-    const getPeriodos = () => {
+    /* const getPeriodos = () => {
         setCargando(true);
         let tempPeriodos = [];
         for(let i = 0; i < territorioSeleccionado.length; i++){
@@ -411,14 +410,65 @@ const EstadisticasTres = () => {
                 }
             }).catch(error => console.log(error));
         }
+    } */
+    const getPeriodos = () => {
+        setCargando(true);
+        let tempPeriodos = [];
+
+        let auxTerritorio = [...territorioSeleccionado];
+
+        if(departamentos.length > 0){
+            let tamanoInicial = departamentos.length;
+            let contieneDepartamento = false;
+            for (let i = 0; i < auxTerritorio.length; i++) {
+                if(auxTerritorio[i].label.substring(0,5) === "TODOS"){
+                    contieneDepartamento = true;
+                    let departamento = [...departamentos[parseInt(auxTerritorio[i].value)].options];
+                    
+                    if(parseInt(departamento[0].value) < 5){
+                        departamento.shift();
+                    }
+                    auxTerritorio = auxTerritorio.concat(departamento);
+                }
+            }
+            if(contieneDepartamento){
+                auxTerritorio.splice(0,tamanoInicial);
+            }
+        }
+        
+        var contadorDeCarga = 0;
+        for(let i = 0; i < auxTerritorio.length; i++){
+            getData('/periodo/search.php?id=' + indicadorSeleccionado.value + "&dane=" + auxTerritorio[i].value).then((data) => {
+                
+                let aux = [];
+                for(let j = 0; data.length > j; j++){
+                    aux.push({value: data[j].valor , label: data[j].periodo, municipio: auxTerritorio[i].label});
+                }
+
+                aux.sort((a,b)=> parseInt(b.label) - parseInt(a.label));
+
+                tempPeriodos.push(aux);
+
+                contadorDeCarga ++;
+                setPorcentajeDeCarga((contadorDeCarga/(auxTerritorio.length/100)).toFixed(1));
+                
+                if(tempPeriodos.length === auxTerritorio.length){
+                    
+                    setPeriodos(tempPeriodos);
+                    let opcionesPeriodosAux = [];
+                    opcionesPeriodosAux.push({value:"0",label:"TODOS", isDisabled: false})
+                    for(let i = 0; i < aux.length; i++){
+                        opcionesPeriodosAux.push({value:(i+1).toString(),label:aux[i].label, isDisabled: false})
+                    }
+                    setOpcionesPeriodos(opcionesPeriodosAux);
+                    setPorcentajeDeCarga(0);
+                    setCargando(false);
+                }
+            }).catch(error => console.log(error));
+        }
     }
 
     const PintarGrafica = () => {
-        console.log(periodos);
-
-        console.log(periodoSeleccionado);
-        console.log(periodoSeleccionado[0].label);
-        console.log(parseInt( periodoSeleccionado[0].value));
         let aniosAux = [];
         let datasets = [];
 
@@ -434,36 +484,32 @@ const EstadisticasTres = () => {
             });
         }
 
-        console.log(aniosAux);
         aniosAux.sort(function(a, b){return a-b});
-        console.log(aniosAux);
         for(let i = 0; i < aniosAux.length; i ++){
             aniosAux[i] = aniosAux[i].toString();
         }
 
-        console.log(aniosAux);
 
         for(let i = 0; i < periodos.length; i++){
             let valores = [];
             let dataset = null;
             let municipio = periodos[i][0].municipio;
-            console.log(municipio);
             for(let j = 0; j < aniosAux.length; j++){
                 let valor = null;
-                console.log(aniosAux[j]);
                 valor = periodos[i].find((valorActual) => {
                     return valorActual.label === aniosAux[j];
                 });
-                console.log(valor);
 
                 if(isNaN(valor.value.split(",").join("."))){
                     setNoGrafica(true);
                     valores.push(valor.value);
+                }else if(masDeUnoDepartamento){
+                    setNoGrafica(true);
+                    valores.push(parseFloat(valor.value.split(",").join(".")));
                 }else{
                     valores.push(parseFloat(valor.value.split(",").join(".")));
                 }
             }
-            console.log(valores);
             
             let r = Math.floor(Math.random() * 256);
             let g = Math.floor(Math.random() * 256);
@@ -479,13 +525,15 @@ const EstadisticasTres = () => {
                 borderWidth: 1,
                 hoverBackgroundColor: rgbaHover,
                 hoverBorderColor: rgbaHover,
-                data: valores
+                data: valores,
+                datalabels: {
+                    align: 'end',
+                    anchor: 'end',
+                    display: false,
+                }
             }
             datasets.push(dataset);
         }
-
-        console.log(datasets);
-        console.log(aniosAux);
         
         setDatosGrafica({
             labels: aniosAux,
@@ -495,9 +543,10 @@ const EstadisticasTres = () => {
 
     return (
         <div>
-            <div style={{display:'flex', flexWrap:'wrap', justifyContent:'space-between', minHeight:'28em', padding:'1.5em 2.1em 3em 2.1em', textAlign:'left', width:'100%'}}>
-                
-                    <div style={{minWidth:'18em', width:'25em', backgroundColor:'rgba(255,255,255,1)', padding:'1em 1em 1em 1em', borderRadius:'0.5em', minHeight:'16em', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}>
+            {/* <div style={{display:'flex', flexWrap:'wrap', justifyContent:'space-between', minHeight:'28em', padding:'1.5em 2.1em 3em 2.1em', textAlign:'left', width:'100%'}}> */}
+            <Grid container spacing={0} style={{minHeight:'28em', padding:'0.5em 2.1em 3em 2.1em', textAlign:'left'}}>
+                    <Grid item xs={12} sm={4} style={{backgroundColor:'rgba(255,255,255,1)', margin:'1em 0em 0 0', padding:'1em 1em 1em 1em', borderRadius:'0.5em', minHeight:'16em', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}>
+                    {/* <div style={{minWidth:'18em', width:'25em', backgroundColor:'rgba(255,255,255,1)', padding:'1em 1em 1em 1em', borderRadius:'0.5em', minHeight:'16em', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}> */}
                         Dimensiones:
                         <Select options={dimensiones} 
                             isSearchable={true}
@@ -514,7 +563,6 @@ const EstadisticasTres = () => {
                             <Select options={
                                 categorias.length !== 0 ?
                                 categorias.filter((datoActual,i,arreglo)=>{
-                                    //console.log(datoActual.value[0] + " === "+ dimensionSeleccionada.value);
                                     return datoActual.value[0] === dimensionSeleccionada.value;
                                 })
                                 :
@@ -536,11 +584,8 @@ const EstadisticasTres = () => {
                             <Select options={
                                 //subcategorias.length !== 0 ?
                                 subcategorias.filter((datoActual,i,arreglo)=>{
-                                    //console.log(datoActual.value + " === " + categoriaSeleccionada.value);
                                     return datoActual.value.substring(0, 3) === categoriaSeleccionada.value;
                                 })
-                                //:
-                                //[]
                                 } 
                                 isSearchable={true}
                                 value={subcategoriaSeleccionada}
@@ -558,11 +603,8 @@ const EstadisticasTres = () => {
                             <Select options={
                                 //indicadoresN0.length !== 0 ?
                                 indicadoresN0.filter((datoActual,i,arreglo)=>{
-                                    //console.log(datoActual.value + " === " + subcategoriaSeleccionada.value);
                                     return datoActual.value.substring(0, 5) === subcategoriaSeleccionada.value;
                                 })
-                                //:
-                                //[]
                                 } 
                                 isSearchable={true}
                                 value={indicadorN0Seleccionado}
@@ -580,7 +622,6 @@ const EstadisticasTres = () => {
                             <Select options={
                                 indicadoresN1.length !== 0 ?
                                 indicadoresN1.filter((datoActual,i,arreglo)=>{
-                                    //console.log(datoActual.value + " === " + indicadorN0Seleccionado.value);
                                     return datoActual.value.substring(0, 7) === indicadorN0Seleccionado.value;
                                 })
                                 :
@@ -602,7 +643,6 @@ const EstadisticasTres = () => {
                             <Select options={
                                 indicadoresN2.length !== 0 ?
                                 indicadoresN2.filter((datoActual,i,arreglo)=>{
-                                    //console.log(datoActual.value + " === " + indicadorN1Seleccionado.value);
                                     return datoActual.value.substring(0, 9) === indicadorN1Seleccionado.value;
                                 })
                                 :
@@ -624,7 +664,6 @@ const EstadisticasTres = () => {
                             <Select options={
                                 indicadoresN3.length !== 0 ?
                                 indicadoresN3.filter((datoActual,i,arreglo)=>{
-                                    //console.log(datoActual.value + " === " + indicadorN2Seleccionado.value);
                                     return datoActual.value.substring(0, 11) === indicadorN2Seleccionado.value;
                                 })
                                 :
@@ -646,7 +685,6 @@ const EstadisticasTres = () => {
                             <Select options={
                                 indicadoresN4.length !== 0 ?
                                 indicadoresN4.filter((datoActual,i,arreglo)=>{
-                                    //console.log(datoActual.value + " === " + indicadorN3Seleccionado.value);
                                     return datoActual.value.substring(0, 13) === indicadorN3Seleccionado.value;
                                 })
                                 :
@@ -679,6 +717,68 @@ const EstadisticasTres = () => {
                             onChange={(t)=>{
                                 setTerritorioSeleccionado(t);
                                 setBotonTerritorio(true);
+
+                                let tAux = [];
+
+                                territorios[0].options[0].isDisabled = false;
+                                territorios[1].options[0].isDisabled = false;
+                                territorios[2].options[0].isDisabled = false;
+                                territorios[3].options[0].isDisabled = false;
+                                
+                                tAux = t?.filter((element)=>{
+                                    return parseInt(element.value) < 5;
+                                })
+                                
+                                if(tAux !== undefined && tAux.length>0){
+                                    let auxTerritorios = territorios;
+                                    for (let i = 0; i < auxTerritorios.length; i++) {
+                                        if(!tAux.some((element)=>{return element.value === i.toString()})){
+                                            for(let j = 0; j < auxTerritorios[i].options.length; j++){
+                                                auxTerritorios[i].options[j].isDisabled = false;
+                                            }
+                                        }
+                                    }
+                                    setTerritorios(auxTerritorios);
+                                }
+
+                                if(t === null || t.length=== 0){
+                                        let auxTerritorios = territorios;
+                                        for(let i = 0; i < auxTerritorios.length; i++){
+                                            for(let j = 0; j < auxTerritorios[i].options.length; j++){
+                                                auxTerritorios[i].options[j].isDisabled = false;
+                                            }
+                                        }
+                                        setTerritorios(auxTerritorios);
+                                }else{
+                                    for (let k = 0; k < t.length; k++) {
+                                        if(t && t.length > 0 && t[k].label !== undefined && t[k].label.substring(0,5) === "TODOS"){
+                                            let auxTerritorios = territorios;
+                                            for(let i = 1; i < auxTerritorios[parseInt(t[k].value)].options.length; i++){
+                                                auxTerritorios[parseInt(t[k].value)].options[i].isDisabled = true;
+                                            }
+                                            setTerritorios(auxTerritorios);
+                                        }else if(t && t.length > 0 && t[k].label !== undefined && t[k].label.substring(0,5) !== "TODOS"){
+                                            let auxTerritorios = territorios;
+                                            t.forEach(element => {
+                                                if(element.value.substring(0,2) === "19"){
+                                                    auxTerritorios[0].options[0].isDisabled = true;
+                                                }else if(element.value.substring(0,2) === "27"){
+                                                    auxTerritorios[1].options[0].isDisabled = true;
+                                                }else if(element.value.substring(0,2) === "52"){
+                                                    auxTerritorios[2].options[0].isDisabled = true;
+                                                }else if(element.value.substring(0,2) === "76"){
+                                                    auxTerritorios[3].options[0].isDisabled = true;
+                                                }
+                                            });
+                                        }
+                                    }
+                                }
+
+                                if(tAux?.length>1){
+                                    setMasDeUnoDepartamento(true);
+                                }else{
+                                    setMasDeUnoDepartamento(false);
+                                }
 
                                 setPeriodos([]);
                                 setPeriodoSeleccionado(null);
@@ -714,8 +814,6 @@ const EstadisticasTres = () => {
                                 
                                 setGraficar(false);
                                 setDatosGrafica(null);
-
-                                console.log(opcionesPeriodos);
                                 
                                 
                                 if(p && p.length > 0 && p[0].label !== undefined &&  p[0].label === "TODOS"){
@@ -754,24 +852,21 @@ const EstadisticasTres = () => {
                         cargando &&
                         <div className={classes.root} style={{textAlign:'center'}}>
                             Procesando...
+                            {
+                                porcentajeDeCarga !== 0 ? " " + porcentajeDeCarga + " %" : null
+                                
+                            }
                             <LinearProgress color="secondary" />
                         </div>
                     }
-                    </div>
-                    
-                    {/* <Button
-                        variant="contained"
-                        color="secondary"
-                        className={classes.button}
-                        style={{width:'100%', margin:'0em 0 1em 0', background:'linear-gradient(to right, #c4161c 0%, #9e0b0f  100%)'}}
-                        onClick={()=>{setNoGrafica(false); setGraficar(false); setDatosGrafica(null)}}
-                        startIcon={<CreateIcon />}
-                    >
-                        Editar Datos de la gráfica
-                    </Button> */}
+                    {/* </div> */}
+                    </Grid>
+
+                    <Grid item xs={12} sm={1}></Grid>
+
                     {
                         datosGrafica == null &&
-                        <div style={{minWidth:'18em', width:'60%', height:'13em', position:'relative', margin:'0em 0 0 0em', backgroundColor:'rgba(200,200,200,0.97)', padding:'2em 2em 2em 2em', borderRadius:'0.5em', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}>
+                        <Grid item xs={12} sm={7} style={{minHeight:'13em', maxHeight:'30em', margin:'1em 0 0 0em', backgroundColor:'rgba(200,200,200,0.97)', padding:'2em 2em 2em 2em', borderRadius:'0.5em', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}>
                             {
                                 dimensionSeleccionada== null &&
                                 <div style={{fontSize:'20px', fontFamily:'roboto'}}>Una DIMENSIÓN es el componente macro en donde se agrupan las diferentes categorias.</div>
@@ -791,13 +886,16 @@ const EstadisticasTres = () => {
                                 <div style={{fontSize:'20px', fontFamily:'roboto'}}>Los INDICADORES son datos o información que sirve para conocer o valorar las categorías y subcategorías y la intensidad de un hecho o para determinar su evolución futura. Es decir, aquellos medibles con base en información secundaria. 
                                 Los indicadores son jerárquicos y se presentan indicadores de nivel 1, nivel 2, nivel 3 y hasta nivel 4.</div>
                             }
-                            
-                        </div>
+                        </Grid>
                     }
                 
                 {
                     (datosGrafica != null /* && graficar!==false */ && graficaBarras && !noGrafica) &&
-                    <div style={{minWidth:'18em', width:'60%', position:'relative', margin:'0em 0 0 0em', backgroundColor:'rgba(255,255,255,0.97)', padding:'3em 0.5em 0.5em 0.5em', borderRadius:'0.5em', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}>
+                    
+                    <Grid item xs={12} sm={7} style={{position:'relative', margin:'1em 0 0 0em', backgroundColor:'rgba(255,255,255,0.97)', padding:'3em 0.5em 0.5em 0.5em', borderRadius:'0.5em', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}>
+                    {/* <div style={{minWidth:'18em', width:'60%', position:'relative', margin:'0em 0 0 0em', backgroundColor:'rgba(255,255,255,0.97)', padding:'3em 0.5em 0.5em 0.5em', borderRadius:'0.5em', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}> */}
+
+                    
                         <div style={{margin:'0.5em 0.5em 0 0.5em', position:'absolute', top:'0', right:'0'}}>
                             <Button
                                 variant="contained"
@@ -822,7 +920,7 @@ const EstadisticasTres = () => {
                         </div>
                         <Bar data={datosGrafica}
                         width={70}
-                        height={35}
+                        height={40}
                         options={{
                             title: {
                                 display: true,
@@ -847,7 +945,41 @@ const EstadisticasTres = () => {
                                 }]
                             },
                             animation: {
-                                duration: 1000
+                                duration: tiempoGrafica
+                            },
+                            legend: {
+                                onHover: function(event, legendItem){
+                                    if(!datosGrafica.datasets[legendItem.datasetIndex].datalabels.display){
+                                        let display = datosGrafica;
+                                        display.datasets.forEach(element => {
+                                            element.datalabels.display = false;
+                                        });
+                                        display.datasets[legendItem.datasetIndex].datalabels.display = true;
+                                        setTiempoGrafica(0);
+                                        setDatosGrafica(display);
+                                        setGraficaBarras(false);
+                                        setGraficaBarras(true);
+                                    }
+                                },
+                                onLeave: function(event, legendItem){
+                                    let display = datosGrafica;
+                                    display.datasets.forEach(element => {
+                                        element.datalabels.display = false;
+                                    });
+                                    setTiempoGrafica(0);
+                                    setDatosGrafica(display);
+                                    setGraficaBarras(false);
+                                    setGraficaBarras(true);
+                                    setTiempoGrafica(1000);
+                                },
+                                onClick: function(event, legendItem){
+                                        let display = datosGrafica;
+                                        display.datasets[legendItem.datasetIndex].hidden = !display.datasets[legendItem.datasetIndex].hidden;
+                                        setTiempoGrafica(0);
+                                        setDatosGrafica(display);
+                                        setGraficaBarras(false);
+                                        setGraficaBarras(true);
+                                }
                             },
                             tooltips: {
                                 callbacks: {
@@ -873,23 +1005,56 @@ const EstadisticasTres = () => {
                                         return nombre + " " + (x1 + x2);
                                     },
                                     title:function(tooltipItem, data){
-                                        console.log(data);
-                                        console.log(tooltipItem);
                                         return "Año: " + tooltipItem[0].xLabel;
                                     }
                                 }
-                            }
+                            },
+                            plugins: {
+                                datalabels: {
+                                    display: true,
+                                    color: 'white',
+                                    backgroundColor: function(context) {
+                                        return context.dataset.backgroundColor;
+                                    },
+                                    borderRadius: 4,
+                                    font: {
+                                        weight: 'bold'
+                                    },
+                                    formatter: (value) =>{
+                                        let label = value;
+                                        if(!Number.isInteger(label)){
+                                            if(label.toString().split('.')[0].length > 1){
+                                                label = label.toFixed(2);
+                                            }else{
+                                                label = label.toFixed(4);
+                                            }
+                                        }
+                                        label += '';
+                                        let x = label.split('.');
+                                        let x1 = x[0];
+                                        let x2 = x.length > 1 ? '.' + x[1] : '';
+                                        let rgx = /(\d+)(\d{3})/;
+                                        while (rgx.test(x1)) {
+                                            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+                                        }
+                                        
+                                        return (x1 + x2);
+                                    }
+                                }
+                             }
                         }}   
                         />
                         <div style={{textAlign:'center', fontWeight:'bold', fontSize:'14px', fontFamily:'roboto', margin:'0.5em 1em 0.5em 1em'}}>Fuente: {fuente}</div>
                         <div style={{textAlign:'right'}}>
                             <Excel titulo={indicadorSeleccionado.label} datosExcel={datosGrafica.datasets} aniosExcel={datosGrafica.labels}></Excel>
                         </div>
-                    </div>
+                    </Grid>
+                    /* </div> */
                 }
                 {
                     (datosGrafica != null /* && graficar!==false */ && graficaLineas && !noGrafica) &&
-                    <div style={{minWidth:'18em', width:'60%', position:'relative',margin:'0em 0 0 0', backgroundColor:'rgba(255,255,255,0.97)', padding:'3em 0.5em 0.5em 0.5em', borderRadius:'0.5em', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}>
+                    <Grid item xs={12} sm={7} style={{position:'relative', margin:'1em 0 0 0em', backgroundColor:'rgba(255,255,255,0.97)', padding:'3em 0.5em 0.5em 0.5em', borderRadius:'0.5em', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}>
+                    {/* <div style={{minWidth:'18em', width:'60%', position:'relative',margin:'0em 0 0 0', backgroundColor:'rgba(255,255,255,0.97)', padding:'3em 0.5em 0.5em 0.5em', borderRadius:'0.5em', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}> */}
                         
                         <div style={{margin:'0.5em 0.5em 0 0.5em', position:'absolute', top:'0', right:'0'}}>
                             <Button
@@ -916,7 +1081,7 @@ const EstadisticasTres = () => {
 
                         <Line data={datosGrafica}
                         width={70}
-                        height={35}
+                        height={40}
                         options={{
                             title: {
                                 display: true,
@@ -941,7 +1106,41 @@ const EstadisticasTres = () => {
                                 }]
                             },
                             animation: {
-                                duration: 1000
+                                duration: tiempoGrafica
+                            },
+                            legend: {
+                                onHover: function(event, legendItem){
+                                    if(!datosGrafica.datasets[legendItem.datasetIndex].datalabels.display){
+                                        let display = datosGrafica;
+                                        display.datasets.forEach(element => {
+                                            element.datalabels.display = false;
+                                        });
+                                        display.datasets[legendItem.datasetIndex].datalabels.display = true;
+                                        setTiempoGrafica(0);
+                                        setDatosGrafica(display);
+                                        setGraficaBarras(false);
+                                        setGraficaBarras(true);
+                                    }
+                                },
+                                onLeave: function(event, legendItem){
+                                    let display = datosGrafica;
+                                    display.datasets.forEach(element => {
+                                        element.datalabels.display = false;
+                                    });
+                                    setTiempoGrafica(0);
+                                    setDatosGrafica(display);
+                                    setGraficaBarras(false);
+                                    setGraficaBarras(true);
+                                    setTiempoGrafica(1000);
+                                },
+                                onClick: function(event, legendItem){
+                                        let display = datosGrafica;
+                                        display.datasets[legendItem.datasetIndex].hidden = !display.datasets[legendItem.datasetIndex].hidden;
+                                        setTiempoGrafica(0);
+                                        setDatosGrafica(display);
+                                        setGraficaBarras(false);
+                                        setGraficaBarras(true);
+                                }
                             },
                             tooltips: {
                                 callbacks: {
@@ -967,29 +1166,66 @@ const EstadisticasTres = () => {
                                         return nombre + " " + (x1 + x2);
                                     },
                                     title:function(tooltipItem, data){
-                                        console.log(data);
-                                        console.log(tooltipItem);
                                         return "Año: " + tooltipItem[0].xLabel;
                                     }
                                 }
-                            }
+                            },
+                            plugins: {
+                                datalabels: {
+                                    display: true,
+                                    color: 'white',
+                                    backgroundColor: function(context) {
+                                        return context.dataset.backgroundColor;
+                                    },
+                                    borderRadius: 4,
+                                    font: {
+                                        weight: 'bold'
+                                    },
+                                    formatter: (value) =>{
+                                        let label = value;
+                                        if(!Number.isInteger(label)){
+                                            if(label.toString().split('.')[0].length > 1){
+                                                label = label.toFixed(2);
+                                            }else{
+                                                label = label.toFixed(4);
+                                            }
+                                        }
+                                        label += '';
+                                        let x = label.split('.');
+                                        let x1 = x[0];
+                                        let x2 = x.length > 1 ? '.' + x[1] : '';
+                                        let rgx = /(\d+)(\d{3})/;
+                                        while (rgx.test(x1)) {
+                                            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+                                        }
+                                        
+                                        return (x1 + x2);
+                                    }
+                                }
+                             }
                         }}   
                         />
                         <div style={{textAlign:'center', fontWeight:'bold', fontSize:'14px', fontFamily:'roboto', margin:'0.5em 1em 0.5em 1em'}}>Fuente: {fuente}</div>
                         <div style={{textAlign:'right'}}>
                             <Excel titulo={indicadorSeleccionado.label} datosExcel={datosGrafica.datasets} aniosExcel={datosGrafica.labels}></Excel>
                         </div>
-                    </div>
+                    {/* </div> */}
+                    </Grid>
                 }
                 {
                     noGrafica &&
-                    <div style={{minWidth:'18em', width:'60%',textAlign:'center', margin:'5em 0 0 0'}}>
-                        <h3>Estos datos son de caracter cualitativo y no se pueden graficar.</h3>
-                        <Excel titulo={indicadorSeleccionado.label} datosExcel={datosGrafica.datasets} aniosExcel={datosGrafica.labels}></Excel>
-                    </div>
+                    <Grid item xs={12} sm={7} style={{textAlign:'center', margin:'5em 0 0 0'}}>
+                        {masDeUnoDepartamento?
+                        <h3 style={{margin:'0 0 0.5em 0'}}>Para la consulta de los datos totales de más de un departamento, solo se dispone del Excel. </h3>
+                        :
+                        <h3 style={{margin:'0 0 0.5em 0'}}>Estos datos son de caracter cualitativo y no se pueden graficar.</h3>
+                        }
+                        <Excel titulo={indicadorSeleccionado.label} style={{textAlign:'center'}} datosExcel={datosGrafica.datasets} aniosExcel={datosGrafica.labels}></Excel>
+                    </Grid>
                 }
-            </div>
-        </div>
+                </Grid>
+            {/* </div> */}
+        </div> 
     );
 };
 

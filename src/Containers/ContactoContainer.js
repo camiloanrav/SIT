@@ -157,7 +157,7 @@ const ContactoContainer = () => {
                                             <div className="circle-icon">
                                                 <span className="icon fas fa-map-marker-alt"></span>
                                             </div>
-                                            <p>Edificio A</p>
+                                            <p>Edificio Ala Norte</p>
                                         </div>
                                     </li>
                                     <li>

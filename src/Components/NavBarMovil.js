@@ -10,14 +10,14 @@ const NavBarMovil = ({user}) => {
             <header id="header-menu-mobile">
                 <div id="hmm-top" onClick={()=> setOpen(true)}>
                     <span className="hmmt-line"></span>
-                    <a href="#" id="hmmt-menu-icon">
+                    <a href="#/" id="hmmt-menu-icon">
                         <span className="icon fas fa-bars"></span>
                         <p>Menú</p>
                     </a>
                     <div id="hmdb-logo-container">
-                        <a id="hmdb-logo" href="" ></a>
+                        <a id="hmdb-logo" href="#/" ></a>
                     </div>
-                    <a href="/#" className="hmmt-logo">
+                    <a href="#/" className="hmmt-logo">
                         <figure className="gf-figure-logo">
                             <img src={logo} alt="UAO"></img>
                         </figure>
@@ -27,14 +27,14 @@ const NavBarMovil = ({user}) => {
  
                 <div id="hmm-bottom" className={"".concat(`${open===true?"hmm-open":""}`)}>
                     <div className="hmmb-icons">
-                        <a href="#" id="hmmb-menu-icon-close" onClick={()=> setOpen(false)}>
+                        <a href="#/" id="hmmb-menu-icon-close" onClick={()=> setOpen(false)}>
                             <div className="circle-icon">
                                 <span className="icon fas fa-times"></span>
                             </div>
                             <p>Cerrar</p>
                         </a>
                         <div id="hmmb-profile-dropdown">
-                            <a href="#" id="hmmbpd-close">
+                            <a href="#/" id="hmmbpd-close">
                                 <div className="circle-icon">
                                     <span className="icon fas fa-times"></span>
                                 </div>
@@ -63,20 +63,14 @@ const NavBarMovil = ({user}) => {
                         </ul>
                     }
                     <div className="hmmb-footer">
-                        {/* <ul class="hmmbf-legal">
-                            <li><a href="">Política de Tratamiento de Datos Personales</a></li>
-                            <li><a href="">Reglamento Estudiantil</a></li>
-                            <li><a href="">Documentos legales</a></li>
-                            <li><a href="">Transparencia y Acceso a la Información Pública</a></li>
-                        </ul> */}
                         <div id="hmmbf-contact">
                             <h5>Contacto</h5>
                             <ul className="social-links">
-                                <li><a href="" className="icon fab fa-facebook-square"></a></li>
-                                <li><a href="" className="icon fab fa-twitter"></a></li>
-                                <li><a href="" className="icon fab fa-instagram"></a></li>
-                                <li><a href="" className="icon fab fa-youtube"></a></li>
-                                <li><a href="" className="icon fab fa-linkedin"></a></li>
+                                <li><a href="https://es-la.facebook.com/universidadautonomadeoccidente/" className="icon fab fa-facebook-square"></a></li>
+                                <li><a href="https://twitter.com/lauao" className="icon fab fa-twitter"></a></li>
+                                <li><a href="https://www.instagram.com/universidadautonomadeoccidente/?hl=es-la" className="icon fab fa-instagram"></a></li>
+                                <li><a href="https://www.youtube.com/channel/UCakpB12sFykpJY6lqImL5uQ" className="icon fab fa-youtube"></a></li>
+                                <li><a href="https://co.linkedin.com/school/universidadautonomadeoccidente/" className="icon fab fa-linkedin"></a></li>
                             </ul>
                             <ul className="contact-list">
                                 <li>
@@ -93,9 +87,6 @@ const NavBarMovil = ({user}) => {
                                             01 8000 91 34 35
                                         </div>
                                     </div>
-                                    <div className="contact-directory">
-                                        <a href="">Ver Directorio General &gt;</a>
-                                    </div>
                                 </li>
                                 <li>
                                     <div className="contact-title">Correo Electrónico</div>
@@ -104,7 +95,7 @@ const NavBarMovil = ({user}) => {
                                             <span className="icon fas fa-envelope"></span>
                                         </div>
                                         <div className="ci-text">
-                                            <a href="">buzon@uao.edu.co</a>
+                                            <a href="#/">buzon@uao.edu.co</a>
                                         </div>
                                     </div>
                                 </li>

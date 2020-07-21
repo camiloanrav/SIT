@@ -4,7 +4,6 @@ import { Bar } from "react-chartjs-2";
 import { Line } from "react-chartjs-2";
 import Select from "react-select";
 import { defaults } from 'react-chartjs-2';
-import { Chart } from 'react-chartjs-2';
 
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
@@ -17,7 +16,7 @@ import ShowChartIcon from '@material-ui/icons/ShowChart';
 import CreateIcon from '@material-ui/icons/Create';
 
 import Excel from "../Components/Excel";
-import Login from '../Containers/Login';
+import 'chartjs-plugin-datalabels';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -54,6 +53,8 @@ const EstadisticasUno = () => {
     const [departamentos, setDepartamentos] = useState([]);
     const [porcentajeDeCarga, setPorcentajeDeCarga] = useState(0);
     const [masDeUnoDepartamento, setMasDeUnoDepartamento] = useState(false);
+
+    const [tiempoGrafica, setTiempoGrafica] = useState(1000);
 
     const classes = useStyles();
 
@@ -92,7 +93,6 @@ const EstadisticasUno = () => {
                     temp.push({value: data[i].idindicadores , label:data[i].nombre.charAt(0).toUpperCase() + data[i].nombre.slice(1), unidad:data[i].unidades_medida_idunidades, periodicidad:data[i].periodicidad, tipo_valor:data[i].tipo_valor, nivel: data[i].nivel, padre: data[i].indicadores_idindicadores, fuente:data[i].fuentes_idfuentes, categoria:data[i].categorias_idcategorias});
                 }
             }
-            console.log(temp);
             setIndicadores(temp);
             setCargando(false);
         }).catch(error => console.log(error.data));
@@ -152,12 +152,7 @@ const EstadisticasUno = () => {
             setDepartamentos(departamentosAux);
             
             setCargando(false);
-            /* let temp = []; 
-            for(let i = 0; data.length > i; i++){
-                temp.push({value: data[i].codigo_dane , label:data[i].nombre});
-            }
-            setTerritorios(temp);
-            setCargando(false); */
+
         }).catch(error => console.log(error.data));
     }
 
@@ -186,24 +181,23 @@ const EstadisticasUno = () => {
             }
         }
         
-        console.log(auxTerritorio);
         var contadorDeCarga = 0;
         for(let i = 0; i < auxTerritorio.length; i++){
             getData('/periodo/search.php?id=' + indicadorSeleccionado.value + "&dane=" + auxTerritorio[i].value).then((data) => {
-                //console.log(data);
                 
                 let aux = [];
                 for(let j = 0; data.length > j; j++){
                     aux.push({value: data[j].valor , label: data[j].periodo, municipio: auxTerritorio[i].label});
                 }
+
+                aux.sort((a,b)=> parseInt(b.label) - parseInt(a.label));
+
                 tempPeriodos.push(aux);
 
                 contadorDeCarga ++;
                 setPorcentajeDeCarga((contadorDeCarga/(auxTerritorio.length/100)).toFixed(1));
                 
                 if(tempPeriodos.length === auxTerritorio.length){
-                    
-                    console.log(tempPeriodos);
                     setPeriodos(tempPeriodos);
                     let opcionesPeriodosAux = [];
                     opcionesPeriodosAux.push({value:"0",label:"TODOS", isDisabled: false})
@@ -219,11 +213,6 @@ const EstadisticasUno = () => {
     }
 
     const PintarGrafica = () => {
-        console.log(periodos);
-
-        console.log(periodoSeleccionado);
-        console.log(periodoSeleccionado[0].label);
-        console.log(parseInt( periodoSeleccionado[0].value));
         let aniosAux = [];
         let datasets = [];
 
@@ -239,39 +228,32 @@ const EstadisticasUno = () => {
             });
         }
 
-        console.log(aniosAux);
         aniosAux.sort(function(a, b){return a-b});
-        console.log(aniosAux);
         for(let i = 0; i < aniosAux.length; i ++){
             aniosAux[i] = aniosAux[i].toString();
         }
 
-        console.log(aniosAux);
 
         for(let i = 0; i < periodos.length; i++){
             let valores = [];
             let dataset = null;
             let municipio = periodos[i][0].municipio;
-            console.log(municipio);
             for(let j = 0; j < aniosAux.length; j++){
                 let valor = null;
-                console.log(aniosAux[j]);
                 valor = periodos[i].find((valorActual) => {
                     return valorActual.label === aniosAux[j];
                 });
-                console.log(valor);
 
                 if(isNaN(valor.value.split(",").join("."))){
                     setNoGrafica(true);
                     valores.push(valor.value);
                 }else if(masDeUnoDepartamento){
                     setNoGrafica(true);
-                    valores.push(parseFloat(valor.value.split(",").join("."))/* .toFixed(3) */);
+                    valores.push(parseFloat(valor.value.split(",").join(".")));
                 }else{
-                    valores.push(parseFloat(valor.value.split(",").join("."))/* .toFixed(3) */);
+                    valores.push(parseFloat(valor.value.split(",").join(".")));
                 }
             }
-            console.log(valores);
             
             let r = Math.floor(Math.random() * 256);
             let g = Math.floor(Math.random() * 256);
@@ -287,7 +269,13 @@ const EstadisticasUno = () => {
                 borderWidth: 1,
                 hoverBackgroundColor: rgbaHover,
                 hoverBorderColor: rgbaHover,
-                data: valores
+                data: valores,
+                hidden: false,
+                datalabels: {
+                    align: 'end',
+                    anchor: 'end',
+                    display: false,
+                }
             }
             datasets.push(dataset);
         }
@@ -444,8 +432,6 @@ const EstadisticasUno = () => {
                                 
                                 setGraficar(false);
                                 setDatosGrafica(null);
-
-                                console.log(opcionesPeriodos);
                                 
                                 
                                 if(p && p.length > 0 && p[0].label !== undefined && p[0].label === "TODOS"){
@@ -532,7 +518,8 @@ const EstadisticasUno = () => {
                         </div>
                         <Bar data={datosGrafica}
                         width={70}
-                        height={32}
+                        height={30}
+                        /* redraw={true} */
                         options={{
                             title: {
                                 display: true,
@@ -557,7 +544,41 @@ const EstadisticasUno = () => {
                                 }]
                             },
                             animation: {
-                                duration: 1000
+                                duration: tiempoGrafica
+                            },
+                            legend: {
+                                onHover: function(event, legendItem){
+                                    if(!datosGrafica.datasets[legendItem.datasetIndex].datalabels.display){
+                                        let display = datosGrafica;
+                                        display.datasets.forEach(element => {
+                                            element.datalabels.display = false;
+                                        });
+                                        display.datasets[legendItem.datasetIndex].datalabels.display = true;
+                                        setTiempoGrafica(0);
+                                        setDatosGrafica(display);
+                                        setGraficaBarras(false);
+                                        setGraficaBarras(true);
+                                    }
+                                },
+                                onLeave: function(event, legendItem){
+                                    let display = datosGrafica;
+                                    display.datasets.forEach(element => {
+                                        element.datalabels.display = false;
+                                    });
+                                    setTiempoGrafica(0);
+                                    setDatosGrafica(display);
+                                    setGraficaBarras(false);
+                                    setGraficaBarras(true);
+                                    setTiempoGrafica(1000);
+                                },
+                                onClick: function(event, legendItem){
+                                        let display = datosGrafica;
+                                        display.datasets[legendItem.datasetIndex].hidden = !display.datasets[legendItem.datasetIndex].hidden;
+                                        setTiempoGrafica(0);
+                                        setDatosGrafica(display);
+                                        setGraficaBarras(false);
+                                        setGraficaBarras(true);
+                                }
                             },
                             
                             tooltips: {
@@ -584,12 +605,43 @@ const EstadisticasUno = () => {
                                         return nombre + " " + (x1 + x2);
                                     },
                                     title:function(tooltipItem, data){
-                                        console.log(data);
-                                        console.log(tooltipItem);
                                         return "Año: " + tooltipItem[0].xLabel;
                                     }
                                 }
-                            }
+                            },
+                            plugins: {
+                                datalabels: {
+                                    display: true,
+                                    color: 'white',
+                                    backgroundColor: function(context) {
+                                        return context.dataset.backgroundColor;
+                                    },
+                                    borderRadius: 4,
+                                    font: {
+                                        weight: 'bold'
+                                    },
+                                    formatter: (value) =>{
+                                        let label = value;
+                                        if(!Number.isInteger(label)){
+                                            if(label.toString().split('.')[0].length > 1){
+                                                label = label.toFixed(2);
+                                            }else{
+                                                label = label.toFixed(4);
+                                            }
+                                        }
+                                        label += '';
+                                        let x = label.split('.');
+                                        let x1 = x[0];
+                                        let x2 = x.length > 1 ? '.' + x[1] : '';
+                                        let rgx = /(\d+)(\d{3})/;
+                                        while (rgx.test(x1)) {
+                                            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+                                        }
+                                        
+                                        return (x1 + x2);
+                                    }
+                                }
+                             }
                         }}   
                         />
                         <div style={{textAlign:'center', fontWeight:'bold', fontSize:'14px', fontFamily:'roboto', margin:'0.5em 1em 0.5em 1em'}}>Fuente: {fuente}</div>
@@ -627,7 +679,7 @@ const EstadisticasUno = () => {
 
                         <Line data={datosGrafica}
                         width={70}
-                        height={32}
+                        height={30}
                         options={{
                             title: {
                                 display: true,
@@ -652,7 +704,41 @@ const EstadisticasUno = () => {
                                 }]
                             },
                             animation: {
-                                duration: 1000
+                                duration: tiempoGrafica
+                            },
+                            legend: {
+                                onHover: function(event, legendItem){
+                                    if(!datosGrafica.datasets[legendItem.datasetIndex].datalabels.display){
+                                        let display = datosGrafica;
+                                        display.datasets.forEach(element => {
+                                            element.datalabels.display = false;
+                                        });
+                                        display.datasets[legendItem.datasetIndex].datalabels.display = true;
+                                        setTiempoGrafica(0);
+                                        setDatosGrafica(display);
+                                        setGraficaLineas(false);
+                                        setGraficaLineas(true);
+                                    }
+                                },
+                                onLeave: function(event, legendItem){
+                                    let display = datosGrafica;
+                                    display.datasets.forEach(element => {
+                                        element.datalabels.display = false;
+                                    });
+                                    setTiempoGrafica(0);
+                                    setDatosGrafica(display);
+                                    setGraficaLineas(false);
+                                    setGraficaLineas(true);
+                                    setTiempoGrafica(1000);
+                                },
+                                onClick: function(event, legendItem){
+                                        let display = datosGrafica;
+                                        display.datasets[legendItem.datasetIndex].hidden = !display.datasets[legendItem.datasetIndex].hidden;
+                                        setTiempoGrafica(0);
+                                        setDatosGrafica(display);
+                                        setGraficaBarras(false);
+                                        setGraficaBarras(true);
+                                }
                             },
                             tooltips: {
                                 callbacks: {
@@ -678,12 +764,43 @@ const EstadisticasUno = () => {
                                         return nombre + " " + (x1 + x2);
                                     },
                                     title:function(tooltipItem, data){
-                                        console.log(data);
-                                        console.log(tooltipItem);
                                         return "Año: " + tooltipItem[0].xLabel;
                                     }
                                 }
-                            }
+                            },
+                            plugins: {
+                                datalabels: {
+                                    display: true,
+                                    color: 'white',
+                                    backgroundColor: function(context) {
+                                        return context.dataset.backgroundColor;
+                                    },
+                                    borderRadius: 4,
+                                    font: {
+                                        weight: 'bold'
+                                    },
+                                    formatter: (value) =>{
+                                        let label = value;
+                                        if(!Number.isInteger(label)){
+                                            if(label.toString().split('.')[0].length > 1){
+                                                label = label.toFixed(2);
+                                            }else{
+                                                label = label.toFixed(4);
+                                            }
+                                        }
+                                        label += '';
+                                        let x = label.split('.');
+                                        let x1 = x[0];
+                                        let x2 = x.length > 1 ? '.' + x[1] : '';
+                                        let rgx = /(\d+)(\d{3})/;
+                                        while (rgx.test(x1)) {
+                                            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+                                        }
+                                        
+                                        return (x1 + x2);
+                                    }
+                                }
+                             }
                         }}   
                         />
                         <div style={{textAlign:'center', fontWeight:'bold', fontSize:'14px', fontFamily:'roboto', margin:'0.5em 1em 0.5em 1em'}}>Fuente: {fuente}</div>

@@ -61,7 +61,8 @@ const Footer = () => {
                                             <span className="icon fas fa-envelope"></span>
                                         </div>
                                         <div className="right">
-                                            <a href="">buzon@uao.edu.co</a>
+                                            {/* <a href="">buzon@uao.edu.co</a> */}
+                                            <p>buzon@uao.edu.co</p>
                                         </div>
                                     </div>
                                 </div>
