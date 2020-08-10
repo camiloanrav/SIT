@@ -41,7 +41,7 @@
   .contactoMenu{
     padding-top: 1em;
     padding-bottom: 2em;
-    background: linear-gradient(rgba(255,255,255,0.4), rgba(255,255,255,0.9)), url(../src/background.png);
+    background: linear-gradient(rgba(255,255,255,0.4), rgba(255,255,255,0.9)), url(./img/background.png);
     background-position:center;
     background-repeat:no-repeat;
     background-size:cover;
@@ -71,7 +71,7 @@
     display: flex;
     justify-content: space-around;
     flex-wrap:wrap;
-    background: linear-gradient(rgba(255,255,255,1), rgba(255,255,255,0.6)), url(../src/background.png);
+    background: linear-gradient(rgba(255,255,255,1), rgba(255,255,255,0.6)), url(./img/background.png);
     background-position:center;
     background-repeat:no-repeat;
     background-size:cover;

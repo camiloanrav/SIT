@@ -3,7 +3,6 @@ import React, {useState, useEffect} from 'react';
 import { Bar } from "react-chartjs-2";
 import { Line } from "react-chartjs-2";
 import Select from "react-select";
-import { defaults } from 'react-chartjs-2';
 
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';

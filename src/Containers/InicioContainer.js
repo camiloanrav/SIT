@@ -1,5 +1,4 @@
 import React, { Component, useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 
 import Footer from '../Components/Footer';
 import NavBarDesktop from '../Components/NavBarDesktop';
@@ -12,10 +11,10 @@ import { getData } from '../utils/api';
 
 import CarouselInicio from '../Components/CarouselInicio';
 
-import dimensionAmbiental from '../dimensionAmbiental.jpg';
-import dimensionEconomica from '../dimensionEconomica.jpeg';
-import dimensionInstitucional from '../dimensionInstitucional.jpg';
-import dimensionSocial from '../dimensionSocial.jpg';
+import dimensionAmbiental from '../img/dimensionAmbiental.jpg';
+import dimensionEconomica from '../img/dimensionEconomica.jpeg';
+import dimensionInstitucional from '../img/dimensionInstitucional.jpg';
+import dimensionSocial from '../img/dimensionSocial.jpg';
 
 const InicioContainer = () => {
     const [cargando, setCargando] = useState(true);
@@ -65,6 +64,5 @@ const InicioContainer = () => {
   
  
 }
-InicioContainer.propTypes = {};
 
 export default InicioContainer;

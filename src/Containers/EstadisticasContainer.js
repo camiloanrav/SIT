@@ -4,13 +4,10 @@ import NavBarDesktop from "../Components/NavBarDesktop";
 import NavBarMovil from "../Components/NavBarMovil";
 import Footer from "../Components/Footer";
 import EstadisticasUno from "../Components/EstadisticasUno";
-import EstadisticasDos from "../Components/EstadisticasDos";
 import EstadisticasTres from "../Components/EstadisticasTres";
 import Titulo from "../Components/Titulo";
 
-import {getData} from '../utils/api';
-
-import background from '../background.png';
+import background from '../img//background.png';
 
 import Tabs from '../Components/Tabs';
 

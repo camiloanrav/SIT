@@ -3,12 +3,12 @@ import ReactDOM from 'react-dom';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
 
-import carousel1 from '../carousel-01.jpg';
-import carousel2 from '../carousel-02.jpg';
-import carousel4 from '../carousel-04.jpg';
-import carousel5 from '../carousel-05.jpg';
-import carousel6 from '../carousel-06.jpg';
-import carousel7 from '../carousel-07.jpg';
+import carousel1 from '../img/carousel-01.jpg';
+import carousel2 from '../img/carousel-02.jpg';
+import carousel4 from '../img/carousel-04.jpg';
+import carousel5 from '../img/carousel-05.jpg';
+import carousel6 from '../img/carousel-06.jpg';
+import carousel7 from '../img/carousel-07.jpg';
 
 class CarouselInicio extends Component {
     render() {
