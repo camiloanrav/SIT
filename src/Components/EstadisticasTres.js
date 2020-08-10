@@ -14,6 +14,8 @@ import EqualizerIcon from '@material-ui/icons/Equalizer';
 import ShowChartIcon from '@material-ui/icons/ShowChart';
 import Grid from '@material-ui/core/Grid';
 
+import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
+
 import Excel from "../Components/Excel";
 import 'chartjs-plugin-datalabels';
 
@@ -544,7 +546,7 @@ const EstadisticasTres = () => {
     return (
         <div>
             {/* <div style={{display:'flex', flexWrap:'wrap', justifyContent:'space-between', minHeight:'28em', padding:'1.5em 2.1em 3em 2.1em', textAlign:'left', width:'100%'}}> */}
-            <Grid container spacing={0} style={{minHeight:'28em', padding:'0.5em 2.1em 3em 2.1em', textAlign:'left'}}>
+            <Grid container spacing={0} style={{minHeight:'28em', padding:'0.5em 2.1em 2em 2.1em', textAlign:'left'}}>
                     <Grid item xs={12} sm={4} style={{backgroundColor:'rgba(255,255,255,1)', margin:'1em 0em 0 0', padding:'1em 1em 1em 1em', borderRadius:'0.5em', minHeight:'16em', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}>
                     {/* <div style={{minWidth:'18em', width:'25em', backgroundColor:'rgba(255,255,255,1)', padding:'1em 1em 1em 1em', borderRadius:'0.5em', minHeight:'16em', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}> */}
                         Dimensiones:
@@ -842,7 +844,7 @@ const EstadisticasTres = () => {
                         </div>
                     }
                     {
-                        /* botonPeriodo && */ periodoSeleccionado!= null  &&
+                        /* botonPeriodo && */datosGrafica == null && periodoSeleccionado!= null  &&
                         <div style={{display:'flex', justifyContent:'center'}}>
                             <Button startIcon={<EqualizerIcon />} onClick={()=>{setGraficar(true); /* setBotonPeriodo(false); */ PintarGrafica();}} color="secondary" style={{margin:'1.5em 1em 1em 1em', background:'linear-gradient(to right, #c4161c 0%, #9e0b0f  100%)'}} variant="contained">Graficar</Button>  
                         </div>
@@ -1118,8 +1120,8 @@ const EstadisticasTres = () => {
                                         display.datasets[legendItem.datasetIndex].datalabels.display = true;
                                         setTiempoGrafica(0);
                                         setDatosGrafica(display);
-                                        setGraficaBarras(false);
-                                        setGraficaBarras(true);
+                                        setGraficaLineas(false);
+                                        setGraficaLineas(true);
                                     }
                                 },
                                 onLeave: function(event, legendItem){
@@ -1129,8 +1131,8 @@ const EstadisticasTres = () => {
                                     });
                                     setTiempoGrafica(0);
                                     setDatosGrafica(display);
-                                    setGraficaBarras(false);
-                                    setGraficaBarras(true);
+                                    setGraficaLineas(false);
+                                    setGraficaLineas(true);
                                     setTiempoGrafica(1000);
                                 },
                                 onClick: function(event, legendItem){
@@ -1138,8 +1140,8 @@ const EstadisticasTres = () => {
                                         display.datasets[legendItem.datasetIndex].hidden = !display.datasets[legendItem.datasetIndex].hidden;
                                         setTiempoGrafica(0);
                                         setDatosGrafica(display);
-                                        setGraficaBarras(false);
-                                        setGraficaBarras(true);
+                                        setGraficaLineas(false);
+                                        setGraficaLineas(true);
                                 }
                             },
                             tooltips: {
@@ -1224,6 +1226,20 @@ const EstadisticasTres = () => {
                     </Grid>
                 }
                 </Grid>
+                <div style={{textAlign:'left'}}>
+                    <Button
+                            variant="contained"
+                            color="secondary"
+                            className={classes.button}
+                            style={{width:'15em', margin:'0em 2.2em 2em 2.2em', background:'linear-gradient(to right, #c4161c 0%, #9e0b0f  100%)'}}
+                            startIcon={<LibraryBooksIcon />}
+                        >
+                            <a style={{color:'white', fontFamily:"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"}} target="_blank" rel="noopener noreferrer" href="https://drive.google.com/file/d/1ZxYiVEDOFXPEWOxgkvn0h1k1zmR8Ihaq/view?usp=sharing">
+                            Metadatos de indicadores
+                            </a>
+                    </Button>
+                </div>
+                
             {/* </div> */}
         </div> 
     );

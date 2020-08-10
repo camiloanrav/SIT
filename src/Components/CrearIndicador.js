@@ -3,6 +3,10 @@ import TextField from '@material-ui/core/TextField';
 import Select from "react-select";
 import Button from '@material-ui/core/Button';
 
+import Snackbar from '@material-ui/core/Snackbar';
+import CloseIcon from '@material-ui/icons/Close';
+import IconButton from '@material-ui/core/IconButton';
+
 import {postData} from '../utils/api';
 
 const FormularioIndicadorOrdenSuperior = ({orden, indicadores, niveles, categorias, setOrder, fuentes, periodicidades, tipos, unidades}) => {
@@ -17,6 +21,9 @@ const FormularioIndicadorOrdenSuperior = ({orden, indicadores, niveles, categori
     const [periodicidadSeleccionada, setPeriodicidadSeleccionada] = useState(null);
     const [tipoSeleccionado, setTipoSeleccionado] = useState(null);
     const [unidadSeleccionada, setUnidadSeleccionada] = useState(null);
+
+    const [openSnackbar, setOpenSnackbar] = React.useState(false);
+    const [messageSnackbar, setMessageSnackbar] = React.useState(false);
 
     useEffect(()=>{
         setIndicadorSeleccionado(null);
@@ -125,7 +132,8 @@ const FormularioIndicadorOrdenSuperior = ({orden, indicadores, niveles, categori
             let nombreAux = indicadoresHijos[i].label.split("=>");
             console.log(nombre.toLowerCase().trim() + " - " + nombreAux[nombreAux.length-1].toLowerCase().trim());
             if(nombre.toLowerCase().trim() === nombreAux[nombreAux.length-1].toLowerCase().trim()){
-                alert("Un indicador de este mismo nivel ya tiene ese nombre. Por favor cambiarlo.");
+                setMessageSnackbar("Un indicador de este mismo nivel ya tiene ese nombre. Por favor cambiarlo.");
+                setOpenSnackbar(true);  
                 return;
             }
         }
@@ -152,7 +160,8 @@ const FormularioIndicadorOrdenSuperior = ({orden, indicadores, niveles, categori
 
             if(nivelSeleccionado.value !== "4"){
                 if(ultimoIndicador>99){
-                    alert("A este indicador superior no se le pueden agregar más indicadores.");
+                    setMessageSnackbar("A este indicador superior no se le pueden agregar más indicadores.");
+                    setOpenSnackbar(true); 
                     return;
                 }else{
                     if(ultimoIndicador > 9){
@@ -163,7 +172,8 @@ const FormularioIndicadorOrdenSuperior = ({orden, indicadores, niveles, categori
                 }
             }else{
                 if(ultimoIndicador > 9){
-                    alert("A este indicador superior no se le pueden agregar más indicadores.");
+                    setMessageSnackbar("A este indicador superior no se le pueden agregar más indicadores.");
+                    setOpenSnackbar(true); 
                     return;
                 }else{
                     indicadorFinalAux = ultimoIndicador.toString();
@@ -223,16 +233,19 @@ const FormularioIndicadorOrdenSuperior = ({orden, indicadores, niveles, categori
         }
         
         if(aux.nombre.trim() === ""){
-            alert("El nombre no es valido");
+            setMessageSnackbar("El nombre no es valido.");
+            setOpenSnackbar(true);
         }else{
             console.log(aux);
             postData('/indicador/create.php',aux).then(data => {
                 if(data){
                     console.log(data.message!==undefined?data.message:"Error");
                     try {
-                        alert(data.message!==undefined?data.message:"Error");
+                        setMessageSnackbar(data.message!==undefined?data.message:"Error");
+                        setOpenSnackbar(true);
                     } catch (error) {
-                        alert("Error")
+                        setMessageSnackbar("Error");
+                        setOpenSnackbar(true);
                     }
                     setOrder('');
                 }
@@ -368,6 +381,24 @@ const FormularioIndicadorOrdenSuperior = ({orden, indicadores, niveles, categori
                 null
                 }
             </div>
+
+            <Snackbar
+                    anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'center',
+                    }}
+                    open={openSnackbar}
+                    autoHideDuration={4000}
+                    onClose={()=>{setOpenSnackbar(false)}}
+                    message={messageSnackbar}
+                    action={
+                        <React.Fragment>
+                        <IconButton size="small" aria-label="close" color="inherit" onClick={()=>{setOpenSnackbar(false)}}>
+                            <CloseIcon fontSize="small" />
+                        </IconButton>
+                        </React.Fragment>
+                    }
+                />
         </div>
     );
 }

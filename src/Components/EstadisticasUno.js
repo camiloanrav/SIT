@@ -14,6 +14,7 @@ import {getData} from '../utils/api';
 import EqualizerIcon from '@material-ui/icons/Equalizer';
 import ShowChartIcon from '@material-ui/icons/ShowChart';
 import CreateIcon from '@material-ui/icons/Create';
+import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 
 import Excel from "../Components/Excel";
 import 'chartjs-plugin-datalabels';
@@ -736,8 +737,8 @@ const EstadisticasUno = () => {
                                         display.datasets[legendItem.datasetIndex].hidden = !display.datasets[legendItem.datasetIndex].hidden;
                                         setTiempoGrafica(0);
                                         setDatosGrafica(display);
-                                        setGraficaBarras(false);
-                                        setGraficaBarras(true);
+                                        setGraficaLineas(false);
+                                        setGraficaLineas(true);
                                 }
                             },
                             tooltips: {
@@ -820,6 +821,17 @@ const EstadisticasUno = () => {
                         <Excel titulo={indicadorSeleccionado.label} style={{textAlign:'center'}} datosExcel={datosGrafica.datasets} aniosExcel={datosGrafica.labels}></Excel>
                     </div>
                 }
+                <Button
+                        variant="contained"
+                        color="secondary"
+                        className={classes.button}
+                        style={{width:'15em', margin:'1em 0 0em 0', background:'linear-gradient(to right, #c4161c 0%, #9e0b0f  100%)'}}
+                        startIcon={<LibraryBooksIcon />}
+                    >
+                        <a style={{color:'white', fontFamily:"-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"}} target="_blank" rel="noopener noreferrer" href="https://drive.google.com/file/d/1ZxYiVEDOFXPEWOxgkvn0h1k1zmR8Ihaq/view?usp=sharing">
+                            Metadatos de indicadores
+                        </a>
+                </Button>
             </div>
         </div>
     );

@@ -1,6 +1,6 @@
 {
   "name": "sit",
-  "homepage": "https://serpacifico.uao.edu.co/ser",
+  "homepage": "/ser",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

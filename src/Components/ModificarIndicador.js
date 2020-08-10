@@ -5,6 +5,10 @@ import Button from '@material-ui/core/Button';
 
 import {postData} from '../utils/api';
 
+import Snackbar from '@material-ui/core/Snackbar';
+import CloseIcon from '@material-ui/icons/Close';
+import IconButton from '@material-ui/core/IconButton';
+
 const ModificarIndicador = ({setIndicadorSeleccionado, setGestionando, setModificando,indicadorSeleccionado,fuentes,periodicidades,tipos,unidades}) => {
     
     const [nombre, setNombre] = useState(()=>{
@@ -24,6 +28,9 @@ const ModificarIndicador = ({setIndicadorSeleccionado, setGestionando, setModifi
         null
     );
 
+    const [openSnackbar, setOpenSnackbar] = React.useState(false);
+    const [messageSnackbar, setMessageSnackbar] = React.useState(false);
+
     const handleChangeFuente = (valor,e) => {
         console.log(valor);
         setFuenteSeleccionada(valor);
@@ -40,6 +47,7 @@ const ModificarIndicador = ({setIndicadorSeleccionado, setGestionando, setModifi
         console.log(valor);
         setPeriodicidadSeleccionada(valor);
     }
+
     const Modificar = () => {
         let aux = {
             "idindicadores": indicadorSeleccionado.value,
@@ -56,13 +64,15 @@ const ModificarIndicador = ({setIndicadorSeleccionado, setGestionando, setModifi
         
     if(aux.nombre.trim() !==""){
         postData('/indicador/update.php',aux).then(data => {
-            alert(data.message);
+            setMessageSnackbar(data.message);
+            setOpenSnackbar(true);
             setModificando(false);
             setGestionando(false);
             setIndicadorSeleccionado(null);
         });
     }else{
-        alert("El nombre no es valido");
+        setMessageSnackbar("El nombre no es valido.");
+        setOpenSnackbar(true);
     }
         
     }
@@ -139,6 +149,23 @@ const ModificarIndicador = ({setIndicadorSeleccionado, setGestionando, setModifi
                 <Button color="default" variant="contained" onClick={()=>{setModificando(false)}}>Cancelar</Button>
                 <Button onClick={()=>{Modificar()}} color="secondary" style={{marginLeft:'0.5em',background:'linear-gradient(to right, #c4161c 0%, #9e0b0f  100%)'}} variant="contained">Modificar indicador</Button>  
             </div>
+            <Snackbar
+                    anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'center',
+                    }}
+                    open={openSnackbar}
+                    autoHideDuration={4000}
+                    onClose={()=>{setOpenSnackbar(false)}}
+                    message={messageSnackbar}
+                    action={
+                        <React.Fragment>
+                        <IconButton size="small" aria-label="close" color="inherit" onClick={()=>{setOpenSnackbar(false);}}>
+                            <CloseIcon fontSize="small" />
+                        </IconButton>
+                        </React.Fragment>
+                    }
+                />
         </div>
     );
 };

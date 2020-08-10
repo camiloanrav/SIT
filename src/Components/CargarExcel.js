@@ -74,7 +74,7 @@ const CargarExcel = ({indicadores}) => {
         }
     };
 
-    const handleFile = () => {
+    const handleFile = (accion) => {
         console.time();
         setIsLoading(true);
         /* Boilerplate to set up FileReader */
@@ -104,8 +104,6 @@ const CargarExcel = ({indicadores}) => {
                     setIsLoading(false);
                     return;
                 }
-
-                
 
                 datosHojaExcel.forEach((element,i) => {
 
@@ -149,21 +147,40 @@ const CargarExcel = ({indicadores}) => {
                 console.log(col);
                 
                 if(problemaArchivo.length===0 && indicadorErroneo.length === 0){
-                    postData2('/indicaterri/create.php',datos).then((resp) => {
-                        setIsLoading(false);
-                        console.log(resp);
-                        if(resp != null && resp.data != null &&  resp.data.length !== 0){
-                            //setName("Error al cargar el archivo.");
-                            console.log(resp.data);
-                            let errores = resp.data.split('"}{"message":"');
-                            //setErroresEnArchivoExcelServer(resp.data);
-                            setErroresEnArchivoExcelServer(errores);
-                            setName("Error al cargar el archivo en el servidor.");
-                        }else{
-                            setName('El archivo ha sido cargado correctamente.');
-                        }
-                        console.timeEnd();
-                    });
+                    if(accion === 1){
+                        postData2('/indicaterri/create.php',datos).then((resp) => {
+                            setIsLoading(false);
+                            console.log(resp);
+                            if(resp != null && resp.data != null &&  resp.data.length !== 0){
+                                //setName("Error al cargar el archivo.");
+                                console.log(resp.data);
+                                let errores = resp.data.split('"}{"message":"');
+                                //setErroresEnArchivoExcelServer(resp.data);
+                                setErroresEnArchivoExcelServer(errores);
+                                setName("Error al cargar el archivo en el servidor.");
+                            }else{
+                                setName('El archivo ha sido cargado correctamente.');
+                            }
+                            console.timeEnd();
+                        });
+                    }else if(accion === 2){
+                        postData2('/indicaterri/exceldelete.php',datos).then((resp) => {
+                            setIsLoading(false);
+                            console.log(resp);
+                            if(resp != null && resp.data != null &&  resp.data.length !== 0){
+                                //setName("Error al cargar el archivo.");
+                                console.log(resp.data);
+                                let errores = resp.data.split('"}{"message":"');
+                                //setErroresEnArchivoExcelServer(resp.data);
+                                setErroresEnArchivoExcelServer(errores);
+                                setName("Error al cargar el archivo en el servidor.");
+                            }else{
+                                setName('Los indicadores han sido borrados correctamente.');
+                            }
+                            console.timeEnd();
+                        });
+                    }
+                    
                     /* setIsLoading(false);
                     setName('El archivo ha sido cargado correctamente.');
                     setFile(null);
@@ -209,8 +226,11 @@ const CargarExcel = ({indicadores}) => {
                 <input style={{ display: 'none' }} ref={refContainer} type="file" className="form-control" id="raised-button-file" accept={SheetJSFT} onChange={handleChange} />
             </Button>
             {
-                name === '' || name ==='El archivo ha sido cargado correctamente.' || name ==='El archivo Excel tiene problemas en su estructura.' || name ==='Error al cargar el archivo en el servidor.' ? null : 
-                <Button color="secondary" style={{marginLeft:'0.5em', background:'linear-gradient(to right, #c4161c 0%, #9e0b0f  100%)'}} variant="contained" onClick={handleFile}>CARGAR</Button> 
+                name === '' || name ==='El archivo ha sido cargado correctamente.' || name ==='El archivo Excel tiene problemas en su estructura.' || name ==='Error al cargar el archivo en el servidor.' || name === 'Los indicadores han sido borrados correctamente.' ? null : 
+                <div style ={{margin:'1em 0 0 0'}}>
+                    <Button color="secondary" style={{marginLeft:'0.5em', background:'linear-gradient(to right, #c4161c 0%, #9e0b0f  100%)'}} variant="contained" onClick={()=>{handleFile(1)}}>CARGAR</Button> 
+                    <Button color="secondary" style={{marginLeft:'0.5em'}} variant="outlined" onClick={()=>{handleFile(2)}}>BORRAR</Button> 
+                </div>
             }
             <p style={{marginTop:'1em', fontFamily:'roboto'}}>{name} {archivoSeleccionado}</p>
             <br />

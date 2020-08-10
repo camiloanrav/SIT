@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 const VideoAyuda = () => {
     return (
@@ -11,18 +10,13 @@ const VideoAyuda = () => {
                     </h1>
                     <div className="vs-wrap">
                     <div className="vs-container">
-                        <iframe src="https://www.youtube.com/embed/5CquF0y_q9E" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <iframe src="https://www.youtube.com/embed/BPjlcRMTUBo" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                     </div>
                     </div>
                 </div>
             </section>
         </div>
     );
-};
-
-VideoAyuda.propTypes = {
-    header: PropTypes.string.isRequired,
-    body: PropTypes.element.isRequired,
 };
 
 export default VideoAyuda;

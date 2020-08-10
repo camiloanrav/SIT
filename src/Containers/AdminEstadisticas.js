@@ -19,6 +19,10 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { makeStyles } from '@material-ui/core/styles';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
+import Snackbar from '@material-ui/core/Snackbar';
+import CloseIcon from '@material-ui/icons/Close';
+import IconButton from '@material-ui/core/IconButton';
+
 import Select from "react-select";
 
 import {postData} from '../utils/api';
@@ -54,6 +58,10 @@ const AdministrarIndicadores = ({indicadores, getIndicadores}) =>{
     const [postEliminando, setPostEliminando] = useState(false);
 
     const [indicadorSeleccionado, setIndicadorSeleccionado] = useState(null);
+
+    const [openSnackbar, setOpenSnackbar] = React.useState(false);
+    const [messageSnackbar, setMessageSnackbar] = React.useState(false);
+    
 
     useEffect(() => {
         getData('/unidad/all.php').then(data => {
@@ -101,7 +109,8 @@ const AdministrarIndicadores = ({indicadores, getIndicadores}) =>{
         console.log(indicadoresHijos);
         
         if(indicadoresHijos.length!==0){
-            alert("El indicador tiene otros indicadores que dependen de él, borre primero esos indicadores.");
+            setMessageSnackbar("El indicador tiene otros indicadores que dependen de él, borre primero esos indicadores.");
+            setOpenSnackbar(true);
             setEliminando(false);
             setGestionando(false);
             setIndicadorSeleccionado(null);
@@ -119,7 +128,8 @@ const AdministrarIndicadores = ({indicadores, getIndicadores}) =>{
                         console.log(data.message);
                     }
                     
-                    alert("Eliminado");
+                    setMessageSnackbar("Eliminado");
+                    setOpenSnackbar(true);
                     setPostEliminando(false);
                     setEliminando(false);
                     setGestionando(false);
@@ -226,14 +236,31 @@ const AdministrarIndicadores = ({indicadores, getIndicadores}) =>{
             <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={eliminando}>
                 <DialogTitle id="simple-dialog-title">¿Desea eliminar el indicador {indicadorSeleccionado?indicadorSeleccionado.label:null}? Tenga en cuenta que también se eliminarán todos los datos relacionados a este indicador.</DialogTitle>
                 <DialogActions>
-                    <Button onClick={handleClose} color="primary">
+                    <Button disabled={postEliminando} onClick={handleClose} color="primary">
                         Cancelar
                     </Button>
-                    <Button onClick={()=>{Eliminar(indicadorSeleccionado)}} color="primary" autoFocus>
+                    <Button disabled={postEliminando} onClick={()=>{Eliminar(indicadorSeleccionado)}} color="primary" autoFocus>
                         Eliminar
                     </Button>
                 </DialogActions>
             </Dialog>
+            <Snackbar
+                    anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'center',
+                    }}
+                    open={openSnackbar}
+                    autoHideDuration={4000}
+                    onClose={()=>{setOpenSnackbar(false)}}
+                    message={messageSnackbar}
+                    action={
+                        <React.Fragment>
+                        <IconButton size="small" aria-label="close" color="inherit" onClick={()=>{setOpenSnackbar(false)}}>
+                            <CloseIcon fontSize="small" />
+                        </IconButton>
+                        </React.Fragment>
+                    }
+                />
         </div>
     );
 }
@@ -265,6 +292,7 @@ const AdminEstadisticas = () => {
 
             data.sort((a,b) => (a.idindicadores > b.idindicadores) ? 1 : ((b.idindicadores > a.idindicadores) ? -1 : 0));
 
+            //Valida errores
             /* data.forEach(dato => {
                 let hijo = 1;
 

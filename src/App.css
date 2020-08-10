@@ -71,11 +71,16 @@
     display: flex;
     justify-content: space-around;
     flex-wrap:wrap;
+    background: linear-gradient(rgba(255,255,255,1), rgba(255,255,255,0.6)), url(../src/background.png);
+    background-position:center;
+    background-repeat:no-repeat;
+    background-size:cover;
   }
 
   .ayuda .preguntasFrecuentes{
     margin: 1em;
-    max-width: 40em;
+    max-width: 90em;
+    margin-bottom: 1em;
   }
 
   .ayuda .preguntasFrecuentes h3{
@@ -455,7 +460,7 @@
     }
 
     .resources-section{
-      margin: 1em !important;
+      margin: 0em 1em 3em 1em !important;
     }
 
     .activeNavBar{

@@ -3,8 +3,11 @@ import axios from 'axios';
 /* const URL_base = 'http://localhost/serpacificows';
 const URL_base_correo = 'http://localhost'; */
 
-const URL_base = 'https://serpacifico.uao.edu.co/serpacificows';
-const URL_base_correo = 'https://serpacifico.uao.edu.co/';
+/* const URL_base = 'https://serpacifico.uao.edu.co/serpacificows';
+const URL_base_correo = 'https://serpacifico.uao.edu.co/'; */
+
+const URL_base = 'https://172.16.3.90/serpacificows';
+const URL_base_correo = 'https://172.16.3.90';
 
 /* const URL_base = 'http://45.5.188.65/serpacificows';
 const URL_base_correo = 'https://45.5.188.65'; */
