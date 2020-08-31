@@ -14,17 +14,12 @@ class CarouselInicio extends Component {
     render() {
         return (
             <div>
-                {/* <div style={{position:'relative', left:'5em', bottom:'0em', zIndex:'1', backgroundColor:'red', height:'0em'}}>
-                    <div style={{position:'absolute', offset:'10em'}}>
-                        Hola
-                    </div>
-                </div> */}
+                
                 <div className="titulo">
                     <p>Estadísticas Territoriales<br></br>de la Región Pacífico</p>
                 </div>
                 <Carousel
-                /* className="carousel" 
-                style={{maxHeight:'20em'}} */
+                
                 showThumbs={false}
                 showIndicators={false}
                 showStatus={false}

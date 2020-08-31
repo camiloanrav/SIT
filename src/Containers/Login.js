@@ -1,12 +1,7 @@
 import React, {useState, useEffect} from 'react';
 
-import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
+
 
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -27,7 +22,6 @@ import {postData} from '../utils/api';
 import  { Redirect } from 'react-router-dom';
 
 const Login = (props) => {
-    const [open, setOpen] = React.useState(false);
 
     const [openSnackbar, setOpenSnackbar] = React.useState(false);
 
@@ -55,6 +49,10 @@ const Login = (props) => {
         });
     }
 
+    const handleClose = () => {
+        setOpenSnackbar(false);
+    }
+
     const ProtectedComponent = () => {
         if (sessionStorage.getItem("login")){
             return <Redirect to='/ser/administrador-inicio'  />
@@ -62,23 +60,6 @@ const Login = (props) => {
             return null
         }
     }
-
-
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-        setOpenSnackbar(false);
-    };
-
-    const handleSend = () => {
-        //Enviar contraseña al correo
-        setMessage("Correo enviado de forma correcta.");
-        setOpenSnackbar(true);
-        setOpen(false);
-    };
     
     const handleChange = prop => event => {
         setValues({ ...values, [prop]: event.target.value });
@@ -140,7 +121,6 @@ const Login = (props) => {
                             <button onClick={handleLogin} className="button-card-uao" style={{width:'100%', marginBottom:'1.5em'}}>
                                 INGRESAR
                             </button>
-                            <a onClick={handleClickOpen} href="#/">¿Olvidaste tu contraseña?</a>
                         </div>
                     </div> 
                     : 
@@ -160,33 +140,10 @@ const Login = (props) => {
                             </button>
                         </div>
                     </div>
-                    
                     }
-                    
                 </div>
             </div>
             <ProtectedComponent></ProtectedComponent>
-            <Dialog
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-            >
-                <DialogTitle id="alert-dialog-title">{"¿Olvidaste tu contraseña?"}</DialogTitle>
-                <DialogContent>
-                <DialogContentText id="alert-dialog-description">
-                    Se enviara un mensaje al correo de SER Pacífico, con el link para cambiar la contraseña.
-                </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                <Button variant="outlined" onClick={handleClose} color="secondary">
-                    Denegar
-                </Button>
-                <Button variant="outlined" onClick={handleSend} color="primary" autoFocus>
-                    Confirnar
-                </Button>
-                </DialogActions>
-            </Dialog>
             <Snackbar
                 anchorOrigin={{
                 vertical: 'top',

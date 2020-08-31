@@ -1,10 +1,8 @@
 import React  from 'react';
 import { NavLink} from 'react-router-dom';
 import logo from '../logo-ser.png';
-//import Select from 'react-select/src/Select';
 
 const NavBarDesktop = ({user}) => {
-    //const [activo, setActivo] = useState(0);
 
     let nav;
     if(user === "administrador"){
@@ -12,9 +10,6 @@ const NavBarDesktop = ({user}) => {
         <div id="hmd-bottom">
             <span className="hmdb-line-left"></span>
             <span className="hmdb-line-right"></span>
-            {/* <div id="hmdb-logo-container">
-                <a id="hmdb-logo" href="" ></a>
-            </div> */}
             <div>
                 <img src={logo} width="400" alt="Logo"></img>
             </div>
@@ -37,7 +32,14 @@ const NavBarDesktop = ({user}) => {
                     </li>
                 </NavLink>
 
-                <NavLink onClick={()=>{sessionStorage.clear(); }} to="ser/login" activeClassName="activeNavBar"  className="dropdown">
+                <NavLink to="/ser/ajustes" activeClassName="activeNavBar"  className="dropdown">
+                    <li className="dd-btn">
+                        Ajustes
+                        <i style={{margin:'0 0 0 0.5em'}} className="fas fa-wrench"></i>
+                    </li>
+                </NavLink>
+
+                <NavLink onClick={()=>{sessionStorage.clear(); }} to="/" activeClassName="activeNavBar"  className="dropdown">
                     <li className="dd-btn">
                             Cerrar Sesión
                             <i style={{margin:'0 0 0 0.5em'}} className="fas fa-sign-out-alt"></i>

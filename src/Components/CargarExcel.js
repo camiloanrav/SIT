@@ -75,7 +75,6 @@ const CargarExcel = ({indicadores}) => {
     };
 
     const handleFile = (accion) => {
-        console.time();
         setIsLoading(true);
         /* Boilerplate to set up FileReader */
         const reader = new FileReader();
@@ -96,7 +95,6 @@ const CargarExcel = ({indicadores}) => {
                 let ws = wb.Sheets[nombreHojaExcel];
                 let datosHojaExcel = XLSX.utils.sheet_to_json(ws);
                 let problemaArchivoAux = [];
-                console.log(datosHojaExcel);
                 
                 /* col = make_cols(ws['!ref']); */
                 if(datosHojaExcel.length === 0 || datosHojaExcel[0].indicadores_idindicadores === undefined){
@@ -140,59 +138,36 @@ const CargarExcel = ({indicadores}) => {
             }
             
             if(datos !== undefined && datos != null){
-
-                console.log(datos.length);
-                
-                console.log(datos);
-                console.log(col);
                 
                 if(problemaArchivo.length===0 && indicadorErroneo.length === 0){
                     if(accion === 1){
                         postData2('/indicaterri/create.php',datos).then((resp) => {
                             setIsLoading(false);
-                            console.log(resp);
                             if(resp != null && resp.data != null &&  resp.data.length !== 0){
-                                //setName("Error al cargar el archivo.");
-                                console.log(resp.data);
                                 let errores = resp.data.split('"}{"message":"');
-                                //setErroresEnArchivoExcelServer(resp.data);
                                 setErroresEnArchivoExcelServer(errores);
                                 setName("Error al cargar el archivo en el servidor.");
                             }else{
                                 setName('El archivo ha sido cargado correctamente.');
                             }
-                            console.timeEnd();
                         });
                     }else if(accion === 2){
                         postData2('/indicaterri/exceldelete.php',datos).then((resp) => {
                             setIsLoading(false);
-                            console.log(resp);
                             if(resp != null && resp.data != null &&  resp.data.length !== 0){
-                                //setName("Error al cargar el archivo.");
-                                console.log(resp.data);
                                 let errores = resp.data.split('"}{"message":"');
-                                //setErroresEnArchivoExcelServer(resp.data);
                                 setErroresEnArchivoExcelServer(errores);
                                 setName("Error al cargar el archivo en el servidor.");
                             }else{
                                 setName('Los indicadores han sido borrados correctamente.');
                             }
-                            console.timeEnd();
                         });
                     }
-                    
-                    /* setIsLoading(false);
-                    setName('El archivo ha sido cargado correctamente.');
-                    setFile(null);
-                    console.timeEnd(); */
                 }else{
                     setName('El archivo Excel tiene problemas en su estructura.');
-                    console.log(problemaArchivo);
-                    console.log(indicadorErroneo);
                     setErroresEnArchivoExcel(problemaArchivo);
                     setIndicadoresErroneos(indicadorErroneo);
                     setIsLoading(false);
-                    console.timeEnd();
                 }
             }else{
                 setName('El archivo Excel tiene problemas en su estructura.');
@@ -205,16 +180,6 @@ const CargarExcel = ({indicadores}) => {
             reader.readAsArrayBuffer(file);
         };
     }
-
-   /*  function UpdateInputExcel(evt) {
-        setExcel(evt.target.value);
-    }
-
-    function ConvertExcel(data) {
-        setExcel(data);
-        var first_worksheet = excel.Sheets[excel.SheetNames[0]];
-        setData(XLSX.utils.sheet_to_json(first_worksheet, {header:1}));
-    } */
 
     return (
         <div style={{padding:'3em', marginTop:'3em'}}>
@@ -237,7 +202,7 @@ const CargarExcel = ({indicadores}) => {
             {
                 isLoading &&
                 <div className={classes.root}>
-                    Cargando Archivo...
+                    Procesando Archivo...
                     <LinearProgress color="secondary"/>
                 </div>
             }

@@ -15,16 +15,7 @@ import {
 
     let { url } = useRouteMatch();
     const [indicador, setIndicador] = useState(1);
-    const [location, setLocation] = useState(useLocation());
 
-    useEffect(()=>{
-        //Location();
-        console.log(location.pathname);
-    },[]);
-
-    const Location = () => {
-        setLocation(useLocation());
-    }
 
     function handleClick(indicador){
         setIndicador(indicador);
@@ -49,8 +40,6 @@ import {
                             </Link>
                         </ul>
                     </nav>
-                    {/* <div className="tabs-box-container">
-                    </div> */}
                 </section>
             </div>
         </div>

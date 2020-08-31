@@ -254,74 +254,6 @@ const EstadisticasTres = () => {
             setIndicadoresN2(tempN2);
             setIndicadoresN3(tempN3);
             setIndicadoresN4(tempN4);
-
-            //Valida los indicadores padres que tienen mal la unidad y la fuente
-            /* let errores = [];
-            for (let i = 0; i < data.length; i++) {
-                let aux = [];
-                if(data[i].unidades_medida_idunidades !== "0" || data[i].fuentes_idfuentes !== "0"){
-                    aux = data.filter((datoActual, j, array)=>{
-                        return  data[i].idindicadores === datoActual.idindicadores.substring(0,data[i].idindicadores.length) && parseInt(datoActual.nivel) > parseInt(data[i].nivel);
-                    });
-                    if(aux.length > 0){
-                        errores.push({nombre:data[i].nombre, indicador: data[i].idindicadores, hijos:aux});
-                    }
-                }
-                
-            }
-            console.log(errores); */
-
-            let cero = ["2060103"];
-            let uno = ["202010103", "202010203", "206010401", "206010402", "206010701", "206010702", "206010703"];
-            let dos = ["10102020501", "10102020502", "10102020503", "10102020504", "10102040201", "20601050101", "20601050102", "20601050103", "20601050104", "20601050105", "20601050106", "20601050107", "20601050108", "20601050109", "20601050110", "20601050111", "20601050112", "20601050113", "20601050114", "20601050115", "20601050116", "20601050117", "20601050201", "20601050202", "20601050203", "20601050204", "20601050205", "20601050206", "20601050207", "20601050208", "20601050209", "20601050210", "20601050211", "20601050212", "20601050213", "20601050214", "20601050215", "20601050216", "20601050217", "20601060101", "20601060201", "20601070401", "20601070402", "20601070501", "20601070502", "20601070504"];
-            let tres =  ["2060106010201", "2060106010202", "2060106010301", "2060106010401", "2060106010501", "2060106020201", "2060106020202", "2060106020301", "2060106020401", "2060106020501", "2060107040301", "2060107040302", "2060107040303", "2060107040304", "2060107040401", "2060107050301", "2060107050302", "2060107050303", "2060107050304", "2060107050501"];
-            let cuatro = ["10102020208021", "10102020208022", "10102020208023", "10102020208024", "20601060103021", "20601060103022", "20601060104021", "20601060104022", "20601060105021", "20601060105022", "20601060203021", "20601060203022", "20601060204021", "20601060204022", "20601060205021", "20601060205022", "20601070404021", "20601070404022", "20601070505021", "20601070505022"];
-            let todos = [];
-
-            todos = todos.concat(cero);
-            todos = todos.concat(uno);
-            todos = todos.concat(dos);
-            todos = todos.concat(tres);
-            todos = todos.concat(cuatro);
-            todos.sort((a,b) => (a > b) ? 1 : ((b > a) ? -1 : 0));
-            console.log(todos);
-            
-            
-            /* console.log(tempN1.length);
-            let respuestas = 0;
-            let consultas = 0;
-            let ind = [];
-            for (let i = 0; i < tempN1.length; i++) {
-                if(tempN1[i].unidad !== "0"){
-                    consultas++;
-                }
-            }
-            
-            for (let i = 0; i < tempN1.length; i++) {
-                if(tempN1[i].unidad !== "0"){
-                    getData2('/indicaterri/search.php?id=' + tempN1[i].value).then(d => {
-                        respuestas++;
-                        console.log(respuestas);
-                        //console.log(d);
-                        
-                        if(d.statusText !== "OK"){
-                            ind.push(tempN1[i].value);
-                            if(ind.length > 1){
-                                ind.sort((a,b) => (a > b) ? 1 : ((b > a) ? -1 : 0));
-                            }
-                            console.log(ind);
-                            
-                        }
-                        if(consultas === respuestas){
-                            console.log("Terminó");
-                            
-                            ind.sort((a,b) => (a > b) ? 1 : ((b > a) ? -1 : 0));
-                            console.log(ind);
-                        }
-                    }).catch(error => console.log(error.data));
-                }
-            } */
-            
             
             
             setCargando(false);
@@ -386,33 +318,6 @@ const EstadisticasTres = () => {
         }).catch(error => console.log(error.data));
     }
 
-    /* const getPeriodos = () => {
-        setCargando(true);
-        let tempPeriodos = [];
-        for(let i = 0; i < territorioSeleccionado.length; i++){
-            getData('/periodo/search.php?id=' + indicadorSeleccionado.value + "&dane=" + territorioSeleccionado[i].value).then((data) => {
-                console.log(data);
-                
-                let aux = []; 
-                for(let j = 0; data.length > j; j++){
-                    aux.push({value: data[j].valor , label: data[j].periodo, municipio: territorioSeleccionado[i].label});
-                }
-                tempPeriodos.push(aux);
-                console.log(aux);
-                if(tempPeriodos.length === territorioSeleccionado.length){
-                    console.log(tempPeriodos);
-                    setPeriodos(tempPeriodos);
-                    let opcionesPeriodosAux = [];
-                    opcionesPeriodosAux.push({value:"0",label:"TODOS", isDisabled: false})
-                    for(let i = 0; i < aux.length; i++){
-                        opcionesPeriodosAux.push({value:(i+1).toString(),label:aux[i].label, isDisabled: false})
-                    }
-                    setOpcionesPeriodos(opcionesPeriodosAux);
-                    setCargando(false);
-                }
-            }).catch(error => console.log(error));
-        }
-    } */
     const getPeriodos = () => {
         setCargando(true);
         let tempPeriodos = [];
@@ -471,6 +376,7 @@ const EstadisticasTres = () => {
     }
 
     const PintarGrafica = () => {
+        setNoGrafica(false);
         let aniosAux = [];
         let datasets = [];
 
@@ -1222,7 +1128,7 @@ const EstadisticasTres = () => {
                         :
                         <h3 style={{margin:'0 0 0.5em 0'}}>Estos datos son de caracter cualitativo y no se pueden graficar.</h3>
                         }
-                        <Excel titulo={indicadorSeleccionado.label} style={{textAlign:'center'}} datosExcel={datosGrafica.datasets} aniosExcel={datosGrafica.labels}></Excel>
+                        <Excel titulo={indicadorSeleccionado.label} style={{textAlign:'center'}} datosExcel={datosGrafica?.datasets} aniosExcel={datosGrafica?.labels}></Excel>
                     </Grid>
                 }
                 </Grid>

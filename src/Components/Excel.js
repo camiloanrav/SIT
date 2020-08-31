@@ -38,13 +38,6 @@ const Excel = ({titulo,datosExcel,aniosExcel}) => {
         }
 
         headers.unshift("Municipio");
-        
-        console.log(datosExcel);
-        console.log(aniosExcel);
-        console.log("---");
-        console.log(aniosAux);
-        console.log(aniosAux);
-        
 
         var wb = XLSX.utils.json_to_sheet(informacionExcel, {skipHeader: false, header:headers});
         

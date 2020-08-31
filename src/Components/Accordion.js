@@ -90,7 +90,7 @@ export default function Accordion() {
                         <div style={{position:'relative' , paddingBottom:'1em', paddingRight:'1em', textAlign:'right'}}>
                             <button onClick={()=>{handleClickOpen(1); setData(dimension);}} /* onClick={()=>handleSubmitDimension(value, iddimensiones)} */ className="button-card-uao">
                                 EDITAR
-                                <i class="fas fa-chevron-right" style={{marginLeft:'1em'}}></i>
+                                <i className="fas fa-chevron-right" style={{marginLeft:'1em'}}></i>
                             </button>
                         </div>
                     </div>                  
@@ -111,27 +111,20 @@ export default function Accordion() {
                         </div>
                         
                         <div style={{padding:'1em 1em 0em 1em'}}>
-                            <p style={{fontFamily:'roboto', textAlign:'left'}}>
+                            <div style={{fontFamily:'roboto', textAlign:'left'}}>
                                 <ul>
                                     <li><b>Capital: </b> {capital}</li>
                                     <li><b>Extensión: </b>{extension}</li>
                                     <li><b>Población: </b>{poblacion}</li>
                                     <li><b>Participación PIB: </b>{participacion}</li>
                                 </ul>
-                            </p>
-                            {/* <div class="input-form">
-                                <label class="if-text-area" for="mensaje"></label>
-                                <span class="wpcf7-form-control-wrap">
-                                    <textarea onChange={updateInputValue} id="mensaje" name="mensaje" cols="40" rows="4" required="required"></textarea>
-                                    <p class="message">Formato de nombre incorrecto</p>
-                                </span>
-                            </div> */}
+                            </div>
                         </div>
                         <hr></hr>
                         <div style={{position:'relative' , paddingBottom:'1em', paddingRight:'1em', textAlign:'right'}}>
                             <button onClick={()=>{handleClickOpen(2); setData(mapa);}} /* onClick={()=>handleSubmitDimension(value, idinfo)} */ className="button-card-uao">
                                 EDITAR
-                                <i class="fas fa-chevron-right" style={{marginLeft:'1em'}}></i>
+                                <i className="fas fa-chevron-right" style={{marginLeft:'1em'}}></i>
                             </button>
                         </div>
                     </div>
@@ -139,16 +132,6 @@ export default function Accordion() {
             });
         }
 
-        /* const getDimensiones = () =>{
-            axios.get(`http://11.11.8.206/serpacificows/dimension/all.php`)
-            .then(res => {
-                setDimensions(RenderDimensions(res.data));
-            })
-            let dataFromServer = [{iddimensiones:"1", nombre:"Ambiente", descripcion:"Lorem dsadsad dsadasda dsads adsa d asd  asd sa dsadasdsadsa dsadasdas"},
-            {"iddimensiones":"2", "nombre":"Economica", "descripcion":"Lorem dsadsad dsadasda dsads adsa d asd  asd sa dsadasdsadsa dsadasdas"},
-            {"iddimensiones":"3", "nombre":"Social", "descripcion":"Lorem dsadsad dsadasda dsads adsa d asd  asd sa dsadasdsadsa dsadasdas"}];
-            setDimensions(RenderDimensions(dataFromServer));
-        } */
         getData('/dimension/all.php').then(data => {
             setDimensions(RenderDimensions(data)); 
         }).catch(error => console.log(error.data));
@@ -157,22 +140,9 @@ export default function Accordion() {
             setMap(RenderMap(data)); 
         }).catch(error => console.log(error.data));
     
-        /* const getMap = () => {
-            axios.get(`http://11.11.8.206/serpacificows/informacion/all.php`)
-            .then(res => {
-                setMap(RenderMap(res.data));
-            })
-            let dataFromServer = [{"idinfo":"1", "nombre":"Valle", "capital":"Cali", "extension":"Lorem dsadsad dsadasda dsads adsa d asd  asd sa dsadasdsadsa dsadasdas", "poblacion":100, "participacion":10},
-            {"idinfo":"2", "nombre":"Cauca", "capital":"Popayan", "extension":"Lorem dsadsad dsadasda dsads adsa d asd  asd sa dsadasdsadsa dsadasdas", "poblacion":100, "participacion":10},
-            {"idinfo":"3", "nombre":"Nariño", "capital":"Pasto", "extension":"Lorem dsadsad dsadasda dsads adsa d asd  asd sa dsadasdsadsa dsadasdas", "poblacion":100, "participacion":10}];
-            setMap(RenderMap(dataFromServer));
-        }
-        getDimensiones();
-        getMap(); */
     },[data,save]);
 
     function updateInputValue(evt) {
-        //setValue(evt.target.value);
         let aux = data;
         aux.descripcion = evt.target.value;
         setData(aux);
@@ -200,7 +170,6 @@ export default function Accordion() {
 
     function handleSubmitDimension (elements) {
         postData('/dimension/update.php',elements).then(data => {
-            console.log(data);
             setSave(data);
             handleClose();
         });
@@ -208,7 +177,6 @@ export default function Accordion() {
 
     function handleSubmitMapa (elements) {
         postData('/informacion/update.php',elements).then(data => {
-            console.log(data);
             setSave(data);
             handleClose();
         }); 
@@ -228,15 +196,12 @@ export default function Accordion() {
                         className={classes.summary}
                     >
                         <Typography className={classes.heading}>Dimensiones</Typography>
-                        {/* <Typography className={classes.secondaryHeading}>I am an expansion panel</Typography> */}
                     </ExpansionPanelSummary>
                     
                     <ExpansionPanelDetails>
-                        {/* <Typography> */}
                             <div style={{display:'flex', flexWrap:'wrap', justifyContent:'center'}}>
                                 {dimensions}
                             </div>
-                        {/* </Typography> */}
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
                 <ExpansionPanel expanded={expanded === "mapa"} onChange={handleChange("mapa")}>
@@ -247,15 +212,12 @@ export default function Accordion() {
                         className={classes.summary}
                     >
                         <Typography className={classes.heading}>Mapa</Typography>
-                        {/* <Typography className={classes.secondaryHeading}>I am an expansion panel</Typography> */}
                     </ExpansionPanelSummary>
                     
                     <ExpansionPanelDetails>
-                        {/* <Typography> */}
                             <div style={{display:'flex', flexWrap:'wrap', justifyContent:'center'}}>
                                 {map}
                             </div>
-                        {/* </Typography> */}
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
                 <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">

@@ -139,15 +139,15 @@ const Tabla = ({ datos, isAdmin, tab, setDatos }) => {
     useEffect(() => {
             setOffset(currentPage * perPage);
             let elements = datos.slice(currentPage * perPage, currentPage * perPage + perPage);
-            console.log(elements);
+            
             setDataPerPage(elements);
     }, [currentPage]);
 
     const handlePageClick = data => {
         let selected = data.selected;
-        //asignData(selected);
+        
         setCurrentPage(selected);
-        console.log(selected);
+        
         window.scrollTo(0, 0);
         
     };
@@ -174,7 +174,7 @@ const Tabla = ({ datos, isAdmin, tab, setDatos }) => {
                                 <tr>
                                     <th scope="col">Título</th>
                                     <th scope="col">Autor/es</th>
-                                    <th scope="col">Acciones</th>
+                                    <th scope="col"></th>
                                 </tr>
                             </thead>
                             

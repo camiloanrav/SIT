@@ -10,11 +10,6 @@ const Mapa = () => {
     const [Cauca, setCauca] = useState(false);
     const [Info, setInfo] = useState(null);
 
-   /*  async function getAxios() {  
-        await axios.get(`http://11.11.8.27/serpacificows/informacion/all.php`).then(response => {            
-            setInfo(response.data);  
-        }).catch(error => console.log(error.response));
-    } */
 
     useEffect(() => {
         getData('/informacion/all.php').then(data => {
@@ -127,6 +122,9 @@ const Mapa = () => {
                 <circle cx="437.3" cy="870.9" id="2">
                 </circle>               
             </svg>
+            <b>Fuente:</b> IGAC
+            <br></br>
+            <b>Autores:</b> Elavoración propia con información IGAC
             {
                 Valle && Info!=null ?  <DatosDepartamento nombre={Info[1].nombre} extension={Info[1].extension} capital={Info[1].capital} poblacion={Info[1].poblacion} participacionPIB={Info[1].participacion} color={"#00B0FF"}></DatosDepartamento> : null
             }

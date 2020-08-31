@@ -17,6 +17,7 @@ import AdminInicio from './Containers/AdminInicio';
 import AdminPublicaciones from './Containers/AdminPublicaciones';
 import AdminEstadisticas from './Containers/AdminEstadisticas';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import AjustesContainer from './Containers/AjustesContainer';
 
 const NoMatchPage = () => {
   return (
@@ -45,7 +46,7 @@ function App() {
             <Redirect exact from="/ser/estadisticas" to="/ser/estadisticas/busqueda-por-dimensiones"/>
             <Redirect exact from="/ser/administrador-estadisticas" to="/ser/administrador-estadisticas/modificar-indicadores"/>
             <Redirect exact from="/ser/administrador-publicaciones" to="/ser/administrador-publicaciones/documentos"/>
-            {/* <Redirect exact from="/administrador" to="/administrador/inicio"/> */}
+
             <Route exact path="/ser/inicio" component={InicioContainer}/>
             <Route path="/ser/estadisticas" component={EstadisticasContainer}/>
             <Route path="/ser/contacto" component={ContactoContainer}/>
@@ -55,6 +56,7 @@ function App() {
             <Route path="/ser/administrador-inicio" component={AdminInicio}/>
             <Route path="/ser/administrador-publicaciones" component={AdminPublicaciones}/>
             <Route path="/ser/administrador-estadisticas" component={AdminEstadisticas}/>
+            <Route path="/ser/ajustes" component={AjustesContainer}/>
             <Route component={NoMatchPage}/>
           </Switch>
         

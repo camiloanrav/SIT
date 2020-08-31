@@ -106,7 +106,6 @@ const AdministrarIndicadores = ({indicadores, getIndicadores}) =>{
             return i.padre === indicadorAEliminar.value;
         });
 
-        console.log(indicadoresHijos);
         
         if(indicadoresHijos.length!==0){
             setMessageSnackbar("El indicador tiene otros indicadores que dependen de él, borre primero esos indicadores.");
@@ -142,7 +141,6 @@ const AdministrarIndicadores = ({indicadores, getIndicadores}) =>{
     }
 
     const handleChangeIndicadorSeleccionado = (valor,e) => {
-        console.log(valor);
         setIndicadorSeleccionado(valor);
     }
 
@@ -284,56 +282,8 @@ const AdminEstadisticas = () => {
 
     const getIndicadores = () => {
         getData('/indicador/all.php').then(data => {
-            /* console.log(data); */
-            var tempIDMalo = [];
-            var tempNivelMalo = [];
-            var nombres = [];
-            var periodicidades = [];
 
             data.sort((a,b) => (a.idindicadores > b.idindicadores) ? 1 : ((b.idindicadores > a.idindicadores) ? -1 : 0));
-
-            //Valida errores
-            /* data.forEach(dato => {
-                let hijo = 1;
-
-                if(dato.nivel === "1"){
-                    hijo = dato.idindicadores.substring(0,7);
-                }else if(dato.nivel === "2"){
-                    hijo = dato.idindicadores.substring(0,9);
-                }else if(dato.nivel === "3"){
-                    hijo = dato.idindicadores.substring(0,11);
-                }else if(dato.nivel === "4"){
-                    hijo = dato.idindicadores.substring(0,13);
-                }
-
-                if(dato.nivel === "1" && dato.idindicadores.length !== 9){
-                    tempNivelMalo.push({hijo: dato.idindicadores , padre:dato.indicadores_idindicadores, nivel:dato.nivel});
-                }else if(dato.nivel === "2" && dato.idindicadores.length !== 11){
-                    tempNivelMalo.push({hijo: dato.idindicadores , padre:dato.indicadores_idindicadores, nivel:dato.nivel});
-                }else if(dato.nivel === "3" && dato.idindicadores.length !== 13){
-                    tempNivelMalo.push({hijo: dato.idindicadores , padre:dato.indicadores_idindicadores, nivel:dato.nivel});
-                }else if(dato.nivel === "4" && dato.idindicadores.length !== 14){
-                    tempNivelMalo.push({hijo: dato.idindicadores , padre:dato.indicadores_idindicadores, nivel:dato.nivel});
-                }
-                
-                nombres.push(dato.nombre);
-                periodicidades.push(dato.periodicidad);
-
-                if(hijo !== dato.indicadores_idindicadores && dato.nivel !== "0"){
-                    tempIDMalo.push({hijo: dato.idindicadores , padre:dato.indicadores_idindicadores, nivel:dato.nivel});            
-                }
-            });
-            
-            let findDuplicates = arr => arr.filter((item, index) => arr.indexOf(item) != index);
-            let findUnique = arr => arr.filter((value,index,self) => self.indexOf(value) === index );
-
-            console.log(findDuplicates(nombres)) // All duplicates
-            console.log([...new Set(findDuplicates(nombres))]) // Unique duplicates
-
-            console.log(findUnique(periodicidades)) // All duplicates
-            
-            console.log(tempIDMalo);
-            console.log(tempNivelMalo);*/
 
             let temp = []; 
 
@@ -347,8 +297,6 @@ const AdminEstadisticas = () => {
                 }
                 temp.push({value: data[i].idindicadores , label:data[i].nombre.charAt(0).toUpperCase() + data[i].nombre.slice(1), unidad:data[i].unidades_medida_idunidades, periodicidad:data[i].periodicidad, tipo_valor:data[i].tipo_valor, nivel: data[i].nivel, padre: data[i].indicadores_idindicadores, fuente:data[i].fuentes_idfuentes, categoria:data[i].categorias_idcategorias});
             }
-            console.log(temp);
-            //handleChange({value:temp[0].value},{name:"indicadorSuperior"});
             setindIndicadores(temp);
 
         }).catch(error => console.log(error.data));

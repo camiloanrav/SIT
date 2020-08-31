@@ -4,10 +4,7 @@ import {getData} from '../utils/api';
 
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
-import DeleteIcon from '@material-ui/icons/Delete';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import KeyboardVoiceIcon from '@material-ui/icons/KeyboardVoice';
-import Icon from '@material-ui/core/Icon';
+
 import SaveIcon from '@material-ui/icons/Save';
 
 const useStyles = makeStyles((theme) => ({
@@ -59,16 +56,13 @@ const Excel = () => {
         
         new_workbook.Sheets["Indicadores"] = wb;
         
-        //XLSX.utils.book_append_sheet(new_workbook, wb);
     
         XLSX.writeFile(new_workbook, nombreArchivo+".xlsx", {bookType:'xlsx', type:'array'});
     }
     
     return (
         <div>
-            {/* <div >
-                <button style={{margin:'0.5em', backgroundColor:'lightblue'}} onClick={()=>ConvertJSON()}>Generar Excel</button>
-            </div> */}
+            
             <Button
                 variant="outlined"
                 color="primary"

@@ -8,13 +8,7 @@ const ContactoMenu = () => {
                 <section className="signature" >
                     <div className="signature-wrap">
                         <div className="sw-info ">
-                            {/*
-                            <div className="signature-logo">
-                                <figure>
-                                    <img src="../../../images/UAO-logo-acreditacion.png" alt="UAO"></img>
-                                </figure>
-                            </div>
-                            */}
+                            
                         <div className="sw-title">Universidad Autónoma de Occidente</div>
                         <ul>
                             <li>

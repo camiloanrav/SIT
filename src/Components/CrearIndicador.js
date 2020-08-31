@@ -65,37 +65,30 @@ const FormularioIndicadorOrdenSuperior = ({orden, indicadores, niveles, categori
     },[tipoSeleccionado]);
 
     const handleChangeNivel = (valor,e) => {
-        console.log(valor);
         setNivelSeleccionado(valor);
     }
 
     const handleChangeIndicador = (valor,e) => {
-        console.log(valor);
         setIndicadorSeleccionado(valor);
     }
 
     const handleChangeCategoria = (valor,e) => {
-        console.log(valor);
         setCategoriaSeleccionada(valor);
     }
 
     const handleChangeFuente = (valor,e) => {
-        console.log(valor);
         setFuenteSeleccionada(valor);
     }
 
     const handleChangePeriodicidad = (valor,e) => {
-        console.log(valor);
         setPeriodicidadSeleccionada(valor);
     }
 
     const handleChangeTipo = (valor,e) => {
-        console.log(valor);
         setTipoSeleccionado(valor);
     }
 
     const handleChangeUnidad = (valor,e) => {
-        console.log(valor);
         setUnidadSeleccionada(valor);
     }
 
@@ -114,23 +107,16 @@ const FormularioIndicadorOrdenSuperior = ({orden, indicadores, niveles, categori
             indicadoresHijos = indicadores.filter((i) => {
                 return i.value.substring(0,position) === categoriaSeleccionada.value && i.value.length === 7;
             });
-            console.log(indicadoresHijos);
         }else{
-            /* indicadoresHijos = indicadores.filter(i => {
-                return i.value.substring(0,position) === indicadorSeleccionado.value && i.nivel === nivelSeleccionado.value;
-            });
-            console.log(indicadoresHijos); */
             indicadoresHijos = indicadores.filter(i => {
                 return i.padre === indicadorSeleccionado.value;
             });
-            console.log(indicadoresHijos);
         }
 
         for(let i = 0; indicadoresHijos.length > i ; i++){
             indicadoresHijosSubst.push(parseInt(indicadoresHijos[i].value.substring(position, indicadoresHijos[i].length)));
             
             let nombreAux = indicadoresHijos[i].label.split("=>");
-            console.log(nombre.toLowerCase().trim() + " - " + nombreAux[nombreAux.length-1].toLowerCase().trim());
             if(nombre.toLowerCase().trim() === nombreAux[nombreAux.length-1].toLowerCase().trim()){
                 setMessageSnackbar("Un indicador de este mismo nivel ya tiene ese nombre. Por favor cambiarlo.");
                 setOpenSnackbar(true);  
@@ -138,12 +124,9 @@ const FormularioIndicadorOrdenSuperior = ({orden, indicadores, niveles, categori
             }
         }
 
-        console.log(indicadoresHijosSubst);
         
         if(indicadoresHijosSubst.length !== 0){
-            //ultimoIndicador = Math.max(...indicadoresHijosSubst) + 1;
             indicadoresHijosSubst.sort(function(a, b){return a-b});
-            console.log(indicadoresHijosSubst);
 
             for(let i = 0; indicadoresHijosSubst.length > i; i++){
                 if(indicadoresHijosSubst[i+1] !== undefined){
@@ -156,7 +139,6 @@ const FormularioIndicadorOrdenSuperior = ({orden, indicadores, niveles, categori
                     ultimoIndicador = indicadoresHijosSubst[i] + 1;
                 }
             }
-            console.log(ultimoIndicador);
 
             if(nivelSeleccionado.value !== "4"){
                 if(ultimoIndicador>99){
@@ -200,7 +182,6 @@ const FormularioIndicadorOrdenSuperior = ({orden, indicadores, niveles, categori
                 categoriaAux={"value":indicadorFinalAux.substr(0,5)};
             }
         }
-        console.log(indicadorFinalAux);
         Crear(indicadorFinalAux, categoriaAux, indicadorSuperiorAux);// Modificar
     }
 
@@ -236,7 +217,6 @@ const FormularioIndicadorOrdenSuperior = ({orden, indicadores, niveles, categori
             setMessageSnackbar("El nombre no es valido.");
             setOpenSnackbar(true);
         }else{
-            console.log(aux);
             postData('/indicador/create.php',aux).then(data => {
                 if(data){
                     console.log(data.message!==undefined?data.message:"Error");
@@ -255,8 +235,6 @@ const FormularioIndicadorOrdenSuperior = ({orden, indicadores, niveles, categori
     
     return(
         <div style={{minWidth:'15em', width:'50em', margin:'2em 1em 0em 1em', textAlign:'left'}}>
-            {/* {categoriaSeleccionada.value}
-            {nivelSeleccionado.value} */}
             <TextField onChange={(event)=>{setNombre(event.target.value)}}/* value={values.newPass} onChange={handleChange('newPass')} */ type="text" fullWidth id="indicador" label="Nombre" />
             <div style={{margin:'1em 0em 1em 0em'}}>
                 <div>Nivel</div>
@@ -266,7 +244,6 @@ const FormularioIndicadorOrdenSuperior = ({orden, indicadores, niveles, categori
                     :
                     niveles
                 }
-                        /* defaultValue={niveles[0]} */
                         value={nivelSeleccionado}
                         isSearchable={false}
                         onChange={handleChangeNivel}
@@ -281,7 +258,6 @@ const FormularioIndicadorOrdenSuperior = ({orden, indicadores, niveles, categori
                     <Select options={categorias}
                             isSearchable={true}
                             value={categoriaSeleccionada}
-                            /* defaultValue={categorias[0]} */
                             onChange={handleChangeCategoria}
                             name="categoria"
                             placeholder="Selecciona la categoría"
@@ -298,7 +274,6 @@ const FormularioIndicadorOrdenSuperior = ({orden, indicadores, niveles, categori
                     <Select options={indicadorFiltrado}
                             value={indicadorSeleccionado}
                             isSearchable={true}
-                            /* defaultValue={indicadores[0]} */
                             onChange={handleChangeIndicador}
                             name="indicadorSuperior"
                             placeholder="Selecciona el indicador"

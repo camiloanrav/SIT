@@ -209,7 +209,7 @@
 
       .mapdiv{
         width: 28em;
-        height: 28em;
+        height: 30em;
         margin: 0;
       }
 
@@ -245,7 +245,7 @@
 
       .mapdiv{
         width: 30em;
-        height: 30em;
+        height: 32em;
         margin: 0;
       }
 
@@ -280,7 +280,7 @@
 
       .mapdiv{
         width: 38em;
-        height: 38em;
+        height: 41em;
         margin: 0;
       }
 
@@ -359,30 +359,6 @@
       min-height: 15em;
     }
 
-    /* .legend{
-      -webkit-transition:all .5s ease-in-out;
-      -moz-transition:all .5s ease-in-out;
-      -ms-transition:all .5s ease-in-out;
-      -o-transition:all .5s ease-in-out;
-      transition:all .5s ease-in-out;
-      position:absolute;
-      bottom:1.3em !important;
-      left:50%;
-      margin-left:-45%;
-      width:90%;
-      border-radius:10px;
-      background:#000;
-      color:#fff;
-      padding:0.4em !important;
-      font-size:55px !important;
-      text-align:center;
-      opacity:.7 !important;
-      -webkit-transition:opacity .35s ease-in-out;
-      -moz-transition:opacity .35s ease-in-out;
-      -ms-transition:opacity .35s ease-in-out;
-      -o-transition:opacity .35s ease-in-out;
-      transition:opacity .35s ease-in-out;
-    } */
     .titulo{
       position:relative; 
       left:0em;
@@ -490,53 +466,6 @@
       transform: scale(1.04);
     }
 
-
-    /* .accordion {
-      background-color: #eee;
-      color: #444;
-      cursor: pointer;
-      padding: 0.8em;
-      width: 100% !important;
-      border: none;
-      text-align: left;
-      outline: none;
-      font-size: 1.2em;
-      transition: 0.4s;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-      font-weight: bold;
-    }
-    
-    .active, .accordion:hover {
-      background-color: #ccc;
-    }
-    
-    .accordion:after {
-      content: '\002B';
-      color: #777;
-      font-weight: bold;
-      float: right;
-      margin-left: 1em;
-    }
-    
-    .active:after {
-      content: "\2212";
-    }
-    
-    .panel {
-      padding: 0 1em;
-      background-color: white;
-      max-height: 0em;
-      overflow: hidden;
-      transition: max-height 0.2s ease-out;
-    }
-    .panel2 {
-      padding: 0 18em;
-      background-color: white;
-      max-height: 10em;
-      overflow: hidden;
-      transition: max-height 0.2s ease-out;
-    } */
-
     .accordion-list{
       list-style: none;
       margin: 0em 1em 0em 1em;
@@ -637,12 +566,7 @@
       box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
     }
 
-    .activeLinkClassName{
-      /* background-color: red; */
-    }
-
     .break-me{
-      /* background-color: turquoise; */
       color: violet;
     }
 
@@ -683,15 +607,10 @@
     }
 
     .active-link{
-      /* background-color: green;
-      text-decoration-color: violet;
-      border-radius: 0.3em;
-      border: none; */
       color:black;
     }
 
     .break-link{
-      /* background-color: red; */
       text-decoration-color: violet;
       border: none;
     }

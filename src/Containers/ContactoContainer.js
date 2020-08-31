@@ -21,17 +21,6 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 const ContactoContainer = () => {
 
 
-    /* constructor(props) {
-        super(props);
-        this.state = {
-            nombres: "",
-            correo: "",
-            mensaje: "",
-            mailSent: false,
-            error: null,
-            politicas: null,
-        }
-    } */
     const [nombres, setNombres] = useState("");
     const [correo, setCorreo] = useState("");
     const [mensaje, setMensaje] = useState("");
@@ -62,11 +51,6 @@ const ContactoContainer = () => {
         setPoliticas(!p);
     };
 
-    /* const handleFormSubmit = (event) => {
-        event.preventDefault();
-        console.log(this.state);
-    } */
-
     const handleFormSubmit = e => {
         e.preventDefault();
         let aux = {
@@ -77,7 +61,7 @@ const ContactoContainer = () => {
         if(politicas){
             setEnviando(true);
             postEmail('/enviarcorreo/index.php',aux).then(data => {
-                console.log(data);
+                
                 if (data === 200) {
                     setMailSent(true);
                 }else{
@@ -86,7 +70,6 @@ const ContactoContainer = () => {
                 setEnviando(false);
             }).catch(error =>{
                 setEnviando(false);
-                console.log(error.message);
                 setError(true);
             });
         }else{
@@ -113,16 +96,9 @@ const ContactoContainer = () => {
                     <section className="signature" >
                         <div className="signature-wrap">
                             <div className="sw-info">
-                                {/*
-                            <div className="signature-logo">
-                                <figure>
-                                    <img src="../../../images/UAO-logo-acreditacion.png" alt="UAO"></img>
-                                </figure>
-                            </div>
-                            */}
                                 <div className="sw-title">SER Pacífico</div>
                                 <ul>
-                                    <li>
+                                    {/* <li>
                                         <p>Director</p>
                                         <div>
                                             <div className="circle-icon">
@@ -139,7 +115,7 @@ const ContactoContainer = () => {
                                             </div>
                                             <p>PBX. (57 -2) 318 8000 ext. 11541</p>
                                         </div>
-                                    </li>
+                                    </li> */}
                                     <li>
                                         <p>Correo electrónico</p>
                                         <div>
@@ -151,7 +127,7 @@ const ContactoContainer = () => {
                                             </p>
                                         </div>
                                     </li>
-                                    <li>
+                                    {/* <li>
                                         <p>Ubicación en Campus</p>
                                         <div>
                                             <div className="circle-icon">
@@ -168,7 +144,7 @@ const ContactoContainer = () => {
                                             </div>
                                             <p>Lunes a viernes de 9:00 a. m. a 4:30 p. m.</p>
                                         </div>
-                                    </li>
+                                    </li> */}
                                 </ul>
                             </div>
                             <div className="sw-form">

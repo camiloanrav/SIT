@@ -32,35 +32,45 @@ const ModificarIndicador = ({setIndicadorSeleccionado, setGestionando, setModifi
     const [messageSnackbar, setMessageSnackbar] = React.useState(false);
 
     const handleChangeFuente = (valor,e) => {
-        console.log(valor);
         setFuenteSeleccionada(valor);
     }
     const handleChangeTipo = (valor,e) => {
-        console.log(valor);
         setTipoSeleccionado(valor);
     }
     const handleChangeUnidad = (valor,e) => {
-        console.log(valor);
         setUnidadSeleccionada(valor);
     }
     const handleChangePeriodicidad = (valor,e) => {
-        console.log(valor);
         setPeriodicidadSeleccionada(valor);
     }
 
     const Modificar = () => {
-        let aux = {
-            "idindicadores": indicadorSeleccionado.value,
-            "nombre": nombre,
-            "periodicidad": periodicidadSeleccionada.value,
-            "tipo_valor": tipoSeleccionado.value,
-            "nivel": indicadorSeleccionado.nivel,
-            "fuentes_idfuentes": fuenteSeleccionada.value,
-            "unidades_medida_idunidades": unidadSeleccionada.value,
-            "indicadores_idindicadores": indicadorSeleccionado.padre,
-            "categorias_idcategorias": indicadorSeleccionado.categoria
+        let aux;
+        if(indicadorSeleccionado.unidad !== "0"){
+            aux = {
+                "idindicadores": indicadorSeleccionado.value,
+                "nombre": nombre,
+                "periodicidad": periodicidadSeleccionada.value,
+                "tipo_valor": tipoSeleccionado.value,
+                "nivel": indicadorSeleccionado.nivel,
+                "fuentes_idfuentes": fuenteSeleccionada.value,
+                "unidades_medida_idunidades": unidadSeleccionada.value,
+                "indicadores_idindicadores": indicadorSeleccionado.padre,
+                "categorias_idcategorias": indicadorSeleccionado.categoria
+            }
+        }else{
+            aux = {
+                "idindicadores": indicadorSeleccionado.value,
+                "nombre": nombre,
+                "periodicidad": indicadorSeleccionado.periodicidad,
+                "tipo_valor": indicadorSeleccionado.tipo_valor,
+                "nivel": indicadorSeleccionado.nivel,
+                "fuentes_idfuentes": indicadorSeleccionado.fuente,
+                "unidades_medida_idunidades": indicadorSeleccionado.unidad,
+                "indicadores_idindicadores": indicadorSeleccionado.padre,
+                "categorias_idcategorias": indicadorSeleccionado.categoria
+            }
         }
-        console.log(aux);
         
     if(aux.nombre.trim() !==""){
         postData('/indicador/update.php',aux).then(data => {
@@ -79,10 +89,6 @@ const ModificarIndicador = ({setIndicadorSeleccionado, setGestionando, setModifi
 
     return (
         <div style={{minWidth:'15em', width:'50em', margin:'2em 1em 0em 1em', textAlign:'left'}}>
-            {
-                console.log(tipos)
-                
-            }
             <TextField onChange={(event)=>{setNombre(event.target.value)}} value={nombre} type="text" fullWidth id="indicador" label="Nombre" />
             {
                 fuenteSeleccionada!=null?
